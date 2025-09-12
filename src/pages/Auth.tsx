@@ -8,15 +8,21 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/lib/supabase"; // Ensure this import is correct
 import AnimatedBackground from "@/components/AnimatedBackground";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Auth() {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useLanguage();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
+<<<<<<< HEAD
     role: "Student",
+=======
+    role: t('auth.student')
+>>>>>>> 2189e27 (Updated project with latest changes)
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,9 +31,15 @@ export default function Auth() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+<<<<<<< HEAD
     const { error } = await supabase.auth.signInWithPassword({
       email: formData.email,
       password: formData.password,
+=======
+    toast({
+      title: t('auth.welcome.back'),
+      description: t('auth.login.success'),
+>>>>>>> 2189e27 (Updated project with latest changes)
     });
     if (error) {
       console.error("Login error:", error.message);
@@ -47,12 +59,18 @@ export default function Auth() {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+<<<<<<< HEAD
     const { data, error } = await supabase.auth.signUp({
       email: formData.email,
       password: formData.password,
       options: {
         data: { name: formData.name, role: formData.role }, // Store extra user data
       },
+=======
+    toast({
+      title: t('auth.account.created'),
+      description: t('auth.registration.success'),
+>>>>>>> 2189e27 (Updated project with latest changes)
     });
     if (error) {
       console.error("Sign-up error:", error.message);
@@ -88,35 +106,35 @@ export default function Auth() {
             <h1 className="text-3xl md:text-4xl font-bold text-green-200 drop-shadow-[0_0_14px_rgba(34,197,94,0.95)] tracking-tight">EcoLearn</h1>
           </div>
           <p className="text-white text-lg md:text-xl font-semibold drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)]">
-            Learn about our environment and make a difference!
+            {t('auth.subtitle')}
           </p>
         </div>
 
         <Card className="shadow-card border-0 bg-white/95 backdrop-blur-sm">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl font-bold text-foreground">
-              Join Our Community
+              {t('auth.join.community')}
             </CardTitle>
             <CardDescription>
-              Start your environmental education journey today
+              {t('auth.start.journey')}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="login" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="login">Login</TabsTrigger>
-                <TabsTrigger value="register">Register</TabsTrigger>
+                <TabsTrigger value="login">{t('auth.login')}</TabsTrigger>
+                <TabsTrigger value="register">{t('auth.register')}</TabsTrigger>
               </TabsList>
               
               <TabsContent value="login">
                 <form onSubmit={handleLogin} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
+                    <Label htmlFor="email">{t('auth.email')}</Label>
                     <Input
                       id="email"
                       name="email"
                       type="email"
-                      placeholder="student@example.com"
+                      placeholder={t('auth.email.placeholder')}
                       value={formData.email}
                       onChange={handleInputChange}
                       required
@@ -124,12 +142,12 @@ export default function Auth() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="password">Password</Label>
+                    <Label htmlFor="password">{t('auth.password')}</Label>
                     <Input
                       id="password"
                       name="password"
                       type="password"
-                      placeholder="Enter your password"
+                      placeholder={t('auth.password.placeholder')}
                       value={formData.password}
                       onChange={handleInputChange}
                       required
@@ -137,7 +155,7 @@ export default function Auth() {
                     />
                   </div>
                   <Button type="submit" className="w-full bg-gradient-nature hover:opacity-90 transition-all duration-200 shadow-glow">
-                    Login to EcoLearn
+                    {t('auth.login.to.ecolearn')}
                   </Button>
                 </form>
               </TabsContent>
@@ -145,12 +163,12 @@ export default function Auth() {
               <TabsContent value="register">
                 <form onSubmit={handleRegister} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="name">Full Name</Label>
+                    <Label htmlFor="name">{t('auth.full.name')}</Label>
                     <Input
                       id="name"
                       name="name"
                       type="text"
-                      placeholder="Alex Student"
+                      placeholder={t('auth.name.placeholder')}
                       value={formData.name}
                       onChange={handleInputChange}
                       required
@@ -158,12 +176,12 @@ export default function Auth() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
+                    <Label htmlFor="email">{t('auth.email')}</Label>
                     <Input
                       id="email"
                       name="email"
                       type="email"
-                      placeholder="student@example.com"
+                      placeholder={t('auth.email.placeholder')}
                       value={formData.email}
                       onChange={handleInputChange}
                       required
@@ -171,12 +189,12 @@ export default function Auth() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="password">Password</Label>
+                    <Label htmlFor="password">{t('auth.password')}</Label>
                     <Input
                       id="password"
                       name="password"
                       type="password"
-                      placeholder="Create a strong password"
+                      placeholder={t('auth.password.create.placeholder')}
                       value={formData.password}
                       onChange={handleInputChange}
                       required
@@ -184,13 +202,13 @@ export default function Auth() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="role">Role</Label>
+                    <Label htmlFor="role">{t('auth.role')}</Label>
                     <div className="p-3 bg-muted rounded-lg">
-                      <span className="text-sm font-medium text-muted-foreground">Student</span>
+                      <span className="text-sm font-medium text-muted-foreground">{t('auth.student')}</span>
                     </div>
                   </div>
                   <Button type="submit" className="w-full bg-gradient-nature hover:opacity-90 transition-all duration-200 shadow-glow">
-                    Create Account
+                    {t('auth.create.account')}
                   </Button>
                 </form>
               </TabsContent>
@@ -200,13 +218,13 @@ export default function Auth() {
 
         <div className="text-center mt-6">
           <p className="text-white/80 text-sm">
-            Ready to explore? 
+            {t('auth.ready.explore')} 
             <Button
               variant="link"
               className="text-white underline p-0 ml-1"
               onClick={() => navigate("/dashboard")}
             >
-              View Demo Dashboard
+              {t('auth.view.demo')}
             </Button>
           </p>
         </div>

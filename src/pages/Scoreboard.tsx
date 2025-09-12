@@ -5,12 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useNavigate } from "react-router-dom";
 import { Trophy, Star, Award, Target, BookOpen, Zap, Crown, Medal, Gift } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
-const achievements = [
+const getAchievements = (t: (key: string) => string) => [
   {
     id: 1,
-    title: "First Steps",
-    description: "Complete your first lesson",
+    title: t('achievement.first.steps'),
+    description: t('achievement.first.steps.desc'),
     icon: BookOpen,
     earned: true,
     date: "2024-01-15",
@@ -19,8 +20,8 @@ const achievements = [
   },
   {
     id: 2,
-    title: "Quiz Master",
-    description: "Score 100% on a quiz",
+    title: t('achievement.quiz.master'),
+    description: t('achievement.quiz.master.desc'),
     icon: Target,
     earned: true,
     date: "2024-01-16",
@@ -29,8 +30,8 @@ const achievements = [
   },
   {
     id: 3,
-    title: "Eco Warrior",
-    description: "Complete 3 lessons",
+    title: t('achievement.eco.warrior'),
+    description: t('achievement.eco.warrior.desc'),
     icon: Award,
     earned: false,
     date: null,
@@ -39,8 +40,8 @@ const achievements = [
   },
   {
     id: 4,
-    title: "Speed Learner",
-    description: "Complete a lesson in under 10 minutes",
+    title: t('achievement.speed.learner'),
+    description: t('achievement.speed.learner.desc'),
     icon: Zap,
     earned: true,
     date: "2024-01-17",
@@ -49,8 +50,8 @@ const achievements = [
   },
   {
     id: 5,
-    title: "Perfect Score",
-    description: "Get perfect scores on 3 quizzes",
+    title: t('achievement.perfect.score'),
+    description: t('achievement.perfect.score.desc'),
     icon: Crown,
     earned: false,
     date: null,
@@ -59,8 +60,8 @@ const achievements = [
   },
   {
     id: 6,
-    title: "Dedicated Learner",
-    description: "Study for 7 days in a row",
+    title: t('achievement.dedicated.learner'),
+    description: t('achievement.dedicated.learner.desc'),
     icon: Medal,
     earned: false,
     date: null,
@@ -81,6 +82,8 @@ const weeklyProgress = [
 
 export default function Scoreboard() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
+  const achievements = getAchievements(t);
   
   const totalPoints = achievements.filter(a => a.earned).reduce((sum, a) => sum + a.points, 0);
   const earnedAchievements = achievements.filter(a => a.earned).length;
@@ -95,11 +98,10 @@ export default function Scoreboard() {
         <div className="text-center mb-8 animate-slide-up">
           <h1 className="text-4xl font-bold text-foreground mb-4 flex items-center justify-center space-x-3">
             <Trophy className="w-10 h-10 text-accent" />
-            <span>Your Achievements</span>
+            <span>{t('scoreboard.title')}</span>
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Track your progress, earn badges, and celebrate your environmental learning journey! 
-            Every lesson completed makes you a better guardian of our planet.
+            {t('scoreboard.subtitle')}
           </p>
         </div>
 
@@ -108,7 +110,7 @@ export default function Scoreboard() {
           <Card className="shadow-card text-center bg-gradient-nature text-white">
             <CardContent className="p-6">
               <div className="text-3xl font-bold mb-2">{totalPoints}</div>
-              <p className="text-white/90">Total Points</p>
+              <p className="text-white/90">{t('scoreboard.total.points')}</p>
               <Star className="w-6 h-6 mx-auto mt-2 animate-bounce-gentle" />
             </CardContent>
           </Card>
@@ -116,7 +118,7 @@ export default function Scoreboard() {
           <Card className="shadow-card text-center">
             <CardContent className="p-6">
               <div className="text-3xl font-bold text-primary mb-2">{earnedAchievements}</div>
-              <p className="text-muted-foreground">Badges Earned</p>
+              <p className="text-muted-foreground">{t('scoreboard.badges.earned')}</p>
               <Award className="w-6 h-6 mx-auto mt-2 text-primary" />
             </CardContent>
           </Card>
@@ -124,15 +126,15 @@ export default function Scoreboard() {
           <Card className="shadow-card text-center">
             <CardContent className="p-6">
               <div className="text-3xl font-bold text-success mb-2">1</div>
-              <p className="text-muted-foreground">Lessons Completed</p>
+              <p className="text-muted-foreground">{t('scoreboard.lessons.completed')}</p>
               <BookOpen className="w-6 h-6 mx-auto mt-2 text-success" />
             </CardContent>
           </Card>
           
           <Card className="shadow-card text-center">
             <CardContent className="p-6">
-              <div className="text-3xl font-bold text-secondary mb-2">{Math.round(completionRate)}%</div>
-              <p className="text-muted-foreground">Achievement Rate</p>
+              <div className="text-3xl font-bold text-secondary mb-2">{Math.round(completionRate)}{t('common.percent')}</div>
+              <p className="text-muted-foreground">{t('scoreboard.achievement.rate')}</p>
               <Target className="w-6 h-6 mx-auto mt-2 text-secondary" />
             </CardContent>
           </Card>
@@ -145,7 +147,7 @@ export default function Scoreboard() {
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
                   <Trophy className="w-6 h-6 text-accent" />
-                  <span>Achievement Badges</span>
+                  <span>{t('scoreboard.achievement.badges')}</span>
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -178,7 +180,7 @@ export default function Scoreboard() {
                               </p>
                               {achievement.earned && achievement.date && (
                                 <p className="text-xs text-primary mt-1">
-                                  Earned on {new Date(achievement.date).toLocaleDateString()}
+                                  {t('scoreboard.earned.on')} {new Date(achievement.date).toLocaleDateString()}
                                 </p>
                               )}
                             </div>
@@ -188,10 +190,10 @@ export default function Scoreboard() {
                               variant={achievement.earned ? "default" : "outline"}
                               className={achievement.earned ? "bg-primary" : ""}
                             >
-                              {achievement.earned ? "Earned" : "Locked"}
+                              {achievement.earned ? t('scoreboard.earned') : t('scoreboard.locked')}
                             </Badge>
                             <p className="text-sm text-muted-foreground mt-1">
-                              {achievement.points} pts
+                              {achievement.points} {t('common.points')}
                             </p>
                           </div>
                         </div>
@@ -206,14 +208,14 @@ export default function Scoreboard() {
             <Card className="shadow-card bg-gradient-earth text-white">
               <CardContent className="p-8 text-center">
                 <Gift className="w-16 h-16 mx-auto mb-4 animate-bounce-gentle" />
-                <h3 className="text-2xl font-bold mb-4">🎓 Environmental Champion Certificate</h3>
+                <h3 className="text-2xl font-bold mb-4">{t('scoreboard.certificate.title')}</h3>
                 <p className="text-white/90 mb-6">
-                  Complete all 6 lessons to unlock your official Environmental Champion Certificate!
+                  {t('scoreboard.certificate.desc')}
                 </p>
                 <div className="mb-4">
                   <div className="flex justify-between text-sm mb-2">
-                    <span>Progress to Certificate</span>
-                    <span>1/6 Lessons</span>
+                    <span>{t('scoreboard.progress.to.certificate')}</span>
+                    <span>1/6 {t('scoreboard.lessons')}</span>
                   </div>
                   <Progress value={16.67} className="h-3 bg-white/20" />
                 </div>
@@ -222,7 +224,7 @@ export default function Scoreboard() {
                   onClick={() => navigate("/dashboard")}
                   className="bg-white text-primary hover:bg-white/90"
                 >
-                  Continue Learning
+                  {t('scoreboard.continue.learning')}
                 </Button>
               </CardContent>
             </Card>
@@ -235,7 +237,7 @@ export default function Scoreboard() {
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
                   <Zap className="w-5 h-5 text-secondary" />
-                  <span>Weekly Activity</span>
+                  <span>{t('scoreboard.weekly.activity')}</span>
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -249,7 +251,7 @@ export default function Scoreboard() {
                         </div>
                       </div>
                       <Badge variant="secondary" className="text-xs">
-                        {day.lessons} lesson{day.lessons !== 1 ? 's' : ''}
+                        {day.lessons} {day.lessons !== 1 ? t('scoreboard.lessons') : t('scoreboard.lesson')}
                       </Badge>
                     </div>
                   ))}
@@ -262,25 +264,25 @@ export default function Scoreboard() {
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
                   <Star className="w-5 h-5 text-accent" />
-                  <span>Quick Stats</span>
+                  <span>{t('scoreboard.quick.stats')}</span>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm">Study Streak</span>
-                  <Badge className="bg-accent">3 days 🔥</Badge>
+                  <span className="text-sm">{t('scoreboard.study.streak')}</span>
+                  <Badge className="bg-accent">3 {t('common.days')} 🔥</Badge>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm">Average Quiz Score</span>
-                  <Badge variant="secondary">85%</Badge>
+                  <span className="text-sm">{t('scoreboard.avg.quiz.score')}</span>
+                  <Badge variant="secondary">85{t('common.percent')}</Badge>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm">Favorite Topic</span>
-                  <Badge variant="outline">Waste Management</Badge>
+                  <span className="text-sm">{t('scoreboard.favorite.topic')}</span>
+                  <Badge variant="outline">{t('lesson.waste.management')}</Badge>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm">Time Spent Learning</span>
-                  <Badge variant="secondary">2.5 hours</Badge>
+                  <span className="text-sm">{t('scoreboard.time.spent')}</span>
+                  <Badge variant="secondary">2.5 {t('common.hours')}</Badge>
                 </div>
               </CardContent>
             </Card>
@@ -290,19 +292,19 @@ export default function Scoreboard() {
               <CardHeader>
                 <CardTitle className="text-accent flex items-center space-x-2">
                   <Target className="w-5 h-5" />
-                  <span>Next Goal</span>
+                  <span>{t('scoreboard.next.goal')}</span>
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-center">
                   <Award className="w-12 h-12 text-accent mx-auto mb-3" />
-                  <h3 className="font-semibold mb-2">Eco Warrior</h3>
+                  <h3 className="font-semibold mb-2">{t('achievement.eco.warrior')}</h3>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Complete 3 lessons to unlock this badge
+                    {t('achievement.eco.warrior.desc')}
                   </p>
                   <div className="mb-4">
                     <div className="flex justify-between text-sm mb-2">
-                      <span>Progress</span>
+                      <span>{t('scoreboard.progress')}</span>
                       <span>1/3</span>
                     </div>
                     <Progress value={33.33} className="h-2" />
@@ -312,7 +314,7 @@ export default function Scoreboard() {
                     onClick={() => navigate("/dashboard")}
                     className="w-full"
                   >
-                    Continue Learning
+                    {t('scoreboard.continue.learning')}
                   </Button>
                 </div>
               </CardContent>

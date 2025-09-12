@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface EnergySource {
   id: string;
@@ -26,22 +27,22 @@ interface CityBuilding {
   powered: boolean;
 }
 
-const energySources: EnergySource[] = [
-  { id: "1", name: "Solar Panel", icon: "☀️", output: 20, cost: 100, efficiency: 85, placed: false },
-  { id: "2", name: "Wind Turbine", icon: "💨", output: 35, cost: 150, efficiency: 90, placed: false },
-  { id: "3", name: "Hydro Dam", icon: "🌊", output: 50, cost: 200, efficiency: 95, placed: false },
-  { id: "4", name: "Solar Panel", icon: "☀️", output: 20, cost: 100, efficiency: 85, placed: false },
-  { id: "5", name: "Wind Turbine", icon: "💨", output: 35, cost: 150, efficiency: 90, placed: false },
-  { id: "6", name: "Geothermal", icon: "🌋", output: 40, cost: 180, efficiency: 93, placed: false }
+const getEnergySources = (t: (key: string) => string): EnergySource[] => [
+  { id: "1", name: t('game.renewable.solar.panel'), icon: "☀️", output: 20, cost: 100, efficiency: 85, placed: false },
+  { id: "2", name: t('game.renewable.wind.turbine'), icon: "💨", output: 35, cost: 150, efficiency: 90, placed: false },
+  { id: "3", name: t('game.renewable.hydro.dam'), icon: "🌊", output: 50, cost: 200, efficiency: 95, placed: false },
+  { id: "4", name: t('game.renewable.solar.panel'), icon: "☀️", output: 20, cost: 100, efficiency: 85, placed: false },
+  { id: "5", name: t('game.renewable.wind.turbine'), icon: "💨", output: 35, cost: 150, efficiency: 90, placed: false },
+  { id: "6", name: t('game.renewable.geothermal'), icon: "🌋", output: 40, cost: 180, efficiency: 93, placed: false }
 ];
 
-const cityBuildings: CityBuilding[] = [
-  { id: "1", name: "Homes", icon: "🏘️", energyNeeded: 30, powered: false },
-  { id: "2", name: "School", icon: "🏫", energyNeeded: 25, powered: false },
-  { id: "3", name: "Hospital", icon: "🏥", energyNeeded: 40, powered: false },
-  { id: "4", name: "Office", icon: "🏢", energyNeeded: 35, powered: false },
-  { id: "5", name: "Factory", icon: "🏭", energyNeeded: 50, powered: false },
-  { id: "6", name: "Mall", icon: "🏬", energyNeeded: 20, powered: false }
+const getCityBuildings = (t: (key: string) => string): CityBuilding[] => [
+  { id: "1", name: t('game.renewable.homes'), icon: "🏘️", energyNeeded: 30, powered: false },
+  { id: "2", name: t('game.renewable.school'), icon: "🏫", energyNeeded: 25, powered: false },
+  { id: "3", name: t('game.renewable.hospital'), icon: "🏥", energyNeeded: 40, powered: false },
+  { id: "4", name: t('game.renewable.office'), icon: "🏢", energyNeeded: 35, powered: false },
+  { id: "5", name: t('game.renewable.factory'), icon: "🏭", energyNeeded: 50, powered: false },
+  { id: "6", name: t('game.renewable.mall'), icon: "🏬", energyNeeded: 20, powered: false }
 ];
 
 const gridSlots = Array.from({ length: 6 }, (_, i) => ({
@@ -57,6 +58,7 @@ function EnergySourceCard({
   source: EnergySource; 
   onDragStart: (source: EnergySource) => void 
 }) {
+  const { t } = useLanguage();
   return (
     <Card 
       className={`
@@ -73,15 +75,15 @@ function EnergySourceCard({
         </div>
         <div className="space-y-1">
           <div className="flex justify-between text-xs">
-            <span>Output:</span>
+            <span>{t('game.renewable.output')}</span>
             <span className="font-bold text-success">{source.output}MW</span>
           </div>
           <div className="flex justify-between text-xs">
-            <span>Cost:</span>
+            <span>{t('game.renewable.cost')}</span>
             <span className="font-bold text-secondary">${source.cost}K</span>
           </div>
           <div className="flex justify-between text-xs">
-            <span>Efficiency:</span>
+            <span>{t('game.renewable.efficiency')}</span>
             <span className="font-bold text-accent">{source.efficiency}%</span>
           </div>
         </div>
@@ -99,6 +101,7 @@ function GridSlot({
   placedSource?: EnergySource;
   onDrop: (slotId: number) => void;
 }) {
+  const { t } = useLanguage();
   const { draggedOver, setDraggedOver } = useDragDrop();
   
   const getTerrainColor = () => {
@@ -115,6 +118,15 @@ function GridSlot({
       case 'mountain': return '⛰️';
       case 'field': return '🌾';
       case 'water': return '🌊';
+      default: return '🏞️';
+    }
+  };
+
+  const getTerrainLabel = () => {
+    switch (slot.type) {
+      case 'mountain': return t('game.renewable.mountain');
+      case 'field': return t('game.renewable.field');
+      case 'water': return t('game.renewable.water');
       default: return '🏞️';
     }
   };
@@ -143,7 +155,7 @@ function GridSlot({
         <div className="flex flex-col items-center justify-center h-full opacity-60">
           <div className="text-2xl mb-1">{getTerrainIcon()}</div>
           <div className="text-xs text-center">
-            {slot.type.charAt(0).toUpperCase() + slot.type.slice(1)}
+            {getTerrainLabel()}
           </div>
         </div>
       ) : (
@@ -159,13 +171,14 @@ function GridSlot({
 }
 
 function BuildingCard({ building }: { building: CityBuilding }) {
+  const { t } = useLanguage();
   return (
     <Card className={`transition-all duration-300 ${building.powered ? 'bg-success/20 border-success' : 'bg-destructive/20 border-destructive'}`}>
       <CardContent className="p-4 text-center">
         <div className="text-3xl mb-2">{building.icon}</div>
         <div className="text-sm font-medium mb-1">{building.name}</div>
         <Badge variant={building.powered ? "default" : "destructive"} className="text-xs">
-          {building.powered ? "⚡ Powered" : `❌ Needs ${building.energyNeeded}MW`}
+          {building.powered ? `⚡ ${t('game.renewable.powered')}` : `❌ ${t('game.renewable.needs')} ${building.energyNeeded}MW`}
         </Badge>
       </CardContent>
     </Card>
@@ -173,6 +186,9 @@ function BuildingCard({ building }: { building: CityBuilding }) {
 }
 
 function RenewableGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number, progress: number) => void }) {
+  const { t } = useLanguage();
+  const energySources = getEnergySources(t);
+  const cityBuildings = getCityBuildings(t);
   const [gameSources, setGameSources] = useState<EnergySource[]>(energySources);
   const [gameBuildings, setGameBuildings] = useState<CityBuilding[]>(cityBuildings);
   const [gameSlots, setGameSlots] = useState(gridSlots);
@@ -187,7 +203,7 @@ function RenewableGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number
   const handleDrop = (slotId: number) => {
     if (!draggedItem || budget < draggedItem.cost) {
       if (budget < draggedItem.cost) {
-        toast.error("Not enough budget!");
+        toast.error(t('game.renewable.not.enough.budget'));
       }
       return;
     }
@@ -208,7 +224,7 @@ function RenewableGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number
     const newScore = score + 20;
     setScore(newScore);
 
-    toast.success(`${draggedItem.name} installed! +20 points`);
+    toast.success(`${draggedItem.name} ${t('game.renewable.installed')}`);
     setDraggedItem(null);
 
     // Calculate total energy and update building power status
@@ -268,9 +284,9 @@ function RenewableGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number
     <div className="space-y-6">
       {/* Instructions */}
       <div className="text-center p-4 bg-muted rounded-lg">
-        <h3 className="font-bold text-lg mb-2">⚡ Power Up!</h3>
+        <h3 className="font-bold text-lg mb-2">⚡ {t('game.renewable.title')}</h3>
         <p className="text-muted-foreground">
-          Build renewable energy sources to power the entire city with clean energy!
+          {t('game.renewable.instructions')}
         </p>
       </div>
 
@@ -279,25 +295,25 @@ function RenewableGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number
         <Card>
           <CardContent className="p-4 text-center">
             <div className="text-2xl font-bold text-success">{totalEnergy}</div>
-            <div className="text-xs text-muted-foreground">MW Generated</div>
+            <div className="text-xs text-muted-foreground">{t('game.renewable.mw.generated')}</div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
             <div className="text-2xl font-bold text-secondary">{totalNeeded}</div>
-            <div className="text-xs text-muted-foreground">MW Needed</div>
+            <div className="text-xs text-muted-foreground">{t('game.renewable.mw.needed')}</div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
             <div className="text-2xl font-bold text-accent">${budget}K</div>
-            <div className="text-xs text-muted-foreground">Budget Left</div>
+            <div className="text-xs text-muted-foreground">{t('game.renewable.budget.left')}</div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
             <div className="text-2xl font-bold text-primary">{poweredBuildings}/{gameBuildings.length}</div>
-            <div className="text-xs text-muted-foreground">Buildings Powered</div>
+            <div className="text-xs text-muted-foreground">{t('game.renewable.buildings.powered')}</div>
           </CardContent>
         </Card>
       </div>
@@ -306,7 +322,7 @@ function RenewableGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number
       <Card>
         <CardContent className="p-4">
           <div className="flex justify-between items-center mb-2">
-            <span className="font-medium">City Power Level</span>
+            <span className="font-medium">{t('game.renewable.city.power.level')}</span>
             <Badge variant={allPowered ? "default" : "secondary"} className={allPowered ? "bg-success" : ""}>
               {Math.round((totalEnergy / totalNeeded) * 100)}%
             </Badge>
@@ -319,7 +335,7 @@ function RenewableGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Energy Sources */}
         <div>
-          <h4 className="font-semibold mb-4">⚡ Renewable Sources:</h4>
+          <h4 className="font-semibold mb-4">⚡ {t('game.renewable.renewable.sources')}</h4>
           <div className="grid grid-cols-1 gap-3">
             {gameSources.filter(source => !source.placed).map((source) => (
               <EnergySourceCard
@@ -333,7 +349,7 @@ function RenewableGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number
 
         {/* Construction Grid */}
         <div>
-          <h4 className="font-semibold mb-4">🏗️ Build Here:</h4>
+          <h4 className="font-semibold mb-4">🏗️ {t('game.renewable.build.here')}</h4>
           <div className="grid grid-cols-2 gap-3">
             {gameSlots.map((slot) => {
               const placedSource = gameSources.find(s => s.position?.x === slot.id);
@@ -351,7 +367,7 @@ function RenewableGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number
 
         {/* City Buildings */}
         <div>
-          <h4 className="font-semibold mb-4">🏙️ City Buildings:</h4>
+          <h4 className="font-semibold mb-4">🏙️ {t('game.renewable.city.buildings')}</h4>
           <div className="grid grid-cols-1 gap-3">
             {gameBuildings.map((building) => (
               <BuildingCard key={building.id} building={building} />
@@ -363,9 +379,9 @@ function RenewableGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number
       {allPowered && (
         <div className="text-center p-6 bg-success/20 rounded-lg animate-bounce-gentle">
           <div className="text-4xl mb-2">🎉</div>
-          <div className="text-xl font-bold text-success mb-2">City Fully Powered!</div>
+          <div className="text-xl font-bold text-success mb-2">{t('game.renewable.city.fully.powered')}</div>
           <div className="text-muted-foreground">
-            100% renewable energy achieved! The city is now carbon neutral!
+            {t('game.renewable.city.fully.powered.desc')}
           </div>
         </div>
       )}
@@ -373,7 +389,7 @@ function RenewableGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number
       {/* Restart Button */}
       <div className="text-center">
         <Button onClick={restart} variant="outline">
-          Rebuild City
+          {t('game.renewable.rebuild.city')}
         </Button>
       </div>
     </div>
@@ -381,6 +397,7 @@ function RenewableGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number
 }
 
 export function RenewableEnergyGame({ onComplete }: { onComplete: () => void }) {
+  const { t } = useLanguage();
   const [score, setScore] = useState(0);
   const [progress, setProgress] = useState(0);
   const [key, setKey] = useState(0);
@@ -399,8 +416,8 @@ export function RenewableEnergyGame({ onComplete }: { onComplete: () => void }) 
   return (
     <DragDropProvider>
       <GameWrapper
-        title="Power Up!"
-        description="Build renewable energy sources to power an eco-friendly city"
+        title={t('game.renewable.title')}
+        description={t('game.renewable.description')}
         score={score}
         maxScore={200}
         progress={progress}

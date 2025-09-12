@@ -8,6 +8,7 @@ import { Progress } from "@/components/ui/progress";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Play, Pause, RotateCcw, ArrowRight, Clock, BookOpen } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // Import games
 import { WasteManagementGame } from "@/components/games/WasteManagementGame";
@@ -25,88 +26,84 @@ import afforestationImg from "@/assets/lesson-afforestation.jpg";
 import deforestationImg from "@/assets/lesson-deforestation.jpg";
 import renewableEnergyImg from "@/assets/lesson-renewable-energy.jpg";
 
-const lessonsData = {
+const getLessonsData = (t: (key: string) => string) => ({
   1: {
-    title: "Waste Management",
-    description:
-      "Learn about proper waste disposal, recycling, and composting techniques to minimize environmental impact and create a sustainable waste management system.",
+    title: t('lesson.waste.management'),
+    description: t('lesson.waste.management.desc'),
     image: wasteManagementImg,
-    duration: "15 min",
-    difficulty: "Beginner",
+    duration: `15 ${t('common.minutes')}`,
+    difficulty: t('difficulty.beginner'),
     content:
       "Understanding waste management is crucial for environmental protection. This lesson covers the 3 R's: Reduce, Reuse, and Recycle. You'll learn about different types of waste, proper sorting techniques, composting methods, and how individuals and communities can implement effective waste management strategies.",
     videoDescription:
       "Watch this comprehensive guide to waste management practices and see real-world examples of successful recycling programs.",
   },
   2: {
-    title: "Water Treatment",
-    description:
-      "Discover the fascinating process of water purification and treatment that ensures clean, safe water for consumption and environmental protection.",
+    title: t('lesson.water.treatment'),
+    description: t('lesson.water.treatment.desc'),
     image: waterTreatmentImg,
-    duration: "12 min",
-    difficulty: "Beginner",
+    duration: `12 ${t('common.minutes')}`,
+    difficulty: t('difficulty.beginner'),
     content:
       "Water treatment is essential for public health and environmental sustainability. Learn about the multi-step process including screening, sedimentation, filtration, and disinfection. Understand how wastewater treatment plants work and the importance of protecting our water resources.",
     videoDescription:
       "Take a virtual tour of a water treatment facility and see the amazing technology that keeps our water clean.",
   },
   3: {
-    title: "Pollution-Free Zones",
-    description:
-      "Explore innovative strategies and technologies used to create and maintain clean, pollution-free environments in urban and rural areas.",
+    title: t('lesson.pollution.free'),
+    description: t('lesson.pollution.free.desc'),
     image: pollutionFreeImg,
-    duration: "18 min",
-    difficulty: "Intermediate",
+    duration: `18 ${t('common.minutes')}`,
+    difficulty: t('difficulty.intermediate'),
     content:
       "Creating pollution-free zones requires understanding different types of pollution and implementing comprehensive solutions. Learn about air quality monitoring, green transportation, industrial emission controls, and community-based environmental protection initiatives.",
     videoDescription:
       "Discover successful pollution-free zone projects around the world and learn how communities are fighting pollution.",
   },
   4: {
-    title: "Afforestation",
-    description:
-      "Understand the vital importance of tree planting and forest creation in combating climate change and preserving biodiversity.",
+    title: t('lesson.afforestation'),
+    description: t('lesson.afforestation.desc'),
     image: afforestationImg,
-    duration: "14 min",
-    difficulty: "Beginner",
+    duration: `14 ${t('common.minutes')}`,
+    difficulty: t('difficulty.beginner'),
     content:
       "Afforestation is the process of creating forests in areas that were not previously forested. Learn about tree species selection, planting techniques, forest ecosystem development, and the long-term benefits of afforestation for climate regulation and biodiversity conservation.",
     videoDescription:
       "Join forest restoration projects and witness the incredible transformation of barren land into thriving forests.",
   },
   5: {
-    title: "Deforestation",
-    description:
-      "Learn about the causes, effects, and prevention strategies for deforestation, one of the most pressing environmental challenges.",
+    title: t('lesson.deforestation'),
+    description: t('lesson.deforestation.desc'),
     image: deforestationImg,
-    duration: "16 min",
-    difficulty: "Intermediate",
+    duration: `16 ${t('common.minutes')}`,
+    difficulty: t('difficulty.intermediate'),
     content:
       "Deforestation has far-reaching consequences for climate, biodiversity, and human communities. Understand the main drivers of forest loss, including agriculture, logging, and urban development. Learn about sustainable alternatives and conservation strategies.",
     videoDescription:
       "Explore the impact of deforestation and discover how communities are working to protect their forests.",
   },
   6: {
-    title: "Renewable Energy",
-    description:
-      "Discover clean energy technologies like solar, wind, and hydroelectric power that are shaping a sustainable energy future.",
+    title: t('lesson.renewable.energy'),
+    description: t('lesson.renewable.energy.desc'),
     image: renewableEnergyImg,
-    duration: "20 min",
-    difficulty: "Advanced",
+    duration: `20 ${t('common.minutes')}`,
+    difficulty: t('difficulty.advanced'),
     content:
       "Renewable energy is key to reducing greenhouse gas emissions and achieving energy independence. Learn about different renewable technologies, their efficiency, costs, and environmental benefits. Understand how renewable energy systems work and their role in the global energy transition.",
     videoDescription:
       "See cutting-edge renewable energy installations and learn how clean energy is revolutionizing our world.",
   },
-};
+});
 
 export default function Lesson() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [progress, setProgress] = useState(0);
 
+  const lessonsData = getLessonsData(t);
   const lesson = id
     ? lessonsData[parseInt(id) as keyof typeof lessonsData]
     : null;
@@ -178,10 +175,10 @@ export default function Lesson() {
         <Navigation />
         <div className="container mx-auto px-4 py-8 text-center">
           <h1 className="text-2xl font-bold text-destructive">
-            Lesson not found
+            {t('lesson.not.found')}
           </h1>
           <Button onClick={() => navigate("/dashboard")} className="mt-4">
-            Back to Dashboard
+            {t('lesson.back.to.dashboard')}
           </Button>
         </div>
       </div>
@@ -211,16 +208,16 @@ export default function Lesson() {
             </div>
             <div className="flex items-center space-x-1">
               <BookOpen className="w-4 h-4" />
-              <span>Interactive Lesson</span>
+              <span>{t('lesson.interactive.lesson')}</span>
             </div>
           </div>
         </div>
 
         <Tabs defaultValue="video" className="w-full">
           <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="video">📹 Video</TabsTrigger>
-            <TabsTrigger value="game">🎮 Game</TabsTrigger>
-            <TabsTrigger value="content">📚 Content</TabsTrigger>
+            <TabsTrigger value="video">{t('lesson.video')}</TabsTrigger>
+            <TabsTrigger value="game">{t('lesson.game')}</TabsTrigger>
+            <TabsTrigger value="content">{t('lesson.content')}</TabsTrigger>
           </TabsList>
 
           {/* Video Tab */}
@@ -231,7 +228,7 @@ export default function Lesson() {
                   <CardHeader>
                     <CardTitle className="flex items-center space-x-2">
                       <Play className="w-5 h-5 text-primary" />
-                      <span>Lesson Video</span>
+                      <span>{t('lesson.video.title')}</span>
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
@@ -297,9 +294,7 @@ export default function Lesson() {
 
                     <div className="text-center">
                       <p className="text-muted-foreground mb-4">
-                        📹 This is a simulated video player. In a real
-                        implementation, you would embed actual educational
-                        videos here.
+                        {t('lesson.video.simulated')}
                       </p>
                     </div>
                   </CardContent>
@@ -318,7 +313,7 @@ export default function Lesson() {
           <TabsContent value="content" className="space-y-6">
             <Card className="shadow-card">
               <CardHeader>
-                <CardTitle>Lesson Overview</CardTitle>
+                <CardTitle>{t('lesson.overview')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground leading-relaxed">
@@ -333,13 +328,13 @@ export default function Lesson() {
         <div className="space-y-6">
           <Card className="shadow-card">
             <CardHeader>
-              <CardTitle className="text-lg">Your Progress</CardTitle>
+              <CardTitle className="text-lg">{t('lesson.your.progress')}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 <div className="flex justify-between text-sm">
-                  <span>Video Progress</span>
-                  <span>{Math.round(progress)}%</span>
+                  <span>{t('lesson.video.progress')}</span>
+                  <span>{Math.round(progress)}{t('common.percent')}</span>
                 </div>
                 <Progress value={progress} className="h-3" />
 
@@ -347,12 +342,12 @@ export default function Lesson() {
                   <div className="text-center">
                     <div className="text-success text-2xl mb-2">🎉</div>
                     <p className="text-sm text-success font-medium">
-                      Video completed!
+                      {t('lesson.video.completed')}
                     </p>
                   </div>
                 ) : (
                   <p className="text-xs text-muted-foreground">
-                    Watch the complete video to unlock the quiz
+                    {t('lesson.watch.complete')}
                   </p>
                 )}
               </div>
@@ -361,12 +356,11 @@ export default function Lesson() {
 
           <Card className="shadow-card">
             <CardHeader>
-              <CardTitle className="text-lg">Ready for the Quiz?</CardTitle>
+              <CardTitle className="text-lg">{t('lesson.ready.quiz')}</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground mb-4">
-                Test your knowledge with our interactive quiz. Complete the
-                video first to unlock it!
+                {t('lesson.test.knowledge')}
               </p>
               <Button
                 onClick={handleStartQuiz}
@@ -374,11 +368,11 @@ export default function Lesson() {
                 className="w-full bg-gradient-nature hover:opacity-90 disabled:opacity-50"
               >
                 {progress < 100 ? (
-                  "Complete Video First"
+                  t('lesson.complete.video.first')
                 ) : (
                   <>
                     <ArrowRight className="w-4 h-4 mr-2" />
-                    Start Quiz
+                    {t('lesson.start.quiz')}
                   </>
                 )}
               </Button>
@@ -387,7 +381,7 @@ export default function Lesson() {
 
           <Card className="shadow-card">
             <CardHeader>
-              <CardTitle className="text-lg">Quick Facts</CardTitle>
+              <CardTitle className="text-lg">{t('lesson.quick.facts')}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
@@ -396,12 +390,12 @@ export default function Lesson() {
                     <div className="flex items-center space-x-2">
                       <span className="text-xl">♻️</span>
                       <p className="text-sm">
-                        Recycling 1 ton of paper saves 17 trees
+                        {t('fact.recycling.trees')}
                       </p>
                     </div>
                     <div className="flex items-center space-x-2">
                       <span className="text-xl">🗑️</span>
-                      <p className="text-sm">Composting reduces waste by 30%</p>
+                      <p className="text-sm">{t('fact.composting.waste')}</p>
                     </div>
                   </>
                 )}
@@ -409,12 +403,12 @@ export default function Lesson() {
                   <>
                     <div className="flex items-center space-x-2">
                       <span className="text-xl">💧</span>
-                      <p className="text-sm">Clean water prevents 80% of diseases</p>
+                      <p className="text-sm">{t('fact.clean.water.diseases')}</p>
                     </div>
                     <div className="flex items-center space-x-2">
                       <span className="text-xl">🏭</span>
                       <p className="text-sm">
-                        Modern plants remove 99% of pollutants
+                        {t('fact.modern.plants.pollutants')}
                       </p>
                     </div>
                   </>
@@ -426,11 +420,11 @@ export default function Lesson() {
                   <>
                     <div className="flex items-center space-x-2">
                       <span className="text-xl">🌱</span>
-                      <p className="text-sm">Every action makes a difference</p>
+                      <p className="text-sm">{t('fact.every.action.difference')}</p>
                     </div>
                     <div className="flex items-center space-x-2">
                       <span className="text-xl">🌍</span>
-                      <p className="text-sm">Together we protect our planet</p>
+                      <p className="text-sm">{t('fact.together.protect.planet')}</p>
                     </div>
                   </>
                 )}

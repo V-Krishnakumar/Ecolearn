@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 import { PlayCircle, Clock, Trophy, Star } from "lucide-react";
 import Chatbot from "@/components/Chatbot";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // Import lesson images
 import wasteManagementImg from "@/assets/lesson-waste-management.jpg";
@@ -15,64 +16,64 @@ import afforestationImg from "@/assets/lesson-afforestation.jpg";
 import deforestationImg from "@/assets/lesson-deforestation.jpg";
 import renewableEnergyImg from "@/assets/lesson-renewable-energy.jpg";
 
-const lessons = [
+const getLessons = (t: (key: string) => string) => [
   {
     id: 1,
-    title: "Waste Management",
-    description: "Learn about proper waste disposal, recycling, and composting to reduce environmental impact.",
+    title: t('lesson.waste.management'),
+    description: t('lesson.waste.management.desc'),
     image: wasteManagementImg,
-    duration: "15 min",
-    difficulty: "Beginner",
+    duration: `15 ${t('common.minutes')}`,
+    difficulty: t('difficulty.beginner'),
     progress: 100,
     completed: true
   },
   {
     id: 2,
-    title: "Water Treatment",
-    description: "Discover how water is cleaned and purified for safe consumption and environmental protection.",
+    title: t('lesson.water.treatment'),
+    description: t('lesson.water.treatment.desc'),
     image: waterTreatmentImg,
-    duration: "12 min",
-    difficulty: "Beginner",
+    duration: `12 ${t('common.minutes')}`,
+    difficulty: t('difficulty.beginner'),
     progress: 75,
     completed: false
   },
   {
     id: 3,
-    title: "Pollution-Free Zones",
-    description: "Explore strategies to create and maintain clean, pollution-free environments in cities.",
+    title: t('lesson.pollution.free'),
+    description: t('lesson.pollution.free.desc'),
     image: pollutionFreeImg,
-    duration: "18 min",
-    difficulty: "Intermediate",
+    duration: `18 ${t('common.minutes')}`,
+    difficulty: t('difficulty.intermediate'),
     progress: 0,
     completed: false
   },
   {
     id: 4,
-    title: "Afforestation",
-    description: "Understand the importance of planting trees and creating new forests for our planet.",
+    title: t('lesson.afforestation'),
+    description: t('lesson.afforestation.desc'),
     image: afforestationImg,
-    duration: "14 min",
-    difficulty: "Beginner",
+    duration: `14 ${t('common.minutes')}`,
+    difficulty: t('difficulty.beginner'),
     progress: 25,
     completed: false
   },
   {
     id: 5,
-    title: "Deforestation",
-    description: "Learn about the causes and effects of deforestation and how to prevent it.",
+    title: t('lesson.deforestation'),
+    description: t('lesson.deforestation.desc'),
     image: deforestationImg,
-    duration: "16 min",
-    difficulty: "Intermediate",
+    duration: `16 ${t('common.minutes')}`,
+    difficulty: t('difficulty.intermediate'),
     progress: 0,
     completed: false
   },
   {
     id: 6,
-    title: "Renewable Energy",
-    description: "Discover clean energy sources like solar, wind, and hydroelectric power for a sustainable future.",
+    title: t('lesson.renewable.energy'),
+    description: t('lesson.renewable.energy.desc'),
     image: renewableEnergyImg,
-    duration: "20 min",
-    difficulty: "Advanced",
+    duration: `20 ${t('common.minutes')}`,
+    difficulty: t('difficulty.advanced'),
     progress: 0,
     completed: false
   }
@@ -80,6 +81,8 @@ const lessons = [
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
+  const lessons = getLessons(t);
   
   const completedLessons = lessons.filter(lesson => lesson.completed).length;
   const totalProgress = lessons.reduce((sum, lesson) => sum + lesson.progress, 0) / lessons.length;
@@ -92,11 +95,10 @@ export default function Dashboard() {
         {/* Header Section */}
         <div className="mb-8 text-center animate-slide-up">
           <h1 className="text-4xl font-bold text-foreground mb-4">
-            Welcome to Your Environmental Journey! 🌍
+            {t('dashboard.welcome')}
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Explore interactive lessons about environmental protection and sustainability. 
-            Each lesson includes videos, quizzes, and hands-on activities to help you become an eco-hero!
+            {t('dashboard.subtitle')}
           </p>
         </div>
 
@@ -106,14 +108,14 @@ export default function Dashboard() {
             <CardHeader className="pb-3">
               <CardTitle className="text-lg flex items-center space-x-2">
                 <Trophy className="w-5 h-5 text-accent" />
-                <span>Progress</span>
+                <span>{t('dashboard.progress')}</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
-                  <span>Overall Progress</span>
-                  <span className="font-medium">{Math.round(totalProgress)}%</span>
+                  <span>{t('dashboard.overall.progress')}</span>
+                  <span className="font-medium">{Math.round(totalProgress)}{t('common.percent')}</span>
                 </div>
                 <Progress value={totalProgress} className="h-3" />
               </div>
@@ -124,7 +126,7 @@ export default function Dashboard() {
             <CardHeader className="pb-3">
               <CardTitle className="text-lg flex items-center space-x-2">
                 <Star className="w-5 h-5 text-success" />
-                <span>Completed</span>
+                <span>{t('dashboard.completed')}</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -132,7 +134,7 @@ export default function Dashboard() {
                 {completedLessons}
                 <span className="text-lg font-normal text-muted-foreground">/{lessons.length}</span>
               </div>
-              <p className="text-sm text-muted-foreground">Lessons completed</p>
+              <p className="text-sm text-muted-foreground">{t('dashboard.lessons.completed')}</p>
             </CardContent>
           </Card>
 
@@ -140,12 +142,12 @@ export default function Dashboard() {
             <CardHeader className="pb-3">
               <CardTitle className="text-lg flex items-center space-x-2">
                 <Clock className="w-5 h-5 text-secondary" />
-                <span>Total Time</span>
+                <span>{t('dashboard.total.time')}</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold text-secondary">2.5</div>
-              <p className="text-sm text-muted-foreground">Hours of learning</p>
+              <p className="text-sm text-muted-foreground">{t('dashboard.hours.learning')}</p>
             </CardContent>
           </Card>
         </div>
@@ -154,7 +156,7 @@ export default function Dashboard() {
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center space-x-2">
             <span>🌱</span>
-            <span>Environmental Lessons</span>
+            <span>{t('dashboard.environmental.lessons')}</span>
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -174,15 +176,15 @@ export default function Dashboard() {
                   <div className="absolute top-4 right-4">
                     {lesson.completed ? (
                       <Badge className="bg-success text-success-foreground">
-                        ✓ Completed
+                        {t('lesson.completed')}
                       </Badge>
                     ) : lesson.progress > 0 ? (
                       <Badge variant="secondary">
-                        {lesson.progress}% Complete
+                        {lesson.progress}{t('common.percent')} {t('lesson.complete')}
                       </Badge>
                     ) : (
                       <Badge variant="outline" className="bg-white/90">
-                        Not Started
+                        {t('lesson.not.started')}
                       </Badge>
                     )}
                   </div>
@@ -213,7 +215,7 @@ export default function Dashboard() {
                       className="bg-gradient-nature hover:opacity-90 transition-all duration-200"
                     >
                       <PlayCircle className="w-4 h-4 mr-2" />
-                      {lesson.completed ? "Review" : lesson.progress > 0 ? "Continue" : "Start"}
+                      {lesson.completed ? t('lesson.review') : lesson.progress > 0 ? t('lesson.continue') : t('lesson.start')}
                     </Button>
                   </div>
                   
@@ -229,9 +231,9 @@ export default function Dashboard() {
         {/* Motivational Section */}
         <Card className="bg-gradient-nature text-white shadow-glow">
           <CardContent className="p-8 text-center">
-            <h3 className="text-2xl font-bold mb-4">🎯 Keep Going, Eco-Warrior!</h3>
+            <h3 className="text-2xl font-bold mb-4">{t('dashboard.keep.going')}</h3>
             <p className="text-lg mb-6 opacity-90">
-              You're making great progress! Every lesson brings you closer to becoming an environmental champion.
+              {t('dashboard.motivation')}
             </p>
             <Button
               variant="secondary"
@@ -240,7 +242,7 @@ export default function Dashboard() {
               className="bg-white text-primary hover:bg-white/90"
             >
               <Trophy className="w-5 h-5 mr-2" />
-              View Your Achievements
+              {t('dashboard.view.achievements')}
             </Button>
           </CardContent>
         </Card>

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { ArrowUp, ArrowDown } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface StoryPanel {
   id: string;
@@ -16,11 +17,11 @@ interface StoryPanel {
   category: 'problem' | 'solution';
 }
 
-const storyPanels: StoryPanel[] = [
+const getStoryPanels = (t: (key: string) => string): StoryPanel[] => [
   {
     id: "1",
-    title: "Healthy Forest",
-    description: "A thriving forest ecosystem with diverse wildlife and clean air.",
+    title: t('game.deforestation.healthy.forest'),
+    description: t('game.deforestation.healthy.forest.desc'),
     image: "🌳🦅🐿️",
     correctPosition: 1,
     currentPosition: 0,
@@ -28,8 +29,8 @@ const storyPanels: StoryPanel[] = [
   },
   {
     id: "2", 
-    title: "Logging Begins",
-    description: "Trees are cut down for lumber and agriculture expansion.",
+    title: t('game.deforestation.logging.begins'),
+    description: t('game.deforestation.logging.begins.desc'),
     image: "🪓🌳💔",
     correctPosition: 2,
     currentPosition: 0,
@@ -37,8 +38,8 @@ const storyPanels: StoryPanel[] = [
   },
   {
     id: "3",
-    title: "Forest Destruction",
-    description: "Large areas cleared, wildlife loses habitat, soil erodes.",
+    title: t('game.deforestation.forest.destruction'),
+    description: t('game.deforestation.forest.destruction.desc'),
     image: "🏗️💨🐾",
     correctPosition: 3,
     currentPosition: 0,
@@ -46,8 +47,8 @@ const storyPanels: StoryPanel[] = [
   },
   {
     id: "4",
-    title: "Community Action",
-    description: "Local communities organize to protect remaining forests.",
+    title: t('game.deforestation.community.action'),
+    description: t('game.deforestation.community.action.desc'),
     image: "👥🛡️🌳",
     correctPosition: 4,
     currentPosition: 0,
@@ -55,8 +56,8 @@ const storyPanels: StoryPanel[] = [
   },
   {
     id: "5",
-    title: "Sustainable Practices",
-    description: "Implement eco-friendly logging and replanting programs.",
+    title: t('game.deforestation.sustainable.practices'),
+    description: t('game.deforestation.sustainable.practices.desc'),
     image: "♻️🌱📋",
     correctPosition: 5,
     currentPosition: 0,
@@ -64,8 +65,8 @@ const storyPanels: StoryPanel[] = [
   },
   {
     id: "6",
-    title: "Forest Recovery",
-    description: "New trees planted, wildlife returns, ecosystem restored.",
+    title: t('game.deforestation.forest.recovery'),
+    description: t('game.deforestation.forest.recovery.desc'),
     image: "🌳🌿🦋",
     correctPosition: 6,
     currentPosition: 0,
@@ -88,6 +89,7 @@ function StoryPanelCard({
   canMoveUp: boolean;
   canMoveDown: boolean;
 }) {
+  const { t } = useLanguage();
   return (
     <Card className={`
       transition-all duration-300 
@@ -99,10 +101,10 @@ function StoryPanelCard({
           <div className="flex-1">
             <div className="flex items-center space-x-2 mb-2">
               <Badge variant={panel.category === 'problem' ? 'destructive' : 'default'} className="text-xs">
-                {panel.category === 'problem' ? '⚠️ Problem' : '✅ Solution'}
+                {panel.category === 'problem' ? t('game.deforestation.problem') : t('game.deforestation.solution')}
               </Badge>
               <Badge variant="outline" className="text-xs">
-                Position {panel.currentPosition || '?'}
+                {t('game.deforestation.position')} {panel.currentPosition || '?'}
               </Badge>
             </div>
             <h4 className="font-bold text-sm mb-2">{panel.title}</h4>
@@ -137,7 +139,7 @@ function StoryPanelCard({
         {isCorrectPosition && (
           <div className="mt-3 text-center">
             <Badge className="bg-success text-success-foreground">
-              ✅ Correct Position!
+              ✅ {t('game.deforestation.correct.position')}
             </Badge>
           </div>
         )}
@@ -147,6 +149,8 @@ function StoryPanelCard({
 }
 
 function DeforestationGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number, progress: number) => void }) {
+  const { t } = useLanguage();
+  const storyPanels = getStoryPanels(t);
   const [gamePanels, setGamePanels] = useState<StoryPanel[]>(() => {
     // Shuffle panels initially
     const shuffled = [...storyPanels].sort(() => Math.random() - 0.5);
@@ -229,10 +233,9 @@ function DeforestationGameContent({ onScoreUpdate }: { onScoreUpdate: (score: nu
     <div className="space-y-6">
       {/* Instructions */}
       <div className="text-center p-4 bg-muted rounded-lg">
-        <h3 className="font-bold text-lg mb-2">🌲 Forest Guardian!</h3>
+        <h3 className="font-bold text-lg mb-2">🌲 {t('game.deforestation.title')}</h3>
         <p className="text-muted-foreground">
-          Arrange the story panels in the correct order to show the forest conservation journey.
-          Start with the problem, then show the solutions!
+          {t('game.deforestation.instructions')}
         </p>
       </div>
 
@@ -241,19 +244,19 @@ function DeforestationGameContent({ onScoreUpdate }: { onScoreUpdate: (score: nu
         <Card>
           <CardContent className="p-4 text-center">
             <div className="text-2xl font-bold text-success">{correctCount}</div>
-            <div className="text-xs text-muted-foreground">Correct Positions</div>
+            <div className="text-xs text-muted-foreground">{t('game.deforestation.correct.positions')}</div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
             <div className="text-2xl font-bold text-secondary">{moves}</div>
-            <div className="text-xs text-muted-foreground">Moves Made</div>
+            <div className="text-xs text-muted-foreground">{t('game.deforestation.moves.made')}</div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
             <div className="text-2xl font-bold text-accent">{Math.round(progress)}%</div>
-            <div className="text-xs text-muted-foreground">Progress</div>
+            <div className="text-xs text-muted-foreground">{t('game.deforestation.progress')}</div>
           </CardContent>
         </Card>
       </div>
@@ -261,19 +264,19 @@ function DeforestationGameContent({ onScoreUpdate }: { onScoreUpdate: (score: nu
       {/* Story Sequence Guide */}
       <Card className="bg-accent/10">
         <CardContent className="p-4">
-          <h4 className="font-semibold mb-3 text-center">📖 Correct Story Sequence:</h4>
+          <h4 className="font-semibold mb-3 text-center">📖 {t('game.deforestation.correct.story.sequence')}</h4>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-xs">
             <div className="text-center p-2 bg-destructive/20 rounded">
-              <div className="font-bold text-destructive">Problems (1-3)</div>
-              <div>Healthy → Logging → Destruction</div>
+              <div className="font-bold text-destructive">{t('game.deforestation.problems')}</div>
+              <div>{t('game.deforestation.healthy.to.logging')} → {t('game.deforestation.logging.to.destruction')}</div>
             </div>
             <div className="text-center p-2 bg-accent/20 rounded">
-              <div className="font-bold text-accent">Action (4)</div>
-              <div>Community organizes</div>
+              <div className="font-bold text-accent">{t('game.deforestation.action')}</div>
+              <div>{t('game.deforestation.community.organizes')}</div>
             </div>
             <div className="text-center p-2 bg-success/20 rounded">
-              <div className="font-bold text-success">Solutions (5-6)</div>
-              <div>Sustainable → Recovery</div>
+              <div className="font-bold text-success">{t('game.deforestation.solutions')}</div>
+              <div>{t('game.deforestation.sustainable.to.recovery')}</div>
             </div>
           </div>
         </CardContent>
@@ -281,7 +284,7 @@ function DeforestationGameContent({ onScoreUpdate }: { onScoreUpdate: (score: nu
 
       {/* Story Panels */}
       <div className="space-y-4">
-        <h4 className="font-semibold text-center">📚 Story Panels (Arrange in Order):</h4>
+        <h4 className="font-semibold text-center">📚 {t('game.deforestation.story.panels')}</h4>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {gamePanels.map((panel, index) => (
             <StoryPanelCard
@@ -300,10 +303,10 @@ function DeforestationGameContent({ onScoreUpdate }: { onScoreUpdate: (score: nu
       {isComplete && (
         <div className="text-center p-6 bg-success/20 rounded-lg animate-bounce-gentle">
           <div className="text-4xl mb-2">🎉</div>
-          <div className="text-xl font-bold text-success mb-2">Story Complete!</div>
+          <div className="text-xl font-bold text-success mb-2">{t('game.deforestation.story.complete')}</div>
           <div className="text-muted-foreground">
-            You've successfully shown how communities can protect and restore forests!
-            Completed in {moves} moves.
+            {t('game.deforestation.story.complete.desc')}
+            {t('game.deforestation.completed.in.moves')} {moves} moves.
           </div>
         </div>
       )}
@@ -311,7 +314,7 @@ function DeforestationGameContent({ onScoreUpdate }: { onScoreUpdate: (score: nu
       {/* Restart Button */}
       <div className="text-center">
         <Button onClick={restart} variant="outline">
-          Shuffle Story
+          {t('game.deforestation.shuffle.story')}
         </Button>
       </div>
     </div>
@@ -319,6 +322,7 @@ function DeforestationGameContent({ onScoreUpdate }: { onScoreUpdate: (score: nu
 }
 
 export function DeforestationGame({ onComplete }: { onComplete: () => void }) {
+  const { t } = useLanguage();
   const [score, setScore] = useState(0);
   const [progress, setProgress] = useState(0);
   const [key, setKey] = useState(0);
@@ -336,8 +340,8 @@ export function DeforestationGame({ onComplete }: { onComplete: () => void }) {
 
   return (
     <GameWrapper
-      title="Forest Guardian!"
-      description="Arrange the conservation story in the right order to save the forest"
+      title={t('game.deforestation.title')}
+      description={t('game.deforestation.description')}
       score={score}
       maxScore={90}
       progress={progress}

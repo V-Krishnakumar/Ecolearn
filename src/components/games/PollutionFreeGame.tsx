@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface PollutionSource {
   id: string;
@@ -23,22 +24,22 @@ interface Solution {
   used: boolean;
 }
 
-const pollutionSources: PollutionSource[] = [
-  { id: "1", name: "Car Emissions", icon: "🚗💨", type: "transport", matched: false },
-  { id: "2", name: "Factory Smoke", icon: "🏭💨", type: "industrial", matched: false },
-  { id: "3", name: "Plastic Waste", icon: "🥤🗑️", type: "waste", matched: false },
-  { id: "4", name: "Coal Plant", icon: "⚡💨", type: "energy", matched: false },
-  { id: "5", name: "Garbage Dump", icon: "🗑️☠️", type: "waste", matched: false },
-  { id: "6", name: "Truck Exhaust", icon: "🚛💨", type: "transport", matched: false }
+const getPollutionSources = (t: (key: string) => string): PollutionSource[] => [
+  { id: "1", name: t('game.pollution.car.emissions'), icon: "🚗💨", type: "transport", matched: false },
+  { id: "2", name: t('game.pollution.factory.smoke'), icon: "🏭💨", type: "industrial", matched: false },
+  { id: "3", name: t('game.pollution.plastic.waste'), icon: "🥤🗑️", type: "waste", matched: false },
+  { id: "4", name: t('game.pollution.coal.plant'), icon: "⚡💨", type: "energy", matched: false },
+  { id: "5", name: t('game.pollution.garbage.dump'), icon: "🗑️☠️", type: "waste", matched: false },
+  { id: "6", name: t('game.pollution.truck.exhaust'), icon: "🚛💨", type: "transport", matched: false }
 ];
 
-const solutions: Solution[] = [
-  { id: "1", name: "Electric Vehicle", icon: "🔋🚗", type: "transport", used: false },
-  { id: "2", name: "Green Factory", icon: "🏭🌱", type: "industrial", used: false },
-  { id: "3", name: "Recycling Center", icon: "♻️🏢", type: "waste", used: false },
-  { id: "4", name: "Solar Panels", icon: "☀️⚡", type: "energy", used: false },
-  { id: "5", name: "Composting", icon: "🌱🗑️", type: "waste", used: false },
-  { id: "6", name: "Electric Truck", icon: "🔋🚛", type: "transport", used: false }
+const getSolutions = (t: (key: string) => string): Solution[] => [
+  { id: "1", name: t('game.pollution.electric.vehicle'), icon: "🔋🚗", type: "transport", used: false },
+  { id: "2", name: t('game.pollution.green.factory'), icon: "🏭🌱", type: "industrial", used: false },
+  { id: "3", name: t('game.pollution.recycling.center'), icon: "♻️🏢", type: "waste", used: false },
+  { id: "4", name: t('game.pollution.solar.panels'), icon: "☀️⚡", type: "energy", used: false },
+  { id: "5", name: t('game.pollution.composting'), icon: "🌱🗑️", type: "waste", used: false },
+  { id: "6", name: t('game.pollution.electric.truck'), icon: "🔋🚛", type: "transport", used: false }
 ];
 
 function PollutionSourceCard({ 
@@ -48,6 +49,7 @@ function PollutionSourceCard({
   source: PollutionSource; 
   matchedSolution?: Solution 
 }) {
+  const { t } = useLanguage();
   const { draggedOver, setDraggedOver } = useDragDrop();
   
   return (
@@ -69,7 +71,7 @@ function PollutionSourceCard({
         {source.matched && matchedSolution && (
           <div className="mt-2">
             <Badge className="bg-success text-success-foreground text-xs">
-              ✅ Fixed with {matchedSolution.name}
+              ✅ {t('game.pollution.fixed.with')} {matchedSolution.name}
             </Badge>
           </div>
         )}
@@ -85,6 +87,7 @@ function SolutionCard({
   solution: Solution; 
   onDragStart: (solution: Solution) => void 
 }) {
+  const { t } = useLanguage();
   return (
     <Card 
       className={`
@@ -99,7 +102,7 @@ function SolutionCard({
         <div className="text-sm font-medium text-center">{solution.name}</div>
         {solution.used && (
           <Badge variant="outline" className="mt-2 text-xs">
-            Used
+            {t('game.pollution.used')}
           </Badge>
         )}
       </CardContent>
@@ -108,6 +111,9 @@ function SolutionCard({
 }
 
 function PollutionGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number, progress: number) => void }) {
+  const { t } = useLanguage();
+  const pollutionSources = getPollutionSources(t);
+  const solutions = getSolutions(t);
   const [gameSources, setGameSources] = useState<PollutionSource[]>(pollutionSources);
   const [gameSolutions, setGameSolutions] = useState<Solution[]>(solutions);
   const [matches, setMatches] = useState<{[key: string]: string}>({});
@@ -144,10 +150,10 @@ function PollutionGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number
       setScore(newScore);
       setAirQuality(prev => Math.min(100, prev + 16.67)); // Each match improves air quality
       
-      toast.success("Perfect match! Pollution reduced! +15 points");
+      toast.success(t('game.pollution.perfect.match'));
     } else {
       // Wrong match
-      toast.error("That solution doesn't match this pollution type. Try again!");
+      toast.error(t('game.pollution.wrong.match'));
     }
     
     setDraggedItem(null);
@@ -175,10 +181,10 @@ function PollutionGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number
   };
 
   const getAirQualityLabel = () => {
-    if (airQuality >= 80) return "Excellent";
-    if (airQuality >= 50) return "Good";
-    if (airQuality >= 20) return "Moderate";
-    return "Poor";
+    if (airQuality >= 80) return t('game.pollution.excellent');
+    if (airQuality >= 50) return t('game.pollution.good');
+    if (airQuality >= 20) return t('game.pollution.moderate');
+    return t('game.pollution.poor');
   };
 
   const allMatched = gameSources.every(s => s.matched);
@@ -193,9 +199,9 @@ function PollutionGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number
     <div className="space-y-6">
       {/* Instructions */}
       <div className="text-center p-4 bg-muted rounded-lg">
-        <h3 className="font-bold text-lg mb-2">🌬️ Clean City Challenge!</h3>
+        <h3 className="font-bold text-lg mb-2">🌬️ {t('game.pollution.title')}</h3>
         <p className="text-muted-foreground">
-          Match pollution sources with their eco-friendly solutions to improve air quality!
+          {t('game.pollution.instructions')}
         </p>
       </div>
 
@@ -203,18 +209,18 @@ function PollutionGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number
       <Card className="bg-gradient-to-r from-secondary/10 to-success/10">
         <CardContent className="p-6">
           <div className="flex items-center justify-between mb-4">
-            <h4 className="font-semibold">🌡️ Air Quality Monitor</h4>
+            <h4 className="font-semibold">🌡️ {t('game.pollution.air.quality.monitor')}</h4>
             <Badge className={`${getAirQualityColor().replace('text-', 'bg-')} text-white`}>
               {getAirQualityLabel()}
             </Badge>
           </div>
           <Progress value={airQuality} className="h-4 mb-2" />
           <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">Poor</span>
+            <span className="text-muted-foreground">{t('game.pollution.poor')}</span>
             <span className={`font-bold ${getAirQualityColor()}`}>
-              {Math.round(airQuality)}% Clean
+              {Math.round(airQuality)}% {t('game.pollution.clean')}
             </span>
-            <span className="text-muted-foreground">Excellent</span>
+            <span className="text-muted-foreground">{t('game.pollution.excellent')}</span>
           </div>
         </CardContent>
       </Card>
@@ -223,7 +229,7 @@ function PollutionGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Pollution Sources */}
         <div>
-          <h4 className="font-semibold mb-4 text-destructive">☠️ Pollution Sources:</h4>
+          <h4 className="font-semibold mb-4 text-destructive">☠️ {t('game.pollution.pollution.sources')}</h4>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {gameSources.map((source) => (
               <div
@@ -241,7 +247,7 @@ function PollutionGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number
 
         {/* Solutions */}
         <div>
-          <h4 className="font-semibold mb-4 text-success">🌱 Eco Solutions:</h4>
+          <h4 className="font-semibold mb-4 text-success">🌱 {t('game.pollution.eco.solutions')}</h4>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {gameSolutions.map((solution) => (
               <SolutionCard
@@ -257,9 +263,9 @@ function PollutionGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number
       {allMatched && (
         <div className="text-center p-6 bg-success/20 rounded-lg animate-bounce-gentle">
           <div className="text-4xl mb-2">🎉</div>
-          <div className="text-xl font-bold text-success mb-2">City Cleaned!</div>
+          <div className="text-xl font-bold text-success mb-2">{t('game.pollution.city.cleaned')}</div>
           <div className="text-muted-foreground">
-            Air quality improved to {Math.round(airQuality)}%! The city can breathe easy now!
+            {t('game.pollution.city.cleaned.desc')}
           </div>
         </div>
       )}
@@ -267,7 +273,7 @@ function PollutionGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number
       {/* Restart Button */}
       <div className="text-center">
         <Button onClick={restart} variant="outline">
-          Reset City
+          {t('game.pollution.reset.city')}
         </Button>
       </div>
     </div>
@@ -275,6 +281,7 @@ function PollutionGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number
 }
 
 export function PollutionFreeGame({ onComplete }: { onComplete: () => void }) {
+  const { t } = useLanguage();
   const [score, setScore] = useState(0);
   const [progress, setProgress] = useState(0);
   const [key, setKey] = useState(0);
@@ -293,8 +300,8 @@ export function PollutionFreeGame({ onComplete }: { onComplete: () => void }) {
   return (
     <DragDropProvider>
       <GameWrapper
-        title="Clean City Challenge!"
-        description="Match pollution sources with eco-friendly solutions"
+        title={t('game.pollution.title')}
+        description={t('game.pollution.description')}
         score={score}
         maxScore={90}
         progress={progress}

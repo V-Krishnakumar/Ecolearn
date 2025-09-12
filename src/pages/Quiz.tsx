@@ -7,153 +7,246 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, XCircle, ArrowRight, RotateCcw, Trophy } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
 
-const quizData = {
+const getQuizData = (t: (key: string) => string) => ({
   1: {
-    title: "Waste Management Quiz",
+    title: t('quiz.waste.management.title'),
     questions: [
       {
-        question: "What are the 3 R's of waste management?",
-        options: ["Reduce, Reuse, Recycle", "Read, Write, Remember", "Run, Rest, Repeat", "Rock, Roll, Rhythm"],
+        question: t('quiz.waste.q1.question'),
+        options: [
+          t('quiz.waste.q1.option1'),
+          t('quiz.waste.q1.option2'),
+          t('quiz.waste.q1.option3'),
+          t('quiz.waste.q1.option4')
+        ],
         correct: 0,
-        explanation: "The 3 R's - Reduce, Reuse, and Recycle - are the fundamental principles of waste management that help minimize environmental impact."
+        explanation: t('quiz.waste.q1.explanation')
       },
       {
-        question: "Which material takes the longest to decompose in landfills?",
-        options: ["Paper", "Glass", "Plastic bottles", "Food waste"],
+        question: t('quiz.waste.q2.question'),
+        options: [
+          t('quiz.waste.q2.option1'),
+          t('quiz.waste.q2.option2'),
+          t('quiz.waste.q2.option3'),
+          t('quiz.waste.q2.option4')
+        ],
         correct: 1,
-        explanation: "Glass can take over 1 million years to decompose, making it crucial to recycle glass products properly."
+        explanation: t('quiz.waste.q2.explanation')
       },
       {
-        question: "What percentage of household waste can typically be composted?",
-        options: ["10%", "20%", "30%", "50%"],
+        question: t('quiz.waste.q3.question'),
+        options: [
+          t('quiz.waste.q3.option1'),
+          t('quiz.waste.q3.option2'),
+          t('quiz.waste.q3.option3'),
+          t('quiz.waste.q3.option4')
+        ],
         correct: 2,
-        explanation: "About 30% of household waste consists of organic materials that can be composted, significantly reducing landfill waste."
+        explanation: t('quiz.waste.q3.explanation')
       }
     ]
   },
   2: {
-    title: "Water Treatment Quiz",
+    title: t('quiz.water.treatment.title'),
     questions: [
       {
-        question: "What is the first step in water treatment?",
-        options: ["Disinfection", "Screening", "Filtration", "Sedimentation"],
+        question: t('quiz.water.q1.question'),
+        options: [
+          t('quiz.water.q1.option1'),
+          t('quiz.water.q1.option2'),
+          t('quiz.water.q1.option3'),
+          t('quiz.water.q1.option4')
+        ],
         correct: 1,
-        explanation: "Screening is the first step, where large debris and particles are removed from the water before further treatment."
+        explanation: t('quiz.water.q1.explanation')
       },
       {
-        question: "Which chemical is commonly used to disinfect water?",
-        options: ["Salt", "Chlorine", "Sugar", "Baking soda"],
+        question: t('quiz.water.q2.question'),
+        options: [
+          t('quiz.water.q2.option1'),
+          t('quiz.water.q2.option2'),
+          t('quiz.water.q2.option3'),
+          t('quiz.water.q2.option4')
+        ],
         correct: 1,
-        explanation: "Chlorine is widely used to disinfect water by killing harmful bacteria and viruses, making it safe for consumption."
+        explanation: t('quiz.water.q2.explanation')
       },
       {
-        question: "How much of Earth's water is fresh and accessible?",
-        options: ["10%", "5%", "3%", "Less than 1%"],
+        question: t('quiz.water.q3.question'),
+        options: [
+          t('quiz.water.q3.option1'),
+          t('quiz.water.q3.option2'),
+          t('quiz.water.q3.option3'),
+          t('quiz.water.q3.option4')
+        ],
         correct: 3,
-        explanation: "Less than 1% of Earth's water is fresh and accessible, making water conservation and treatment extremely important."
+        explanation: t('quiz.water.q3.explanation')
       }
     ]
   },
   3: {
-    title: "Pollution-Free Zones Quiz",
+    title: t('quiz.pollution.free.title'),
     questions: [
       {
-        question: "What is a major source of air pollution in cities?",
-        options: ["Trees", "Vehicle emissions", "Rainfall", "Wind"],
+        question: t('quiz.pollution.q1.question'),
+        options: [
+          t('quiz.pollution.q1.option1'),
+          t('quiz.pollution.q1.option2'),
+          t('quiz.pollution.q1.option3'),
+          t('quiz.pollution.q1.option4')
+        ],
         correct: 1,
-        explanation: "Vehicle emissions are one of the largest sources of air pollution in urban areas, contributing to smog and health problems."
+        explanation: t('quiz.pollution.q1.explanation')
       },
       {
-        question: "Which transportation method produces the least pollution?",
-        options: ["Diesel bus", "Electric car", "Gasoline car", "Motorcycle"],
+        question: t('quiz.pollution.q2.question'),
+        options: [
+          t('quiz.pollution.q2.option1'),
+          t('quiz.pollution.q2.option2'),
+          t('quiz.pollution.q2.option3'),
+          t('quiz.pollution.q2.option4')
+        ],
         correct: 1,
-        explanation: "Electric vehicles produce zero direct emissions and are much cleaner than fossil fuel-powered vehicles."
+        explanation: t('quiz.pollution.q2.explanation')
       },
       {
-        question: "What role do plants play in pollution-free zones?",
-        options: ["They increase pollution", "They absorb CO₂ and produce oxygen", "They have no effect", "They block sunlight"],
+        question: t('quiz.pollution.q3.question'),
+        options: [
+          t('quiz.pollution.q3.option1'),
+          t('quiz.pollution.q3.option2'),
+          t('quiz.pollution.q3.option3'),
+          t('quiz.pollution.q3.option4')
+        ],
         correct: 1,
-        explanation: "Plants naturally filter air by absorbing carbon dioxide and producing oxygen, making them essential for clean environments."
+        explanation: t('quiz.pollution.q3.explanation')
       }
     ]
   },
   4: {
-    title: "Afforestation Quiz",
+    title: t('quiz.afforestation.title'),
     questions: [
       {
-        question: "What is afforestation?",
-        options: ["Cutting down forests", "Planting trees in new areas", "Moving forests", "Painting trees"],
+        question: t('quiz.afforestation.q1.question'),
+        options: [
+          t('quiz.afforestation.q1.option1'),
+          t('quiz.afforestation.q1.option2'),
+          t('quiz.afforestation.q1.option3'),
+          t('quiz.afforestation.q1.option4')
+        ],
         correct: 1,
-        explanation: "Afforestation is the process of creating forests by planting trees in areas that were not previously forested."
+        explanation: t('quiz.afforestation.q1.explanation')
       },
       {
-        question: "How do trees help fight climate change?",
-        options: ["They reflect heat", "They absorb carbon dioxide", "They create wind", "They block rain"],
+        question: t('quiz.afforestation.q2.question'),
+        options: [
+          t('quiz.afforestation.q2.option1'),
+          t('quiz.afforestation.q2.option2'),
+          t('quiz.afforestation.q2.option3'),
+          t('quiz.afforestation.q2.option4')
+        ],
         correct: 1,
-        explanation: "Trees absorb CO₂ from the atmosphere during photosynthesis, helping to reduce greenhouse gas concentrations."
+        explanation: t('quiz.afforestation.q2.explanation')
       },
       {
-        question: "What's the best time to plant most trees?",
-        options: ["Summer", "Winter", "Spring or Fall", "Any time"],
+        question: t('quiz.afforestation.q3.question'),
+        options: [
+          t('quiz.afforestation.q3.option1'),
+          t('quiz.afforestation.q3.option2'),
+          t('quiz.afforestation.q3.option3'),
+          t('quiz.afforestation.q3.option4')
+        ],
         correct: 2,
-        explanation: "Spring and fall provide optimal conditions for tree planting, with moderate temperatures and adequate rainfall."
+        explanation: t('quiz.afforestation.q3.explanation')
       }
     ]
   },
   5: {
-    title: "Deforestation Quiz",
+    title: t('quiz.deforestation.title'),
     questions: [
       {
-        question: "What is the main cause of deforestation globally?",
-        options: ["Natural disasters", "Agriculture expansion", "Urban development", "Disease"],
+        question: t('quiz.deforestation.q1.question'),
+        options: [
+          t('quiz.deforestation.q1.option1'),
+          t('quiz.deforestation.q1.option2'),
+          t('quiz.deforestation.q1.option3'),
+          t('quiz.deforestation.q1.option4')
+        ],
         correct: 1,
-        explanation: "Agriculture expansion, particularly for livestock and crop production, is responsible for about 80% of global deforestation."
+        explanation: t('quiz.deforestation.q1.explanation')
       },
       {
-        question: "How does deforestation affect the water cycle?",
-        options: ["No effect", "Reduces rainfall", "Increases rainfall", "Changes water color"],
+        question: t('quiz.deforestation.q2.question'),
+        options: [
+          t('quiz.deforestation.q2.option1'),
+          t('quiz.deforestation.q2.option2'),
+          t('quiz.deforestation.q2.option3'),
+          t('quiz.deforestation.q2.option4')
+        ],
         correct: 1,
-        explanation: "Trees release water vapor through transpiration. Deforestation reduces this process, leading to decreased rainfall in the region."
+        explanation: t('quiz.deforestation.q2.explanation')
       },
       {
-        question: "Which ecosystem service is lost when forests are cleared?",
-        options: ["Carbon storage", "Biodiversity habitat", "Soil protection", "All of the above"],
+        question: t('quiz.deforestation.q3.question'),
+        options: [
+          t('quiz.deforestation.q3.option1'),
+          t('quiz.deforestation.q3.option2'),
+          t('quiz.deforestation.q3.option3'),
+          t('quiz.deforestation.q3.option4')
+        ],
         correct: 3,
-        explanation: "Forests provide all these services - they store carbon, provide habitat for wildlife, and protect soil from erosion."
+        explanation: t('quiz.deforestation.q3.explanation')
       }
     ]
   },
   6: {
-    title: "Renewable Energy Quiz",
+    title: t('quiz.renewable.energy.title'),
     questions: [
       {
-        question: "Which is NOT a renewable energy source?",
-        options: ["Solar power", "Wind power", "Coal", "Hydroelectric"],
+        question: t('quiz.renewable.q1.question'),
+        options: [
+          t('quiz.renewable.q1.option1'),
+          t('quiz.renewable.q1.option2'),
+          t('quiz.renewable.q1.option3'),
+          t('quiz.renewable.q1.option4')
+        ],
         correct: 2,
-        explanation: "Coal is a fossil fuel that takes millions of years to form and produces harmful emissions when burned."
+        explanation: t('quiz.renewable.q1.explanation')
       },
       {
-        question: "What makes solar panels work?",
-        options: ["Heat from the sun", "Light from the sun", "Wind", "Rain"],
+        question: t('quiz.renewable.q2.question'),
+        options: [
+          t('quiz.renewable.q2.option1'),
+          t('quiz.renewable.q2.option2'),
+          t('quiz.renewable.q2.option3'),
+          t('quiz.renewable.q2.option4')
+        ],
         correct: 1,
-        explanation: "Solar panels convert light (photons) from the sun into electricity through the photovoltaic effect."
+        explanation: t('quiz.renewable.q2.explanation')
       },
       {
-        question: "Which renewable energy source works best at night?",
-        options: ["Solar", "Wind", "Hydroelectric", "Both B and C"],
+        question: t('quiz.renewable.q3.question'),
+        options: [
+          t('quiz.renewable.q3.option1'),
+          t('quiz.renewable.q3.option2'),
+          t('quiz.renewable.q3.option3'),
+          t('quiz.renewable.q3.option4')
+        ],
         correct: 3,
-        explanation: "Both wind and hydroelectric power can generate electricity 24/7, unlike solar power which only works during daylight."
+        explanation: t('quiz.renewable.q3.explanation')
       }
     ]
   }
-};
+});
 
 export default function Quiz() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useLanguage();
   
+  const quizData = getQuizData(t);
   const quiz = id ? quizData[parseInt(id) as keyof typeof quizData] : null;
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
@@ -167,9 +260,9 @@ export default function Quiz() {
       <div className="min-h-screen bg-background">
         <Navigation />
         <div className="container mx-auto px-4 py-8 text-center">
-          <h1 className="text-2xl font-bold text-destructive">Quiz not found</h1>
+          <h1 className="text-2xl font-bold text-destructive">{t('quiz.not.found')}</h1>
           <Button onClick={() => navigate("/dashboard")} className="mt-4">
-            Back to Dashboard
+            {t('quiz.back.to.dashboard')}
           </Button>
         </div>
       </div>
@@ -195,8 +288,8 @@ export default function Quiz() {
 
     // Show result feedback
     toast({
-      title: isCorrect ? "Correct! 🎉" : "Oops! 😅",
-      description: isCorrect ? "Great job!" : "Don't worry, keep learning!",
+      title: isCorrect ? t('quiz.correct.answer') : t('quiz.oops'),
+      description: isCorrect ? t('quiz.great.job') : t('quiz.keep.learning'),
       variant: isCorrect ? "default" : "destructive",
     });
   };
@@ -223,9 +316,9 @@ export default function Quiz() {
 
   const getScoreMessage = () => {
     const percentage = (score / quiz.questions.length) * 100;
-    if (percentage >= 80) return { message: "Outstanding! You're an eco-expert! 🏆", color: "text-success" };
-    if (percentage >= 60) return { message: "Great job! You're learning well! 🌟", color: "text-primary" };
-    return { message: "Keep studying! You're on your way! 💪", color: "text-secondary" };
+    if (percentage >= 80) return { message: t('quiz.outstanding'), color: "text-success" };
+    if (percentage >= 60) return { message: t('quiz.great.job.learning'), color: "text-primary" };
+    return { message: t('quiz.keep.studying'), color: "text-secondary" };
   };
 
   if (showResult) {
@@ -238,7 +331,7 @@ export default function Quiz() {
             <CardHeader>
               <CardTitle className="text-3xl font-bold flex items-center justify-center space-x-2">
                 <Trophy className="w-8 h-8 text-accent" />
-                <span>Quiz Complete!</span>
+                <span>{t('quiz.complete')}</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -256,14 +349,14 @@ export default function Quiz() {
               </div>
 
               <div className="bg-muted rounded-lg p-4">
-                <h3 className="font-semibold mb-3">Your Answers:</h3>
+                <h3 className="font-semibold mb-3">{t('quiz.your.answers')}</h3>
                 <div className="space-y-2">
                   {quiz.questions.map((question, index) => {
                     const userAnswer = answers[index];
                     const isCorrect = userAnswer === question.correct;
                     return (
                       <div key={index} className="flex items-center justify-between">
-                        <span className="text-sm">Question {index + 1}</span>
+                        <span className="text-sm">{t('quiz.question')} {index + 1}</span>
                         <div className="flex items-center space-x-2">
                           {isCorrect ? (
                             <CheckCircle className="w-5 h-5 text-success" />
@@ -271,7 +364,7 @@ export default function Quiz() {
                             <XCircle className="w-5 h-5 text-destructive" />
                           )}
                           <Badge variant={isCorrect ? "default" : "destructive"}>
-                            {isCorrect ? "Correct" : "Incorrect"}
+                            {isCorrect ? t('quiz.correct') : t('quiz.incorrect')}
                           </Badge>
                         </div>
                       </div>
@@ -287,20 +380,20 @@ export default function Quiz() {
                   className="flex items-center space-x-2"
                 >
                   <RotateCcw className="w-4 h-4" />
-                  <span>Retake Quiz</span>
+                  <span>{t('quiz.retake.quiz')}</span>
                 </Button>
                 <Button
                   onClick={() => navigate("/scoreboard")}
                   className="bg-gradient-nature hover:opacity-90"
                 >
                   <Trophy className="w-4 h-4 mr-2" />
-                  View Achievements
+                  {t('quiz.view.achievements')}
                 </Button>
                 <Button
                   onClick={() => navigate("/dashboard")}
                   variant="secondary"
                 >
-                  Back to Dashboard
+                  {t('quiz.back.to.dashboard')}
                 </Button>
               </div>
             </CardContent>
@@ -322,12 +415,12 @@ export default function Quiz() {
           <div className="flex items-center justify-between mb-4">
             <Badge variant="secondary">{quiz.title}</Badge>
             <span className="text-sm text-muted-foreground">
-              {currentQuestion + 1} of {quiz.questions.length}
+              {currentQuestion + 1} {t('quiz.of')} {quiz.questions.length}
             </span>
           </div>
           <Progress value={progress} className="h-3 mb-2" />
           <p className="text-xs text-muted-foreground text-center">
-            {Math.round(progress)}% Complete
+            {Math.round(progress)}% {t('quiz.complete')}
           </p>
         </div>
 
@@ -385,7 +478,7 @@ export default function Quiz() {
 
             {showExplanation && (
               <div className="bg-muted rounded-lg p-4 animate-slide-up">
-                <h4 className="font-semibold text-foreground mb-2">Explanation:</h4>
+                <h4 className="font-semibold text-foreground mb-2">{t('quiz.explanation')}</h4>
                 <p className="text-sm text-muted-foreground leading-relaxed">
                   {question.explanation}
                 </p>
@@ -397,7 +490,7 @@ export default function Quiz() {
                 variant="outline"
                 onClick={() => navigate(`/lesson/${id}`)}
               >
-                Back to Lesson
+                {t('quiz.back.to.lesson')}
               </Button>
               
               {!showExplanation ? (
@@ -406,7 +499,7 @@ export default function Quiz() {
                   disabled={selectedAnswer === null}
                   className="bg-gradient-nature hover:opacity-90"
                 >
-                  Submit Answer
+                  {t('quiz.submit.answer')}
                 </Button>
               ) : (
                 <Button
@@ -415,12 +508,12 @@ export default function Quiz() {
                 >
                   {currentQuestion < quiz.questions.length - 1 ? (
                     <>
-                      Next Question
+                      {t('quiz.next.question')}
                       <ArrowRight className="w-4 h-4 ml-2" />
                     </>
                   ) : (
                     <>
-                      View Results
+                      {t('quiz.view.results')}
                       <Trophy className="w-4 h-4 ml-2" />
                     </>
                   )}

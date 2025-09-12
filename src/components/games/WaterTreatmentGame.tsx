@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Scenario {
   id: string;
@@ -17,56 +18,56 @@ interface Scenario {
   description: string;
 }
 
-const scenarios: Scenario[] = [
+const getScenarios = (t: (key: string) => string): Scenario[] => [
   {
     id: "1",
-    title: "Leaky Tap",
-    problem: "Water is dripping from this tap, wasting precious water!",
+    title: t('game.water.leaky.tap'),
+    problem: t('game.water.leaky.tap.problem'),
     image: "🚰",
-    solutions: ["Ignore it", "Turn off valve", "Add more taps"],
-    correctSolution: "Turn off valve",
+    solutions: t('game.water.leaky.tap.solutions').split(','),
+    correctSolution: t('game.water.leaky.tap.correct'),
     solved: false,
-    description: "Fixing leaks saves thousands of gallons per year!"
+    description: t('game.water.leaky.tap.description')
   },
   {
     id: "2", 
-    title: "Dirty Water",
-    problem: "This water source is contaminated and needs treatment.",
+    title: t('game.water.dirty.water'),
+    problem: t('game.water.dirty.water.problem'),
     image: "🌊",
-    solutions: ["Drink anyway", "Install filter", "Boil in microwave"],
-    correctSolution: "Install filter",
+    solutions: t('game.water.dirty.water.solutions').split(','),
+    correctSolution: t('game.water.dirty.water.correct'),
     solved: false,
-    description: "Water filters remove 99% of harmful contaminants!"
+    description: t('game.water.dirty.water.description')
   },
   {
     id: "3",
-    title: "Rain Collection", 
-    problem: "It's raining! How can we collect this clean water?",
+    title: t('game.water.rain.collection'), 
+    problem: t('game.water.rain.collection.problem'),
     image: "🌧️",
-    solutions: ["Let it drain away", "Install rain barrel", "Use buckets only"],
-    correctSolution: "Install rain barrel",
+    solutions: t('game.water.rain.collection.solutions').split(','),
+    correctSolution: t('game.water.rain.collection.correct'),
     solved: false,
-    description: "Rainwater harvesting reduces water bills by 40%!"
+    description: t('game.water.rain.collection.description')
   },
   {
     id: "4",
-    title: "Wastewater",
-    problem: "This dirty water needs to be cleaned before returning to nature.",
+    title: t('game.water.wastewater'),
+    problem: t('game.water.wastewater.problem'),
     image: "🏭",
-    solutions: ["Pour down drain", "Treatment plant", "Bury underground"],
-    correctSolution: "Treatment plant",
+    solutions: t('game.water.wastewater.solutions').split(','),
+    correctSolution: t('game.water.wastewater.correct'),
     solved: false,
-    description: "Treatment plants clean 95% of pollutants from wastewater!"
+    description: t('game.water.wastewater.description')
   },
   {
     id: "5",
-    title: "Garden Watering",
-    problem: "These plants need water, but we should conserve it.",
+    title: t('game.water.garden.watering'),
+    problem: t('game.water.garden.watering.problem'),
     image: "🌱",
-    solutions: ["Use sprinkler all day", "Drip irrigation", "Water at noon"],
-    correctSolution: "Drip irrigation",
+    solutions: t('game.water.garden.watering.solutions').split(','),
+    correctSolution: t('game.water.garden.watering.correct'),
     solved: false,
-    description: "Drip irrigation uses 50% less water than sprinklers!"
+    description: t('game.water.garden.watering.description')
   }
 ];
 
@@ -77,6 +78,7 @@ function ScenarioCard({
   scenario: Scenario; 
   onSolutionSelect: (scenarioId: string, solution: string) => void 
 }) {
+  const { t } = useLanguage();
   const [selectedSolution, setSelectedSolution] = useState<string | null>(null);
   const [showResult, setShowResult] = useState(false);
 
@@ -105,7 +107,7 @@ function ScenarioCard({
         {scenario.solved ? (
           <div className="text-center space-y-3">
             <Badge className="bg-success text-success-foreground">
-              ✅ Solved!
+              ✅ {t('game.water.solved')}
             </Badge>
             <p className="text-sm text-success font-medium">
               {scenario.description}
@@ -113,7 +115,7 @@ function ScenarioCard({
           </div>
         ) : (
           <div className="space-y-3">
-            <p className="text-sm font-medium text-center">Choose the best solution:</p>
+            <p className="text-sm font-medium text-center">{t('game.water.choose.solution')}</p>
             <div className="space-y-2">
               {scenario.solutions.map((solution) => (
                 <Button
@@ -136,13 +138,13 @@ function ScenarioCard({
               }`}>
                 {selectedSolution === scenario.correctSolution ? (
                   <div>
-                    <div className="font-bold">🎉 Correct!</div>
+                    <div className="font-bold">🎉 {t('game.water.correct')}</div>
                     <div className="text-sm">{scenario.description}</div>
                   </div>
                 ) : (
                   <div>
-                    <div className="font-bold">❌ Try again!</div>
-                    <div className="text-sm">Think about water conservation!</div>
+                    <div className="font-bold">❌ {t('game.water.try.again')}</div>
+                    <div className="text-sm">{t('game.water.think.conservation')}</div>
                   </div>
                 )}
               </div>
@@ -155,6 +157,8 @@ function ScenarioCard({
 }
 
 function WaterGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number, progress: number) => void }) {
+  const { t } = useLanguage();
+  const scenarios = getScenarios(t);
   const [gameScenarios, setGameScenarios] = useState<Scenario[]>(scenarios);
   const [score, setScore] = useState(0);
 
@@ -169,9 +173,9 @@ function WaterGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number, pr
       setGameScenarios(prev => 
         prev.map(s => s.id === scenarioId ? { ...s, solved: true } : s)
       );
-      toast.success("Great solution! +20 points");
+      toast.success(t('game.water.great.solution'));
     } else {
-      toast.error("Not the best choice. Try thinking about conservation!");
+      toast.error(t('game.water.not.best.choice'));
     }
     
     setScore(newScore);
@@ -198,9 +202,9 @@ function WaterGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number, pr
     <div className="space-y-6">
       {/* Instructions */}
       <div className="text-center p-4 bg-muted rounded-lg">
-        <h3 className="font-bold text-lg mb-2">💧 Fix the Flow!</h3>
+        <h3 className="font-bold text-lg mb-2">💧 {t('game.water.title')}</h3>
         <p className="text-muted-foreground">
-          Solve water problems by choosing the best conservation solution. Each correct answer earns 20 points!
+          {t('game.water.instructions')}
         </p>
       </div>
 
@@ -218,7 +222,7 @@ function WaterGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number, pr
       {/* Restart Button */}
       <div className="text-center">
         <Button onClick={restart} variant="outline">
-          Reset Game
+          {t('game.water.reset.game')}
         </Button>
       </div>
     </div>
@@ -226,6 +230,7 @@ function WaterGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number, pr
 }
 
 export function WaterTreatmentGame({ onComplete }: { onComplete: () => void }) {
+  const { t } = useLanguage();
   const [score, setScore] = useState(0);
   const [progress, setProgress] = useState(0);
   const [key, setKey] = useState(0);
@@ -244,8 +249,8 @@ export function WaterTreatmentGame({ onComplete }: { onComplete: () => void }) {
   return (
     <DragDropProvider>
       <GameWrapper
-        title="Fix the Flow!"
-        description="Solve water conservation challenges with smart solutions"
+        title={t('game.water.title')}
+        description={t('game.water.description')}
         score={score}
         maxScore={100}
         progress={progress}

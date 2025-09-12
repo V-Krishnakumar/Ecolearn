@@ -1,17 +1,19 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Home, BookOpen, User, Trophy, LogOut } from "lucide-react";
+import { Home, BookOpen, User, Trophy, LogOut, Languages, Camera } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export function Navigation() {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { language, toggleLanguage, t } = useLanguage();
 
   const handleLogout = () => {
     // Simple logout simulation
     toast({
-      title: "Logged out successfully",
-      description: "See you next time!",
+      title: t('nav.logout.success'),
+      description: t('nav.logout.message'),
     });
     navigate("/auth");
   };
@@ -39,11 +41,11 @@ export function Navigation() {
               }
             >
               <Home className="w-4 h-4" />
-              <span>Dashboard</span>
+              <span>{t('nav.dashboard')}</span>
             </NavLink>
 
             <NavLink
-              to="/lessons"
+              to="/realtime-tasks"
               className={({ isActive }) =>
                 `flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-200 ${
                   isActive
@@ -52,8 +54,8 @@ export function Navigation() {
                 }`
               }
             >
-              <BookOpen className="w-4 h-4" />
-              <span>Lessons</span>
+              <Camera className="w-4 h-4" />
+              <span>{t('nav.realtime.tasks')}</span>
             </NavLink>
 
             <NavLink
@@ -67,15 +69,25 @@ export function Navigation() {
               }
             >
               <Trophy className="w-4 h-4" />
-              <span>Scoreboard</span>
+              <span>{t('nav.scoreboard')}</span>
             </NavLink>
           </div>
         </div>
 
         <div className="flex items-center space-x-4">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={toggleLanguage}
+            className="flex items-center space-x-2"
+            title={language === 'en' ? 'Switch to Hindi' : 'Switch to English'}
+          >
+            <Languages className="w-4 h-4" />
+            <span className="hidden sm:inline">{language === 'en' ? 'हिंदी' : 'English'}</span>
+          </Button>
           <div className="flex items-center space-x-2 text-sm">
             <User className="w-4 h-4 text-muted-foreground" />
-            <span className="font-medium">Alex Student</span>
+            <span className="font-medium">{t('nav.user')}</span>
           </div>
           <Button
             variant="outline"
@@ -84,7 +96,7 @@ export function Navigation() {
             className="flex items-center space-x-2"
           >
             <LogOut className="w-4 h-4" />
-            <span className="hidden sm:inline">Logout</span>
+            <span className="hidden sm:inline">{t('nav.logout')}</span>
           </Button>
         </div>
       </div>

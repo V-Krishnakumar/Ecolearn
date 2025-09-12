@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { askAI, type ChatMessage } from "@/lib/ai";
 import { Send, MessageCircle, X } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Chatbot() {
+  const { t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
-    { role: "assistant", content: "Hi! I’m EcoLearn’s helper. Ask me any environment question." },
+    { role: "assistant", content: t('chatbot.greeting') },
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -34,7 +36,7 @@ export default function Chatbot() {
           <div className="px-4 py-2 bg-gradient-to-r from-green-500 to-blue-500 text-white flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <MessageCircle className="w-4 h-4" />
-              <span className="font-semibold">EcoLearn Assistant</span>
+              <span className="font-semibold">{t('chatbot.title')}</span>
             </div>
             <button onClick={() => setIsOpen(false)} className="opacity-90 hover:opacity-100">
               <X className="w-4 h-4" />
@@ -55,14 +57,14 @@ export default function Chatbot() {
               </div>
             ))}
             {isLoading && (
-              <div className="text-xs text-muted-foreground">Thinking…</div>
+              <div className="text-xs text-muted-foreground">{t('chatbot.thinking')}</div>
             )}
             <div ref={endRef} />
           </div>
           <div className="p-2 border-t border-border flex items-center space-x-2">
             <input
               className="flex-1 h-9 rounded-md border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              placeholder="Ask about waste, water, energy…"
+              placeholder={t('chatbot.placeholder')}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && send()}
@@ -85,7 +87,7 @@ export default function Chatbot() {
           >
             <MessageCircle className="w-7 h-7" />
           </button>
-          <div className="text-[11px] px-2.5 py-1 rounded-full bg-black/70 text-white shadow-md whitespace-nowrap">Ask me anything</div>
+          <div className="text-[11px] px-2.5 py-1 rounded-full bg-black/70 text-white shadow-md whitespace-nowrap">{t('chatbot.ask.anything')}</div>
         </div>
       )}
     </div>

@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface WasteItem {
   id: string;
@@ -14,23 +15,23 @@ interface WasteItem {
   placed: boolean;
 }
 
-const wasteItems: WasteItem[] = [
-  { id: "1", name: "Plastic Bottle", icon: "🍼", category: "recycle", placed: false },
-  { id: "2", name: "Banana Peel", icon: "🍌", category: "compost", placed: false },
-  { id: "3", name: "Newspaper", icon: "📰", category: "recycle", placed: false },
-  { id: "4", name: "Chip Bag", icon: "🍟", category: "trash", placed: false },
-  { id: "5", name: "Apple Core", icon: "🍎", category: "compost", placed: false },
-  { id: "6", name: "Glass Jar", icon: "🫙", category: "recycle", placed: false },
-  { id: "7", name: "Used Tissue", icon: "🧻", category: "trash", placed: false },
-  { id: "8", name: "Coffee Grounds", icon: "☕", category: "compost", placed: false },
-  { id: "9", name: "Aluminum Can", icon: "🥤", category: "recycle", placed: false },
-  { id: "10", name: "Candy Wrapper", icon: "🍬", category: "trash", placed: false }
+const getWasteItems = (t: (key: string) => string): WasteItem[] => [
+  { id: "1", name: t('game.waste.plastic.bottle'), icon: "🍼", category: "recycle", placed: false },
+  { id: "2", name: t('game.waste.banana.peel'), icon: "🍌", category: "compost", placed: false },
+  { id: "3", name: t('game.waste.newspaper'), icon: "📰", category: "recycle", placed: false },
+  { id: "4", name: t('game.waste.chip.bag'), icon: "🍟", category: "trash", placed: false },
+  { id: "5", name: t('game.waste.apple.core'), icon: "🍎", category: "compost", placed: false },
+  { id: "6", name: t('game.waste.glass.jar'), icon: "🫙", category: "recycle", placed: false },
+  { id: "7", name: t('game.waste.used.tissue'), icon: "🧻", category: "trash", placed: false },
+  { id: "8", name: t('game.waste.coffee.grounds'), icon: "☕", category: "compost", placed: false },
+  { id: "9", name: t('game.waste.aluminum.can'), icon: "🥤", category: "recycle", placed: false },
+  { id: "10", name: t('game.waste.candy.wrapper'), icon: "🍬", category: "trash", placed: false }
 ];
 
-const bins = [
-  { id: "recycle", name: "Recycling", icon: "♻️", color: "bg-secondary/20 border-secondary", category: "recycle" },
-  { id: "compost", name: "Compost", icon: "🌱", color: "bg-success/20 border-success", category: "compost" },
-  { id: "trash", name: "Trash", icon: "🗑️", color: "bg-muted border-border", category: "trash" }
+const getBins = (t: (key: string) => string) => [
+  { id: "recycle", name: t('game.waste.recycling'), icon: "♻️", color: "bg-secondary/20 border-secondary", category: "recycle" },
+  { id: "compost", name: t('game.waste.compost'), icon: "🌱", color: "bg-success/20 border-success", category: "compost" },
+  { id: "trash", name: t('game.waste.trash'), icon: "🗑️", color: "bg-muted border-border", category: "trash" }
 ];
 
 function DraggableItem({ item, onDragStart }: { item: WasteItem; onDragStart: (item: WasteItem) => void }) {
@@ -105,6 +106,9 @@ function DropZone({
 }
 
 function WasteGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number, progress: number) => void }) {
+  const { t } = useLanguage();
+  const wasteItems = getWasteItems(t);
+  const bins = getBins(t);
   const [items, setItems] = useState<WasteItem[]>(wasteItems);
   const [score, setScore] = useState(0);
   const [feedback, setFeedback] = useState("");
@@ -130,11 +134,11 @@ function WasteGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number, pr
     setScore(newScore);
     
     if (isCorrect) {
-      setFeedback(`✅ Correct! ${draggedItem.name} goes in ${binId}!`);
+      setFeedback(`✅ ${t('game.waste.correct')} ${draggedItem.name} goes in ${binId}!`);
       toast.success(`Great job! +10 points`);
     } else {
-      setFeedback(`❌ Oops! ${draggedItem.name} should go in ${draggedItem.category}`);
-      toast.error(`Not quite right. Try again!`);
+      setFeedback(`❌ ${t('game.waste.incorrect')} ${draggedItem.name} should go in ${draggedItem.category}`);
+      toast.error(`${t('game.waste.try.again')}`);
     }
     
     setDraggedItem(null);
@@ -162,9 +166,9 @@ function WasteGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number, pr
     <div className="space-y-6">
       {/* Instructions */}
       <div className="text-center p-4 bg-muted rounded-lg">
-        <h3 className="font-bold text-lg mb-2">🎯 Sort It Right!</h3>
+        <h3 className="font-bold text-lg mb-2">🎯 {t('game.waste.title')}</h3>
         <p className="text-muted-foreground">
-          Drag each waste item to the correct bin. Get +10 points for correct sorting, -5 for mistakes!
+          {t('game.waste.description')}
         </p>
       </div>
 
@@ -177,7 +181,7 @@ function WasteGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number, pr
 
       {/* Waste Items */}
       <div>
-        <h4 className="font-semibold mb-3">Items to Sort:</h4>
+        <h4 className="font-semibold mb-3">{t('game.waste.title')}:</h4>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
           {items.filter(item => !item.placed).map((item) => (
             <DraggableItem
@@ -191,7 +195,7 @@ function WasteGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number, pr
 
       {/* Bins */}
       <div>
-        <h4 className="font-semibold mb-3">Sorting Bins:</h4>
+        <h4 className="font-semibold mb-3">{t('game.waste.title')}:</h4>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {bins.map((bin) => (
             <DropZone
@@ -207,7 +211,7 @@ function WasteGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number, pr
       {/* Restart Button */}
       <div className="text-center">
         <Button onClick={restart} variant="outline">
-          Reset Game
+          {t('game.waste.restart')}
         </Button>
       </div>
     </div>
@@ -215,6 +219,7 @@ function WasteGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number, pr
 }
 
 export function WasteManagementGame({ onComplete }: { onComplete: () => void }) {
+  const { t } = useLanguage();
   const [score, setScore] = useState(0);
   const [progress, setProgress] = useState(0);
   const [key, setKey] = useState(0);
@@ -233,8 +238,8 @@ export function WasteManagementGame({ onComplete }: { onComplete: () => void }) 
   return (
     <DragDropProvider>
       <GameWrapper
-        title="Sort It Right!"
-        description="Learn waste management by sorting items into the correct bins"
+        title={t('game.waste.title')}
+        description={t('game.waste.description')}
         score={score}
         maxScore={100}
         progress={progress}

@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Tree {
   id: string;
@@ -26,25 +27,26 @@ interface Seed {
   used: boolean;
 }
 
-const seeds: Seed[] = [
-  { id: "1", type: "oak", icon: "🌰", name: "Oak", preferredSoil: "good", used: false },
-  { id: "2", type: "pine", icon: "🌲", name: "Pine", preferredSoil: "poor", used: false },
-  { id: "3", type: "willow", icon: "🌿", name: "Willow", preferredSoil: "wet", used: false },
-  { id: "4", type: "maple", icon: "🍁", name: "Maple", preferredSoil: "good", used: false },
-  { id: "5", type: "birch", icon: "🌳", name: "Birch", preferredSoil: "poor", used: false },
-  { id: "6", type: "cypress", icon: "🌲", name: "Cypress", preferredSoil: "wet", used: false }
+const getSeeds = (t: (key: string) => string): Seed[] => [
+  { id: "1", type: "oak", icon: "🌰", name: t('game.afforestation.oak'), preferredSoil: "good", used: false },
+  { id: "2", type: "pine", icon: "🌲", name: t('game.afforestation.pine'), preferredSoil: "poor", used: false },
+  { id: "3", type: "willow", icon: "🌿", name: t('game.afforestation.willow'), preferredSoil: "wet", used: false },
+  { id: "4", type: "maple", icon: "🍁", name: t('game.afforestation.maple'), preferredSoil: "good", used: false },
+  { id: "5", type: "birch", icon: "🌳", name: t('game.afforestation.birch'), preferredSoil: "poor", used: false },
+  { id: "6", type: "cypress", icon: "🌲", name: t('game.afforestation.cypress'), preferredSoil: "wet", used: false }
 ];
 
-const soilPlots = [
-  { id: "1", type: "good", color: "bg-amber-100 border-amber-300", label: "Rich Soil", icon: "🟤" },
-  { id: "2", type: "poor", color: "bg-stone-100 border-stone-300", label: "Rocky Soil", icon: "⚪" },
-  { id: "3", type: "wet", color: "bg-blue-100 border-blue-300", label: "Wetland", icon: "🔵" },
-  { id: "4", type: "good", color: "bg-amber-100 border-amber-300", label: "Rich Soil", icon: "🟤" },
-  { id: "5", type: "poor", color: "bg-stone-100 border-stone-300", label: "Rocky Soil", icon: "⚪" },
-  { id: "6", type: "wet", color: "bg-blue-100 border-blue-300", label: "Wetland", icon: "🔵" }
+const getSoilPlots = (t: (key: string) => string) => [
+  { id: "1", type: "good", color: "bg-amber-100 border-amber-300", label: t('game.afforestation.rich.soil'), icon: "🟤" },
+  { id: "2", type: "poor", color: "bg-stone-100 border-stone-300", label: t('game.afforestation.rocky.soil'), icon: "⚪" },
+  { id: "3", type: "wet", color: "bg-blue-100 border-blue-300", label: t('game.afforestation.wetland'), icon: "🔵" },
+  { id: "4", type: "good", color: "bg-amber-100 border-amber-300", label: t('game.afforestation.rich.soil'), icon: "🟤" },
+  { id: "5", type: "poor", color: "bg-stone-100 border-stone-300", label: t('game.afforestation.rocky.soil'), icon: "⚪" },
+  { id: "6", type: "wet", color: "bg-blue-100 border-blue-300", label: t('game.afforestation.wetland'), icon: "🔵" }
 ];
 
 function SeedItem({ seed, onDragStart }: { seed: Seed; onDragStart: (seed: Seed) => void }) {
+  const { t } = useLanguage();
   return (
     <div
       draggable={!seed.used}
@@ -60,7 +62,7 @@ function SeedItem({ seed, onDragStart }: { seed: Seed; onDragStart: (seed: Seed)
       <div className="text-2xl">{seed.icon}</div>
       <div className="text-xs font-medium text-center">{seed.name}</div>
       <Badge variant="outline" className="text-xs">
-        {seed.preferredSoil} soil
+        {seed.preferredSoil} {t('game.afforestation.soil')}
       </Badge>
     </div>
   );
@@ -72,11 +74,12 @@ function SoilPlot({
   onDrop,
   onWater 
 }: { 
-  plot: typeof soilPlots[0]; 
+  plot: typeof getSoilPlots[0]; 
   tree?: Tree;
   onDrop: (plotId: string) => void;
   onWater: (plotId: string) => void;
 }) {
+  const { t } = useLanguage();
   const { draggedOver, setDraggedOver } = useDragDrop();
   
   const getGrowthStage = (growth: number) => {
@@ -101,49 +104,56 @@ function SoilPlot({
         }
       }}
       className={`
-        relative min-h-[120px] p-4 rounded-lg border-2 border-dashed transition-all duration-200
+        relative min-h-[140px] p-4 rounded-lg border-2 border-dashed transition-all duration-200
         ${plot.color}
         ${draggedOver === plot.id && !tree ? 'scale-105 shadow-glow' : ''}
         ${tree ? 'border-solid' : ''}
+        flex flex-col items-center justify-center
       `}
     >
-      <div className="text-center">
-        <div className="text-lg mb-1">{plot.icon}</div>
-        <div className="text-xs font-medium">{plot.label}</div>
-      </div>
-      
-      {tree && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <div className="text-4xl mb-2 animate-bounce-gentle">
-            {getGrowthStage(tree.growth)}
+      {!tree ? (
+        <>
+          {/* Empty plot content */}
+          <div className="text-center space-y-2">
+            <div className="text-lg">{plot.icon}</div>
+            <div className="text-xs font-medium">{plot.label}</div>
+            <div className="text-xs text-muted-foreground opacity-50">
+              {t('game.afforestation.drop.seed.here')}
+            </div>
           </div>
-          <div className="text-xs">
-            Growth: {tree.growth}%
+        </>
+      ) : (
+        <>
+          {/* Tree content */}
+          <div className="text-center space-y-2">
+            <div className="text-4xl animate-bounce-gentle">
+              {getGrowthStage(tree.growth)}
+            </div>
+            <div className="text-xs font-medium">
+              {t('game.afforestation.growth')} {tree.growth}%
+            </div>
+            {tree.growth < 100 && (
+              <Button
+                size="sm"
+                variant="outline"
+                className="text-xs"
+                onClick={() => onWater(plot.id)}
+                disabled={tree.watered}
+              >
+                {tree.watered ? `💧 ${t('game.afforestation.watered')}` : `💧 ${t('game.afforestation.water')}`}
+              </Button>
+            )}
           </div>
-          {tree.growth < 100 && (
-            <Button
-              size="sm"
-              variant="outline"
-              className="mt-2 text-xs"
-              onClick={() => onWater(plot.id)}
-              disabled={tree.watered}
-            >
-              {tree.watered ? "💧 Watered" : "💧 Water"}
-            </Button>
-          )}
-        </div>
-      )}
-      
-      {!tree && (
-        <div className="absolute inset-0 flex items-center justify-center opacity-50">
-          <div className="text-xs text-muted-foreground">Drop seed here</div>
-        </div>
+        </>
       )}
     </div>
   );
 }
 
 function AfforestationGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number, progress: number) => void }) {
+  const { t } = useLanguage();
+  const seeds = getSeeds(t);
+  const soilPlots = getSoilPlots(t);
   const [gameSeeds, setGameSeeds] = useState<Seed[]>(seeds);
   const [trees, setTrees] = useState<Tree[]>([]);
   const [score, setScore] = useState(0);
@@ -186,9 +196,9 @@ function AfforestationGameContent({ onScoreUpdate }: { onScoreUpdate: (score: nu
     setScore(newScore);
     
     if (isOptimalSoil) {
-      toast.success(`Perfect match! +${points} points`);
+      toast.success(t('game.afforestation.perfect.match'));
     } else {
-      toast.success(`Tree planted! +${points} points (not optimal soil)`);
+      toast.success(t('game.afforestation.tree.planted'));
     }
     
     setDraggedItem(null);
@@ -213,7 +223,7 @@ function AfforestationGameContent({ onScoreUpdate }: { onScoreUpdate: (score: nu
     
     setTrees(newTrees);
     setScore(prev => prev + 10);
-    toast.success("Tree watered! +10 points");
+    toast.success(t('game.afforestation.tree.watered'));
     
     // Reset watered status after a delay
     setTimeout(() => {
@@ -242,9 +252,9 @@ function AfforestationGameContent({ onScoreUpdate }: { onScoreUpdate: (score: nu
     <div className="space-y-6">
       {/* Instructions */}
       <div className="text-center p-4 bg-muted rounded-lg">
-        <h3 className="font-bold text-lg mb-2">🌳 Grow Green!</h3>
+        <h3 className="font-bold text-lg mb-2">🌳 {t('game.afforestation.title')}</h3>
         <p className="text-muted-foreground">
-          Plant trees in the right soil types and water them to create a thriving forest!
+          {t('game.afforestation.instructions')}
         </p>
       </div>
 
@@ -253,27 +263,27 @@ function AfforestationGameContent({ onScoreUpdate }: { onScoreUpdate: (score: nu
         <Card>
           <CardContent className="p-4 text-center">
             <div className="text-2xl font-bold text-success">{trees.length}</div>
-            <div className="text-sm text-muted-foreground">Trees Planted</div>
+            <div className="text-sm text-muted-foreground">{t('game.afforestation.trees.planted')}</div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
             <div className="text-2xl font-bold text-secondary">{Math.round(carbonAbsorbed)}</div>
-            <div className="text-sm text-muted-foreground">kg CO2/year absorbed</div>
+            <div className="text-sm text-muted-foreground">{t('game.afforestation.co2.absorbed')}</div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
             <div className="text-2xl font-bold text-accent">{trees.filter(t => t.growth >= 100).length}</div>
-            <div className="text-sm text-muted-foreground">Mature Trees</div>
+            <div className="text-sm text-muted-foreground">{t('game.afforestation.mature.trees')}</div>
           </CardContent>
         </Card>
       </div>
 
       {/* Seeds to Plant */}
       <div>
-        <h4 className="font-semibold mb-3">🌰 Seeds to Plant:</h4>
-        <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
+        <h4 className="font-semibold mb-4">🌰 {t('game.afforestation.seeds.to.plant')}</h4>
+        <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
           {gameSeeds.filter(seed => !seed.used).map((seed) => (
             <SeedItem
               key={seed.id}
@@ -283,16 +293,16 @@ function AfforestationGameContent({ onScoreUpdate }: { onScoreUpdate: (score: nu
           ))}
         </div>
         {gameSeeds.every(seed => seed.used) && (
-          <div className="text-center text-success font-medium mt-4">
-            🎉 All seeds planted! Water your trees to help them grow!
+          <div className="text-center text-success font-medium mt-4 p-3 bg-success/10 rounded-lg">
+            🎉 {t('game.afforestation.all.seeds.planted')}
           </div>
         )}
       </div>
 
       {/* Forest Grid */}
       <div>
-        <h4 className="font-semibold mb-3">🌍 Your Forest:</h4>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <h4 className="font-semibold mb-4">🌍 {t('game.afforestation.your.forest')}</h4>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
           {soilPlots.map((plot) => {
             const tree = trees.find(t => t.position.x.toString() === plot.id);
             return (
@@ -311,9 +321,9 @@ function AfforestationGameContent({ onScoreUpdate }: { onScoreUpdate: (score: nu
       {allTreesMature && (
         <div className="text-center p-6 bg-success/20 rounded-lg animate-bounce-gentle">
           <div className="text-4xl mb-2">🎉</div>
-          <div className="text-xl font-bold text-success mb-2">Forest Complete!</div>
+          <div className="text-xl font-bold text-success mb-2">{t('game.afforestation.forest.complete')}</div>
           <div className="text-muted-foreground">
-            Your forest absorbs {Math.round(carbonAbsorbed)} kg of CO2 per year!
+            {t('game.afforestation.forest.complete.desc')}
           </div>
         </div>
       )}
@@ -321,7 +331,7 @@ function AfforestationGameContent({ onScoreUpdate }: { onScoreUpdate: (score: nu
       {/* Restart Button */}
       <div className="text-center">
         <Button onClick={restart} variant="outline">
-          Plant New Forest
+          {t('game.afforestation.plant.new.forest')}
         </Button>
       </div>
     </div>
@@ -329,6 +339,7 @@ function AfforestationGameContent({ onScoreUpdate }: { onScoreUpdate: (score: nu
 }
 
 export function AfforestationGame({ onComplete }: { onComplete: () => void }) {
+  const { t } = useLanguage();
   const [score, setScore] = useState(0);
   const [progress, setProgress] = useState(0);
   const [key, setKey] = useState(0);
@@ -347,8 +358,8 @@ export function AfforestationGame({ onComplete }: { onComplete: () => void }) {
   return (
     <DragDropProvider>
       <GameWrapper
-        title="Grow Green!"
-        description="Plant trees in the right conditions and watch your forest thrive"
+        title={t('game.afforestation.title')}
+        description={t('game.afforestation.description')}
         score={score}
         maxScore={200}
         progress={progress}
