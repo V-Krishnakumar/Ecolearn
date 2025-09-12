@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/lib/supabase"; // Ensure this import is correct
 import AnimatedBackground from "@/components/AnimatedBackground";
 
 export default function Auth() {
@@ -15,29 +16,64 @@ export default function Auth() {
     name: "",
     email: "",
     password: "",
-    role: "Student"
+    role: "Student",
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: "Welcome back!",
-      description: "Login successful. Redirecting to dashboard...",
+    const { error } = await supabase.auth.signInWithPassword({
+      email: formData.email,
+      password: formData.password,
     });
-    setTimeout(() => navigate("/dashboard"), 1000);
+    if (error) {
+      console.error("Login error:", error.message);
+      toast({
+        title: "Login Failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Welcome back!",
+        description: "Login successful. Redirecting to dashboard...",
+      });
+      setTimeout(() => navigate("/dashboard"), 1000);
+    }
   };
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: "Account created!",
-      description: "Registration successful. Welcome to EcoLearn!",
+    const { data, error } = await supabase.auth.signUp({
+      email: formData.email,
+      password: formData.password,
+      options: {
+        data: { name: formData.name, role: formData.role }, // Store extra user data
+      },
     });
-    setTimeout(() => navigate("/dashboard"), 1000);
+    if (error) {
+      console.error("Sign-up error:", error.message);
+      toast({
+        title: "Registration Failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else if (data.user) {
+      // Optionally insert into profiles table (requires RLS)
+      const { error: profileError } = await supabase
+        .from("profiles")
+        .insert({ id: data.user.id, username: formData.name, created_at: new Date().toISOString() });
+      if (profileError) console.error("Profile insert error:", profileError.message);
+
+      toast({
+        title: "Account created!",
+        description: "Registration successful. Check your email for confirmation.",
+      });
+      setTimeout(() => navigate("/dashboard"), 1000);
+    }
   };
 
   return (
