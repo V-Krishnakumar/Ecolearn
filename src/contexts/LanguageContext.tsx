@@ -640,6 +640,18 @@ const translations = {
     'task.completed.title': 'Task Completed! 🌟',
     'task.completed.description': 'Congratulations! You\'ve successfully completed the afforestation task. Your contribution helps make our planet greener!',
     
+    // News & Facts
+    'news.title': 'Eco News & Facts',
+    'news.tabs.news': 'News',
+    'news.tabs.facts': 'Facts',
+    'news.tabs.tips': 'Tips',
+    'news.viewMore': 'View More',
+    'news.categories.renewable': 'Renewable Energy',
+    'news.categories.ocean': 'Ocean Conservation',
+    'news.categories.climate': 'Climate Facts',
+    'news.categories.tips': 'Daily Tips',
+    'news.categories.biodiversity': 'Biodiversity',
+    
     // Common
     'common.minutes': 'min',
     'common.hours': 'hrs',
@@ -655,26 +667,6 @@ const translations = {
     'sdg.title.deforestation': '🌲 Deforestation - Sustainable Development Goals',
     'sdg.title.renewable': '⚡ Renewable Energy - Sustainable Development Goals',
     'sdg.description': 'This module aligns with the following Sustainable Development Goals:',
-    
-    // SDG Goals
-    'sdg.12.title': 'Responsible Consumption and Production',
-    'sdg.12.desc': 'Promote reduce, reuse, and recycle.',
-    'sdg.11.title': 'Sustainable Cities and Communities',
-    'sdg.11.desc': 'Cleaner cities through better waste systems.',
-    'sdg.13.title': 'Climate Action',
-    'sdg.13.desc': 'Less waste means fewer greenhouse gas emissions.',
-    'sdg.6.title': 'Clean Water and Sanitation',
-    'sdg.6.desc': 'Ensure access to water and sanitation for all through effective treatment systems.',
-    'sdg.3.title': 'Good Health and Well-being',
-    'sdg.3.desc': 'Protect public health by providing safe, clean water.',
-    'sdg.14.title': 'Life Below Water',
-    'sdg.14.desc': 'Prevent water pollution to protect marine ecosystems.',
-    'sdg.15.title': 'Life on Land',
-    'sdg.15.desc': 'Protect ecosystems from harmful air pollution.',
-    'sdg.7.title': 'Affordable and Clean Energy',
-    'sdg.7.desc': 'Expand access to clean energy sources like solar, wind, and hydro.',
-    'sdg.9.title': 'Industry, Innovation, and Infrastructure',
-    'sdg.9.desc': 'Build sustainable energy systems and technology.',
     
     // SDG Water Treatment specific
     'sdg.water.11.desc': 'Create cleaner, healthier urban spaces.',
@@ -1442,6 +1434,18 @@ const translations = {
     'task.completed.title': 'टास्क पूर्ण! 🌟',
     'task.completed.description': 'बधाई हो! आपने सफलतापूर्वक वनरोपण टास्क पूर्ण किया है। आपका योगदान हमारे ग्रह को हरा-भरा बनाने में मदद करता है!',
     
+    // News & Facts
+    'news.title': 'पारिस्थितिक समाचार और तथ्य',
+    'news.tabs.news': 'समाचार',
+    'news.tabs.facts': 'तथ्य',
+    'news.tabs.tips': 'सुझाव',
+    'news.viewMore': 'और देखें',
+    'news.categories.renewable': 'नवीकरणीय ऊर्जा',
+    'news.categories.ocean': 'समुद्री संरक्षण',
+    'news.categories.climate': 'जलवायु तथ्य',
+    'news.categories.tips': 'दैनिक सुझाव',
+    'news.categories.biodiversity': 'जैव विविधता',
+    
     // Common
     'common.minutes': 'मिनट',
     'common.hours': 'घंटे',
@@ -1457,26 +1461,6 @@ const translations = {
     'sdg.title.deforestation': '🌲 वनों की कटाई - सतत विकास लक्ष्य',
     'sdg.title.renewable': '⚡ नवीकरणीय ऊर्जा - सतत विकास लक्ष्य',
     'sdg.description': 'यह मॉड्यूल निम्नलिखित सतत विकास लक्ष्यों के साथ संरेखित है:',
-    
-    // SDG Goals
-    'sdg.12.title': 'जिम्मेदार उपभोग और उत्पादन',
-    'sdg.12.desc': 'कम करें, पुनः उपयोग और पुनर्चक्रण को बढ़ावा दें।',
-    'sdg.11.title': 'स्थायी शहर और समुदाय',
-    'sdg.11.desc': 'बेहतर अपशिष्ट प्रणालियों के माध्यम से स्वच्छ शहर।',
-    'sdg.13.title': 'जलवायु कार्य',
-    'sdg.13.desc': 'कम अपशिष्ट का मतलब कम ग्रीनहाउस गैस उत्सर्जन।',
-    'sdg.6.title': 'स्वच्छ जल और स्वच्छता',
-    'sdg.6.desc': 'प्रभावी उपचार प्रणालियों के माध्यम से सभी के लिए जल और स्वच्छता की पहुंच सुनिश्चित करें।',
-    'sdg.3.title': 'अच्छा स्वास्थ्य और कल्याण',
-    'sdg.3.desc': 'सुरक्षित, स्वच्छ जल प्रदान करके जनस्वास्थ्य की रक्षा करें।',
-    'sdg.14.title': 'जल के नीचे जीवन',
-    'sdg.14.desc': 'समुद्री पारिस्थितिकी तंत्र की रक्षा के लिए जल प्रदूषण को रोकें।',
-    'sdg.15.title': 'भूमि पर जीवन',
-    'sdg.15.desc': 'हानिकारक वायु प्रदूषण से पारिस्थितिकी तंत्र की रक्षा करें।',
-    'sdg.7.title': 'सस्ती और स्वच्छ ऊर्जा',
-    'sdg.7.desc': 'सौर, पवन और जलविद्युत जैसे स्वच्छ ऊर्जा स्रोतों तक पहुंच का विस्तार करें।',
-    'sdg.9.title': 'उद्योग, नवाचार और बुनियादी ढांचा',
-    'sdg.9.desc': 'स्थायी ऊर्जा प्रणाली और प्रौद्योगिकी का निर्माण करें।',
     
     // SDG Water Treatment specific
     'sdg.water.11.desc': 'स्वच्छ, स्वस्थ शहरी स्थान बनाएं।',

@@ -11,6 +11,7 @@ import { Play, Pause, RotateCcw, ArrowRight, Clock, BookOpen } from "lucide-reac
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useProgress } from "@/lib/localProgress";
 import VideoPlayer from "@/components/VideoPlayer";
+import NewsFacts from "@/components/NewsFacts";
 
 // Import games
 import { WasteManagementGame } from "@/components/games/WasteManagementGame";
@@ -296,7 +297,10 @@ export default function Lesson() {
     <div className="min-h-screen bg-background">
       <Navigation />
 
-      <main className="container mx-auto px-4 py-8 max-w-4xl">
+      <main className="container mx-auto px-4 py-8">
+        <div className="flex gap-8">
+          {/* Main Content */}
+          <div className="flex-1 max-w-4xl">
         {/* Header */}
         <div className="mb-8 animate-slide-up">
           <Badge variant="secondary" className="mb-4">
@@ -518,6 +522,15 @@ export default function Lesson() {
               </div>
             </CardContent>
           </Card>
+        </div>
+          </div>
+
+          {/* News & Facts Sidebar */}
+          <div className="hidden lg:block w-72 flex-shrink-0">
+            <div className="sticky top-8">
+              <NewsFacts />
+            </div>
+          </div>
         </div>
       </main>
     </div>

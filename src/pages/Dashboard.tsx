@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 import { PlayCircle, Clock, Trophy, Star, FileText } from "lucide-react";
 import Chatbot from "@/components/Chatbot";
+import NewsFacts from "@/components/NewsFacts";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUser } from "@/contexts/UserContext";
 import { useProgress } from "@/lib/localProgress";
@@ -120,15 +121,18 @@ export default function Dashboard() {
       <Navigation />
       
       <main className="container mx-auto px-4 py-8">
-        {/* Header Section */}
-        <div className="mb-8 text-center animate-slide-up">
-          <h1 className="text-4xl font-bold text-foreground mb-4">
-            {profile?.username ? `Welcome, ${profile.username}! 🌍` : t('dashboard.welcome')}
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            {t('dashboard.subtitle')}
-          </p>
-        </div>
+        <div className="flex gap-8">
+          {/* Main Content */}
+          <div className="flex-1">
+            {/* Header Section */}
+            <div className="mb-8 text-center animate-slide-up">
+              <h1 className="text-4xl font-bold text-foreground mb-4">
+                {profile?.username ? `Welcome, ${profile.username}! 🌍` : t('dashboard.welcome')}
+              </h1>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                {t('dashboard.subtitle')}
+              </p>
+            </div>
 
         {/* Progress Overview */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -282,24 +286,33 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Motivational Section */}
-        <Card className="bg-gradient-nature text-white shadow-glow">
-          <CardContent className="p-8 text-center">
-            <h3 className="text-2xl font-bold mb-4">{t('dashboard.keep.going')}</h3>
-            <p className="text-lg mb-6 opacity-90">
-              {t('dashboard.motivation')}
-            </p>
-            <Button
-              variant="secondary"
-              size="lg"
-              onClick={() => navigate("/scoreboard")}
-              className="bg-white text-primary hover:bg-white/90"
-            >
-              <Trophy className="w-5 h-5 mr-2" />
-              {t('dashboard.view.achievements')}
-            </Button>
-          </CardContent>
-        </Card>
+            {/* Motivational Section */}
+            <Card className="bg-gradient-nature text-white shadow-glow">
+              <CardContent className="p-8 text-center">
+                <h3 className="text-2xl font-bold mb-4">{t('dashboard.keep.going')}</h3>
+                <p className="text-lg mb-6 opacity-90">
+                  {t('dashboard.motivation')}
+                </p>
+                <Button
+                  variant="secondary"
+                  size="lg"
+                  onClick={() => navigate("/scoreboard")}
+                  className="bg-white text-primary hover:bg-white/90"
+                >
+                  <Trophy className="w-5 h-5 mr-2" />
+                  {t('dashboard.view.achievements')}
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* News & Facts Sidebar */}
+          <div className="hidden lg:block w-72 flex-shrink-0">
+            <div className="sticky top-8">
+              <NewsFacts />
+            </div>
+          </div>
+        </div>
       </main>
       <Chatbot />
     </div>
