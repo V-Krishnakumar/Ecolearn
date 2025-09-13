@@ -35,6 +35,9 @@ An interactive environmental education platform with games, quizzes, and real-ti
    # Copy the environment template (already includes team API key)
    cp .env.example .env
    
+   # Verify the .env file was created
+   ls -la .env
+   
    # The .env.example file already contains the team's Google Gemini API key
    # No additional setup needed!
    ```
@@ -46,6 +49,11 @@ An interactive environmental education platform with games, quizzes, and real-ti
 
 5. **Open your browser**
    Navigate to `http://localhost:8080` to see the application.
+
+6. **Test the AI chatbot**
+   - Click on the chatbot icon in the bottom right
+   - Ask a question like "What is recycling?"
+   - If it doesn't work, see [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
 
 ## Environment Variables
 
