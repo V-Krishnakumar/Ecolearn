@@ -1,6 +1,10 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+<<<<<<< HEAD
 import { Home, BookOpen, User, Trophy, LogOut, Languages, Camera, GraduationCap } from "lucide-react";
+=======
+import { Home, BookOpen, User, Trophy, LogOut, Languages, Camera, FileText } from "lucide-react";
+>>>>>>> f5560166e88de45d93afeaae6c0b0266a6160204
 import { useToast } from "@/hooks/use-toast";
 import { useUser } from "@/contexts/UserContext";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -11,8 +15,8 @@ export function Navigation() {
   const { language, toggleLanguage, t } = useLanguage();
   const { profile, signOut } = useUser();
 
-  const handleLogout = async () => {
-    await signOut();
+  const handleLogout = () => {
+    signOut();
     toast({
       title: t('nav.logout.success'),
       description: t('nav.logout.message'),
@@ -74,6 +78,7 @@ export function Navigation() {
               <span>{t('nav.scoreboard')}</span>
             </NavLink>
 
+<<<<<<< HEAD
             <Button
               variant="outline"
               size="sm"
@@ -83,6 +88,21 @@ export function Navigation() {
               <GraduationCap className="w-4 h-4" />
               <span>Advanced Modules</span>
             </Button>
+=======
+            <NavLink
+              to="/certificate"
+              className={({ isActive }) =>
+                `flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-200 ${
+                  isActive
+                    ? "bg-primary text-primary-foreground shadow-glow"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                }`
+              }
+            >
+              <FileText className="w-4 h-4" />
+              <span>Certificate</span>
+            </NavLink>
+>>>>>>> f5560166e88de45d93afeaae6c0b0266a6160204
           </div>
         </div>
 

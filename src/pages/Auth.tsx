@@ -6,9 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/lib/supabase";
-import { createUserProfile } from "@/lib/profile";
-import { debugSupabaseConfig, testRegistration } from "@/lib/auth-debug";
+import { useUser } from "@/contexts/UserContext";
 import AnimatedBackground from "@/components/AnimatedBackground";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -16,11 +14,11 @@ export default function Auth() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { t } = useLanguage();
+  const { signIn, signUp } = useUser();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
-    role: t('auth.student'), // resolved conflict, using translation
   });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -33,22 +31,15 @@ export default function Auth() {
     setIsLoading(true);
     
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: formData.email,
-        password: formData.password,
-      });
+      const result = await signIn(formData.email, formData.password);
 
-      if (error) {
-        console.error("Login error:", error.message);
+      if (!result.success) {
         toast({
           title: "Login Failed",
-          description: error.message.includes("Email not confirmed") 
-            ? "Please check your email and click the confirmation link, or try registering again."
-            : error.message,
+          description: result.error || "Invalid credentials",
           variant: "destructive",
         });
       } else {
-        console.log("Login successful:", data.user);
         toast({
           title: t('auth.welcome.back'),
           description: t('auth.login.success'),
@@ -72,79 +63,23 @@ export default function Auth() {
     setIsLoading(true);
     
     try {
-      console.log("Starting registration process...");
-      
-      // First, sign up the user
-      const { data, error } = await supabase.auth.signUp({
-        email: formData.email,
-        password: formData.password,
-        options: {
-          data: { name: formData.name, role: formData.role }, // Store extra user data
-          emailRedirectTo: `${window.location.origin}/dashboard`, // Redirect after email confirmation
-        },
-      });
+      const result = await signUp(formData.name, formData.email, formData.password);
 
-      console.log("SignUp response:", { data, error });
-
-      if (error) {
-        console.error("Sign-up error:", error.message);
+      if (!result.success) {
         toast({
           title: "Registration Failed",
-          description: error.message,
+          description: result.error || "Registration failed",
           variant: "destructive",
         });
-        return;
-      }
-
-      if (data.user) {
-        console.log("User created successfully:", data.user);
-        console.log("Email confirmed:", data.user.email_confirmed_at);
-        console.log("User metadata:", data.user.user_metadata);
-        
-        // Create profile using the utility function
-        const profileResult = await createUserProfile(
-          data.user.id,
-          formData.name,
-          formData.role
-        );
-
-        if (profileResult.success) {
-          console.log("Profile created successfully:", profileResult.profile);
-        } else {
-          console.error("Profile creation error:", profileResult.error);
-        }
-        
-        // Check if email is confirmed (handle undefined case)
-        const isEmailConfirmed = data.user.email_confirmed_at !== null && data.user.email_confirmed_at !== undefined;
-        console.log("Is email confirmed:", isEmailConfirmed);
-        
-        // Show success message
+      } else {
         toast({
           title: "Account Created Successfully! 🎉",
-          description: isEmailConfirmed 
-            ? "Welcome to EcoLearn! Redirecting to dashboard..."
-            : "Account created! You can now log in directly or check your email for confirmation.",
+          description: "Welcome to EcoLearn! Redirecting to dashboard...",
         });
-        
-        // Navigate based on email confirmation status
-        if (isEmailConfirmed) {
-          console.log("Email already confirmed, navigating to dashboard");
-          setTimeout(() => navigate("/dashboard"), 2000);
-        } else {
-          console.log("Email not confirmed, but navigating anyway for development");
-          // For development/testing, navigate anyway since email confirmation might be disabled
-          setTimeout(() => navigate("/dashboard"), 2000);
-        }
-      } else {
-        console.error("No user data returned from signup");
-        toast({
-          title: "Registration Failed",
-          description: "No user data returned. Please try again.",
-          variant: "destructive",
-        });
+        setTimeout(() => navigate("/dashboard"), 2000);
       }
     } catch (error) {
-      console.error("Unexpected error during registration:", error);
+      console.error("Unexpected registration error:", error);
       toast({
         title: "Registration Failed",
         description: "An unexpected error occurred. Please try again.",
@@ -265,12 +200,6 @@ export default function Auth() {
                       required
                       className="border-border focus:ring-primary"
                     />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="role">{t('auth.role')}</Label>
-                    <div className="p-3 bg-muted rounded-lg">
-                      <span className="text-sm font-medium text-muted-foreground">{t('auth.student')}</span>
-                    </div>
                   </div>
                   <Button 
                     type="submit" 

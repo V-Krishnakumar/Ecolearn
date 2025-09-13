@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { CheckCircle, XCircle, ArrowRight, RotateCcw, Trophy } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useProgress } from "@/lib/localProgress";
 
 const getQuizData = (t: (key: string) => string) => ({
   1: {
@@ -245,6 +246,7 @@ export default function Quiz() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { t } = useLanguage();
+  const { updateLessonProgress } = useProgress();
   
   const quizData = getQuizData(t);
   const quiz = id ? quizData[parseInt(id) as keyof typeof quizData] : null;
@@ -302,6 +304,14 @@ export default function Quiz() {
     } else {
       // Quiz completed
       setShowResult(true);
+      // Save quiz completion to progress
+      if (id) {
+        const percentage = (score / quiz.questions.length) * 100;
+        updateLessonProgress(parseInt(id), { 
+          quizCompleted: true, 
+          quizScore: Math.round(percentage) 
+        });
+      }
     }
   };
 

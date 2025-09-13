@@ -1,109 +1,119 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabase';
-import { ensureUserProfile, fetchUserProfile } from '@/lib/profile';
-import type { User } from '@supabase/supabase-js';
-
-interface UserProfile {
-  id: string;
-  username: string;
-  role: string;
-  created_at: string;
-}
+import { LocalAuth, LocalUser } from '@/lib/localAuth';
+import { UserProfile } from '@/lib/profile';
 
 interface UserContextType {
-  user: User | null;
+  user: LocalUser | null;
   profile: UserProfile | null;
   loading: boolean;
-  signOut: () => Promise<void>;
+  signOut: () => void;
+  signIn: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  signUp: (name: string, email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  updateProfile: (updates: { username?: string; email?: string }) => Promise<{ success: boolean; error?: string }>;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<LocalUser | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Get initial session
-    const getInitialSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user) {
-        setUser(session.user);
-        await loadUserProfile(session.user.id);
+    // Check for existing user on app load
+    const initializeAuth = () => {
+      const currentUser = LocalAuth.getCurrentUser();
+      if (currentUser) {
+        setUser(currentUser);
+        // Create profile object from user data
+        setProfile({
+          id: currentUser.id,
+          username: currentUser.username,
+          email: currentUser.email,
+          created_at: currentUser.created_at
+        });
       }
       setLoading(false);
     };
 
-    getInitialSession();
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        if (session?.user) {
-          setUser(session.user);
-          await loadUserProfile(session.user.id);
-        } else {
-          setUser(null);
-          setProfile(null);
-        }
-        setLoading(false);
-      }
-    );
-
-    return () => subscription.unsubscribe();
+    initializeAuth();
   }, []);
 
-  const loadUserProfile = async (userId: string) => {
+  const signIn = async (email: string, password: string) => {
+    setLoading(true);
     try {
-      // Use the ensureUserProfile utility which handles creation if needed
-      const profile = await ensureUserProfile(userId);
-      
-      if (profile) {
-        setProfile(profile);
-      } else {
-        // Fallback to user metadata if profile creation fails
-        const { data: userData } = await supabase.auth.getUser();
-        if (userData.user) {
-          const fallbackProfile = {
-            id: userId,
-            username: userData.user.user_metadata?.name || userData.user.email?.split('@')[0] || 'User',
-            role: userData.user.user_metadata?.role || 'student',
-            created_at: new Date().toISOString()
-          };
-          setProfile(fallbackProfile);
-        }
-      }
-    } catch (error) {
-      console.error('Error loading user profile:', error);
-      // Final fallback
-      const { data: userData } = await supabase.auth.getUser();
-      if (userData.user) {
+      const result = await LocalAuth.login({ email, password });
+      if (result.success && result.user) {
+        setUser(result.user);
         setProfile({
-          id: userId,
-          username: userData.user.user_metadata?.name || userData.user.email?.split('@')[0] || 'User',
-          role: userData.user.user_metadata?.role || 'student',
-          created_at: new Date().toISOString()
+          id: result.user.id,
+          username: result.user.username,
+          email: result.user.email,
+          created_at: result.user.created_at
         });
       }
+      setLoading(false);
+      return result;
+    } catch (error) {
+      setLoading(false);
+      return { success: false, error: 'Login failed' };
     }
   };
 
-  const signOut = async () => {
-    await supabase.auth.signOut();
+  const signUp = async (name: string, email: string, password: string) => {
+    setLoading(true);
+    try {
+      const result = await LocalAuth.register({ name, email, password });
+      if (result.success && result.user) {
+        setUser(result.user);
+        setProfile({
+          id: result.user.id,
+          username: result.user.username,
+          email: result.user.email,
+          created_at: result.user.created_at
+        });
+      }
+      setLoading(false);
+      return result;
+    } catch (error) {
+      setLoading(false);
+      return { success: false, error: 'Registration failed' };
+    }
+  };
+
+  const signOut = () => {
+    LocalAuth.logout();
+    setUser(null);
+    setProfile(null);
+  };
+
+  const updateProfile = async (updates: { username?: string; email?: string }) => {
+    const result = await LocalAuth.updateProfile(updates);
+    if (result.success && user) {
+      // Update local state
+      const updatedUser = { ...user, ...updates };
+      setUser(updatedUser);
+      setProfile({
+        id: updatedUser.id,
+        username: updatedUser.username,
+        email: updatedUser.email,
+        created_at: updatedUser.created_at
+      });
+    }
+    return result;
   };
 
   return (
-    <UserContext.Provider value={{ user, profile, loading, signOut }}>
+    <UserContext.Provider value={{ user, profile, loading, signOut, signIn, signUp, updateProfile }}>
       {children}
     </UserContext.Provider>
   );
 }
 
-export function useUser() {
+export const useUser = () => {
   const context = useContext(UserContext);
   if (context === undefined) {
     throw new Error('useUser must be used within a UserProvider');
   }
   return context;
-}
+};

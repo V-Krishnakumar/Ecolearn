@@ -4,10 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
-import { PlayCircle, Clock, Trophy, Star } from "lucide-react";
+import { PlayCircle, Clock, Trophy, Star, FileText } from "lucide-react";
 import Chatbot from "@/components/Chatbot";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUser } from "@/contexts/UserContext";
+import { useProgress } from "@/lib/localProgress";
+import { useEffect, useState } from "react";
 
 // Import lesson images
 import wasteManagementImg from "@/assets/lesson-waste-management.jpg";
@@ -17,16 +19,14 @@ import afforestationImg from "@/assets/lesson-afforestation.jpg";
 import deforestationImg from "@/assets/lesson-deforestation.jpg";
 import renewableEnergyImg from "@/assets/lesson-renewable-energy.jpg";
 
-const getLessons = (t: (key: string) => string) => [
+const getLessonsTemplate = (t: (key: string) => string) => [
   {
     id: 1,
     title: t('lesson.waste.management'),
     description: t('lesson.waste.management.desc'),
     image: wasteManagementImg,
     duration: `15 ${t('common.minutes')}`,
-    difficulty: t('difficulty.beginner'),
-    progress: 100,
-    completed: true
+    difficulty: t('difficulty.beginner')
   },
   {
     id: 2,
@@ -34,9 +34,7 @@ const getLessons = (t: (key: string) => string) => [
     description: t('lesson.water.treatment.desc'),
     image: waterTreatmentImg,
     duration: `12 ${t('common.minutes')}`,
-    difficulty: t('difficulty.beginner'),
-    progress: 75,
-    completed: false
+    difficulty: t('difficulty.beginner')
   },
   {
     id: 3,
@@ -44,9 +42,7 @@ const getLessons = (t: (key: string) => string) => [
     description: t('lesson.pollution.free.desc'),
     image: pollutionFreeImg,
     duration: `18 ${t('common.minutes')}`,
-    difficulty: t('difficulty.intermediate'),
-    progress: 0,
-    completed: false
+    difficulty: t('difficulty.intermediate')
   },
   {
     id: 4,
@@ -54,9 +50,7 @@ const getLessons = (t: (key: string) => string) => [
     description: t('lesson.afforestation.desc'),
     image: afforestationImg,
     duration: `14 ${t('common.minutes')}`,
-    difficulty: t('difficulty.beginner'),
-    progress: 25,
-    completed: false
+    difficulty: t('difficulty.beginner')
   },
   {
     id: 5,
@@ -64,9 +58,7 @@ const getLessons = (t: (key: string) => string) => [
     description: t('lesson.deforestation.desc'),
     image: deforestationImg,
     duration: `16 ${t('common.minutes')}`,
-    difficulty: t('difficulty.intermediate'),
-    progress: 0,
-    completed: false
+    difficulty: t('difficulty.intermediate')
   },
   {
     id: 6,
@@ -74,9 +66,7 @@ const getLessons = (t: (key: string) => string) => [
     description: t('lesson.renewable.energy.desc'),
     image: renewableEnergyImg,
     duration: `20 ${t('common.minutes')}`,
-    difficulty: t('difficulty.advanced'),
-    progress: 0,
-    completed: false
+    difficulty: t('difficulty.advanced')
   }
 ];
 
@@ -84,10 +74,46 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const { t } = useLanguage();
   const { profile } = useUser();
-  const lessons = getLessons(t);
-  
-  const completedLessons = lessons.filter(lesson => lesson.completed).length;
-  const totalProgress = lessons.reduce((sum, lesson) => sum + lesson.progress, 0) / lessons.length;
+  const { getDashboardData } = useProgress();
+  const [dashboardData, setDashboardData] = useState<any>(null);
+  const [lessons, setLessons] = useState<any[]>([]);
+
+  useEffect(() => {
+    const data = getDashboardData();
+    if (data) {
+      setDashboardData(data);
+      
+      // Merge template with progress data
+      const lessonsTemplate = getLessonsTemplate(t);
+      const lessonsWithProgress = lessonsTemplate.map(lesson => {
+        const progressData = data.lessons.find((l: any) => l.id === lesson.id);
+        return {
+          ...lesson,
+          progress: progressData?.progress || 0,
+          completed: progressData?.completed || false,
+          videoProgress: progressData?.videoProgress || 0,
+          gameCompleted: progressData?.gameCompleted || false,
+          quizCompleted: progressData?.quizCompleted || false
+        };
+      });
+      
+      setLessons(lessonsWithProgress);
+    } else {
+      // Fallback to template without progress
+      setLessons(getLessonsTemplate(t).map(lesson => ({
+        ...lesson,
+        progress: 0,
+        completed: false,
+        videoProgress: 0,
+        gameCompleted: false,
+        quizCompleted: false
+      })));
+    }
+  }, [t, getDashboardData]);
+
+  const completedLessons = dashboardData?.completedLessons || 0;
+  const totalProgress = dashboardData?.overallProgress || 0;
+  const totalTime = dashboardData?.totalTime || 0;
 
   return (
     <div className="min-h-screen bg-background">
@@ -148,8 +174,34 @@ export default function Dashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-secondary">2.5</div>
+              <div className="text-3xl font-bold text-secondary">{totalTime.toFixed(1)}</div>
               <p className="text-sm text-muted-foreground">{t('dashboard.hours.learning')}</p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Certificate Section */}
+        <div className="mb-8">
+          <Card className="shadow-card hover:shadow-glow transition-all duration-300 bg-gradient-to-r from-green-50 to-blue-50 border-green-200">
+            <CardContent className="p-6">
+              <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
+                <div className="flex items-center space-x-4">
+                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                    <FileText className="w-6 h-6 text-green-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-800">Get Your Certificate</h3>
+                    <p className="text-gray-600">Download your personalized Eco Warrior certificate</p>
+                  </div>
+                </div>
+                <Button
+                  onClick={() => navigate('/certificate')}
+                  className="bg-green-600 hover:bg-green-700 text-white px-6 py-2"
+                >
+                  <FileText className="w-4 h-4 mr-2" />
+                  View Certificate
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </div>

@@ -15,10 +15,14 @@ import Quiz from "./pages/Quiz";
 import Scoreboard from "./pages/Scoreboard";
 import RealTimeTasks from "./pages/RealTimeTasks";
 import AfforestationTask from "./pages/AfforestationTask";
+<<<<<<< HEAD
 import EnvironmentalPolicy from "./pages/EnvironmentalPolicy";
 import ClimateChange from "./pages/ClimateChange";
 import Biodiversity from "./pages/Biodiversity";
 import AdvancedModules from "./pages/AdvancedModules";
+=======
+import CertificatePage from "./pages/CertificatePage";
+>>>>>>> f5560166e88de45d93afeaae6c0b0266a6160204
 
 const queryClient = new QueryClient();
 
@@ -39,10 +43,14 @@ const App = () => (
               <Route path="/scoreboard" element={<Scoreboard />} />
               <Route path="/realtime-tasks" element={<RealTimeTasks />} />
               <Route path="/afforestation-task" element={<AfforestationTask />} />
+<<<<<<< HEAD
               <Route path="/lesson/environmental-policy" element={<EnvironmentalPolicy />} />
               <Route path="/lesson/climate-change" element={<ClimateChange />} />
               <Route path="/lesson/biodiversity" element={<Biodiversity />} />
               <Route path="/advanced-modules" element={<AdvancedModules />} />
+=======
+              <Route path="/certificate" element={<CertificatePage />} />
+>>>>>>> f5560166e88de45d93afeaae6c0b0266a6160204
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

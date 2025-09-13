@@ -9,6 +9,8 @@ import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Play, Pause, RotateCcw, ArrowRight, Clock, BookOpen } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useProgress } from "@/lib/localProgress";
+import VideoPlayer from "@/components/VideoPlayer";
 
 // Import games
 import { WasteManagementGame } from "@/components/games/WasteManagementGame";
@@ -33,9 +35,9 @@ const getLessonsData = (t: (key: string) => string) => ({
     image: wasteManagementImg,
     duration: `15 ${t('common.minutes')}`,
     difficulty: t('difficulty.beginner'),
-    content: t('lesson.content.waste'),
+    content: t('lesson.waste.management.content'),
     sdgContent: {
-      title: t('sdg.title.waste'),
+      title: t('sdg.waste.management.title'),
       goals: [
         {
           number: "SDG 12",
@@ -54,8 +56,8 @@ const getLessonsData = (t: (key: string) => string) => ({
         }
       ]
     },
-    videoDescription:
-      "Watch this comprehensive guide to waste management practices and see real-world examples of successful recycling programs.",
+    videoDescription: t('video.waste.management.desc'),
+    videoSrc: "/videos/Waste Management.mp4",
   },
   2: {
     title: t('lesson.water.treatment'),
@@ -63,9 +65,9 @@ const getLessonsData = (t: (key: string) => string) => ({
     image: waterTreatmentImg,
     duration: `12 ${t('common.minutes')}`,
     difficulty: t('difficulty.beginner'),
-    content: t('lesson.content.water'),
+    content: t('lesson.water.treatment.content'),
     sdgContent: {
-      title: t('sdg.title.water'),
+      title: t('sdg.water.treatment.title'),
       goals: [
         {
           number: "SDG 6",
@@ -84,8 +86,8 @@ const getLessonsData = (t: (key: string) => string) => ({
         }
       ]
     },
-    videoDescription:
-      "Take a virtual tour of a water treatment facility and see the amazing technology that keeps our water clean.",
+    videoDescription: t('video.water.treatment.desc'),
+    videoSrc: "/videos/Water Treatment.mp4",
   },
   3: {
     title: t('lesson.pollution.free'),
@@ -93,29 +95,29 @@ const getLessonsData = (t: (key: string) => string) => ({
     image: pollutionFreeImg,
     duration: `18 ${t('common.minutes')}`,
     difficulty: t('difficulty.intermediate'),
-    content: t('lesson.content.pollution'),
+    content: t('lesson.pollution.free.content'),
     sdgContent: {
-      title: t('sdg.title.pollution'),
+      title: t('sdg.pollution.free.title'),
       goals: [
         {
           number: "SDG 11",
           title: t('sdg.11.title'),
-          description: t('sdg.water.11.desc')
+          description: t('sdg.11.desc')
         },
         {
           number: "SDG 13", 
           title: t('sdg.13.title'),
-          description: t('sdg.water.13.desc')
+          description: t('sdg.13.desc')
         },
         {
           number: "SDG 15",
           title: t('sdg.15.title'), 
-          description: t('sdg.water.15.desc')
+          description: t('sdg.15.desc')
         }
       ]
     },
-    videoDescription:
-      "Discover successful pollution-free zone projects around the world and learn how communities are fighting pollution.",
+    videoDescription: t('video.pollution.free.desc'),
+    videoSrc: "/videos/Pollution - Free Zones.mp4",
   },
   4: {
     title: t('lesson.afforestation'),
@@ -123,29 +125,29 @@ const getLessonsData = (t: (key: string) => string) => ({
     image: afforestationImg,
     duration: `14 ${t('common.minutes')}`,
     difficulty: t('difficulty.beginner'),
-    content: t('lesson.content.afforestation'),
+    content: t('lesson.afforestation.content'),
     sdgContent: {
-      title: t('sdg.title.afforestation'),
+      title: t('sdg.afforestation.title'),
       goals: [
         {
           number: "SDG 13",
           title: t('sdg.13.title'),
-          description: t('sdg.afforestation.13.desc')
+          description: t('sdg.13.desc')
         },
         {
           number: "SDG 15", 
           title: t('sdg.15.title'),
-          description: t('sdg.afforestation.15.desc')
+          description: t('sdg.15.desc')
         },
         {
           number: "SDG 6",
           title: t('sdg.6.title'), 
-          description: t('sdg.afforestation.6.desc')
+          description: t('sdg.6.desc')
         }
       ]
     },
-    videoDescription:
-      "Join forest restoration projects and witness the incredible transformation of barren land into thriving forests.",
+    videoDescription: t('video.afforestation.desc'),
+    videoSrc: "/videos/Afforestation.mp4",
   },
   5: {
     title: t('lesson.deforestation'),
@@ -153,29 +155,29 @@ const getLessonsData = (t: (key: string) => string) => ({
     image: deforestationImg,
     duration: `16 ${t('common.minutes')}`,
     difficulty: t('difficulty.intermediate'),
-    content: t('lesson.content.deforestation'),
+    content: t('lesson.deforestation.content'),
     sdgContent: {
-      title: t('sdg.title.deforestation'),
+      title: t('sdg.deforestation.title'),
       goals: [
         {
           number: "SDG 15",
           title: t('sdg.15.title'),
-          description: t('sdg.deforestation.15.desc')
+          description: t('sdg.15.desc')
         },
         {
           number: "SDG 13", 
           title: t('sdg.13.title'),
-          description: t('sdg.deforestation.13.desc')
+          description: t('sdg.13.desc')
         },
         {
           number: "SDG 6",
           title: t('sdg.6.title'), 
-          description: t('sdg.deforestation.6.desc')
+          description: t('sdg.6.desc')
         }
       ]
     },
-    videoDescription:
-      "Explore the impact of deforestation and discover how communities are working to protect their forests.",
+    videoDescription: t('video.deforestation.desc'),
+    videoSrc: "/videos/Deforestation.mp4",
   },
   6: {
     title: t('lesson.renewable.energy'),
@@ -183,29 +185,29 @@ const getLessonsData = (t: (key: string) => string) => ({
     image: renewableEnergyImg,
     duration: `20 ${t('common.minutes')}`,
     difficulty: t('difficulty.advanced'),
-    content: t('lesson.content.renewable'),
+    content: t('lesson.renewable.energy.content'),
     sdgContent: {
-      title: t('sdg.title.renewable'),
+      title: t('sdg.renewable.energy.title'),
       goals: [
         {
           number: "SDG 7",
           title: t('sdg.7.title'),
-          description: t('sdg.renewable.7.desc')
+          description: t('sdg.7.desc')
         },
         {
           number: "SDG 13", 
           title: t('sdg.13.title'),
-          description: t('sdg.renewable.13.desc')
+          description: t('sdg.13.desc')
         },
         {
           number: "SDG 9",
           title: t('sdg.9.title'), 
-          description: t('sdg.renewable.9.desc')
+          description: t('sdg.9.desc')
         }
       ]
     },
-    videoDescription:
-      "See cutting-edge renewable energy installations and learn how clean energy is revolutionizing our world.",
+    videoDescription: t('video.renewable.energy.desc'),
+    videoSrc: "/videos/Renewable Energy.mp4",
   },
 });
 
@@ -213,47 +215,43 @@ export default function Lesson() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { t } = useLanguage();
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
+  const { updateLessonProgress, getLessonProgress } = useProgress();
   const [progress, setProgress] = useState(0);
+  const [lessonProgress, setLessonProgress] = useState<any>(null);
 
   const lessonsData = getLessonsData(t);
   const lesson = id
     ? lessonsData[parseInt(id) as keyof typeof lessonsData]
     : null;
 
-  const videoDuration = 15; // Simulated 15-second video
-
   useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (isPlaying && currentTime < videoDuration) {
-      interval = setInterval(() => {
-        setCurrentTime((prev) => {
-          const newTime = prev + 0.1;
-          setProgress((newTime / videoDuration) * 100);
-          if (newTime >= videoDuration) {
-            setIsPlaying(false);
-            return videoDuration;
-          }
-          return newTime;
-        });
-      }, 100);
+    if (id) {
+      const progressData = getLessonProgress(parseInt(id));
+      setLessonProgress(progressData);
+      setProgress(progressData.videoProgress);
     }
-    return () => clearInterval(interval);
-  }, [isPlaying, currentTime, videoDuration]);
+  }, [id, getLessonProgress]);
 
-  const handlePlayPause = () => setIsPlaying(!isPlaying);
+  const handleVideoProgress = (videoProgress: number) => {
+    setProgress(videoProgress);
+    if (id) {
+      updateLessonProgress(parseInt(id), { videoProgress });
+    }
+  };
 
-  const handleRestart = () => {
-    setCurrentTime(0);
-    setProgress(0);
-    setIsPlaying(false);
+  const handleVideoComplete = () => {
+    if (id) {
+      updateLessonProgress(parseInt(id), { videoProgress: 100 });
+    }
   };
 
   const handleStartQuiz = () => navigate(`/quiz/${id}`);
 
   const handleGameComplete = () => {
     console.log("Game completed! Quiz unlocked!");
+    if (id) {
+      updateLessonProgress(parseInt(id), { gameCompleted: true });
+    }
   };
 
   const renderGame = () => {
@@ -277,11 +275,6 @@ export default function Lesson() {
     }
   };
 
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs.toString().padStart(2, "0")}`;
-  };
 
   if (!lesson) {
     return (
@@ -346,71 +339,14 @@ export default function Lesson() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    {/* Video Player Simulation */}
-                    <div className="relative bg-black rounded-lg overflow-hidden aspect-video">
-                      <img
-                        src={lesson.image}
-                        alt={lesson.title}
-                        className="w-full h-full object-cover"
-                      />
-                      <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                        <div className="text-center">
-                          <Button
-                            size="lg"
-                            onClick={handlePlayPause}
-                            className="mb-4 bg-white/20 hover:bg-white/30 text-white backdrop-blur-sm border-white/30"
-                          >
-                            {isPlaying ? (
-                              <Pause className="w-8 h-8" />
-                            ) : (
-                              <Play className="w-8 h-8" />
-                            )}
-                          </Button>
-                          <p className="text-white text-sm opacity-80">
-                            {lesson.videoDescription}
-                          </p>
-                        </div>
-                      </div>
-
-                      {/* Video Controls */}
-                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
-                        <div className="flex items-center space-x-3">
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={handlePlayPause}
-                            className="text-white hover:bg-white/20"
-                          >
-                            {isPlaying ? (
-                              <Pause className="w-4 h-4" />
-                            ) : (
-                              <Play className="w-4 h-4" />
-                            )}
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={handleRestart}
-                            className="text-white hover:bg-white/20"
-                          >
-                            <RotateCcw className="w-4 h-4" />
-                          </Button>
-                          <div className="flex-1">
-                            <Progress value={progress} className="h-2" />
-                          </div>
-                          <span className="text-white text-sm">
-                            {formatTime(currentTime)} / {""}
-                            {formatTime(videoDuration)}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="text-center">
-                      <p className="text-muted-foreground mb-4">
-                        {t('lesson.video.simulated')}
-                      </p>
-                    </div>
+                    {/* Video Player */}
+                    <VideoPlayer
+                      src={lesson.videoSrc}
+                      title={lesson.title}
+                      description={lesson.videoDescription}
+                      onProgress={handleVideoProgress}
+                      onComplete={handleVideoComplete}
+                    />
                   </CardContent>
                 </Card>
               </div>
@@ -447,7 +383,7 @@ export default function Lesson() {
                 <CardContent>
                   <div className="space-y-4">
                     <p className="text-sm text-muted-foreground mb-4">
-                      {t('sdg.description')}
+                      {t('sdg.aligns.with')}
                     </p>
                     <div className="grid gap-4 md:grid-cols-1">
                       {lesson.sdgContent.goals.map((goal, index) => (
@@ -539,7 +475,7 @@ export default function Lesson() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {lesson.title === "Waste Management" && (
+                {id === "1" && (
                   <>
                     <div className="flex items-center space-x-2">
                       <span className="text-xl">♻️</span>
@@ -553,7 +489,7 @@ export default function Lesson() {
                     </div>
                   </>
                 )}
-                {lesson.title === "Water Treatment" && (
+                {id === "2" && (
                   <>
                     <div className="flex items-center space-x-2">
                       <span className="text-xl">💧</span>
@@ -567,10 +503,7 @@ export default function Lesson() {
                     </div>
                   </>
                 )}
-                {(lesson.title === "Pollution-Free Zones" ||
-                  lesson.title === "Afforestation" ||
-                  lesson.title === "Deforestation" ||
-                  lesson.title === "Renewable Energy") && (
+                {(id === "3" || id === "4" || id === "5" || id === "6") && (
                   <>
                     <div className="flex items-center space-x-2">
                       <span className="text-xl">🌱</span>
