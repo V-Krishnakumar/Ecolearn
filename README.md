@@ -1,17 +1,23 @@
 # EcoLearn - Environmental Education Platform
 
-An interactive environmental education platform with AI-powered chatbot, lessons, quizzes, and games.
+An interactive environmental education platform with AI-powered chatbot, lessons, quizzes, and games to help students learn about sustainability and environmental conservation.
 
 ## Features
 
-- 🌱 **Interactive Lessons**: Waste management, water treatment, pollution control, and more
+- 🌱 **Interactive Lessons & Games**: Learn through engaging games about waste management, water treatment, pollution control, afforestation, deforestation, and renewable energy
 - 🤖 **AI Chatbot**: Powered by Google Gemini for environmental Q&A
-- 🎮 **Educational Games**: Drag-and-drop games for each lesson topic
+- 📚 **Educational Quizzes**: Test your knowledge with comprehensive quizzes for each topic
+- 📸 **Real-Time Tasks**: Upload photos of environmental activities like tree planting
 - 📊 **Progress Tracking**: Track your learning progress and scores
-- 🌍 **Multilingual Support**: Available in multiple languages
+- 🌍 **Multilingual Support**: Available in English and Hindi
 - 📱 **Responsive Design**: Works on desktop and mobile devices
 
 ## Quick Start
+
+### Prerequisites
+
+- Node.js (version 16 or higher)
+- npm or yarn package manager
 
 ### 1. Clone the Repository
 ```bash
@@ -25,7 +31,17 @@ npm install
 ```
 
 ### 3. Set Up Environment Variables
-Create a `.env` file in the root directory:
+Copy the environment template and add your API key:
+
+```bash
+# Copy the environment template
+cp .env.example .env
+
+# Verify the .env file was created
+ls -la .env
+```
+
+Then edit the `.env` file and add your Google Gemini API key:
 
 ```bash
 # Google Gemini API Key (Required for AI Chatbot)
@@ -48,18 +64,30 @@ npm run dev
 ### 6. Open in Browser
 Navigate to `http://localhost:5173` (or the port shown in terminal)
 
+### 7. Test the AI Chatbot
+- Click on the chatbot icon in the bottom right
+- Ask a question like "What is recycling?"
+- If it doesn't work, see [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
+
+## Environment Variables
+
+The application requires a Google Gemini API key for the AI chatbot functionality:
+
+- `VITE_GOOGLE_API_KEY`: Your Google Gemini API key
+
 ## Project Structure
 
 ```
 src/
 ├── components/          # Reusable UI components
-│   ├── games/          # Educational games
+│   ├── games/          # Educational game components
 │   └── ui/             # UI component library
+├── contexts/           # React contexts (Language, User, etc.)
 ├── pages/              # Main application pages
 ├── lib/                # Utilities and configurations
 │   ├── ai.ts          # AI chatbot logic
 │   └── supabase.ts    # Database configuration
-└── contexts/           # React contexts (language, etc.)
+└── App.tsx             # Main application component
 ```
 
 ## Available Scripts
@@ -69,16 +97,46 @@ src/
 - `npm run preview` - Preview production build
 - `npm run lint` - Run ESLint
 
+## Team Setup
+
+### For New Team Members
+
+When a new team member joins:
+
+1. **Clone the repository**
+2. **Copy environment template**: `cp .env.example .env`
+3. **Install dependencies**: `npm install`
+4. **Start development**: `npm run dev`
+
+**Note**: You'll need to add your own Google Gemini API key to the `.env` file for the chatbot to work.
+
+### Sharing API Keys with Team
+
+**Setup**: Each team member should get their own Google Gemini API key.
+
+**Benefits of this approach:**
+- ✅ Individual API key limits and usage tracking
+- ✅ No shared dependencies on a single key
+- ✅ Better security and access control
+- ✅ API key is not committed to Git (`.env` files are ignored)
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 ## Technologies Used
 
 - **React 18** - Frontend framework
 - **TypeScript** - Type safety
 - **Vite** - Build tool and dev server
 - **Tailwind CSS** - Styling
+- **Shadcn/ui** - UI component library
+- **React Router** - Client-side routing
+- **Google Gemini AI** - AI chatbot functionality
 - **Supabase** - Backend and authentication
-- **Google Gemini AI** - Chatbot intelligence
-- **React Router** - Navigation
-- **Radix UI** - Accessible components
 
 ## Troubleshooting
 
@@ -86,6 +144,7 @@ src/
 1. Make sure you have a valid Google API key in your `.env` file
 2. Check the browser console for any error messages
 3. Ensure the API key starts with `AIzaSy`
+4. See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) for detailed solutions
 
 ### Environment Variables Not Loading?
 1. Make sure your `.env` file is in the root directory
@@ -95,14 +154,6 @@ src/
 ### Supabase Issues?
 The project is pre-configured with Supabase. If you encounter authentication issues, check the Supabase configuration in `src/lib/supabase.ts`.
 
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
 ## License
 
-This project is open source and available under the MIT License.
+This project is licensed under the MIT License.
