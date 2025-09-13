@@ -1,22 +1,24 @@
 import { useState, useEffect } from 'react';
-import { getLocalProgress, setLocalProgress, ProgressData } from '@/lib/localProgress';
+import { LocalProgress, LessonProgress, UserProgress } from '@/lib/localProgress';
 import { useUser } from '@/contexts/UserContext';
 
 export function useProgress(lessonId: number) {
   const { user } = useUser();
-  const [progress, setProgress] = useState<ProgressData>({
-    video_progress: 0,
-    video_completed: false,
-    game_completed: false,
-    quiz_completed: false,
-    total_progress: 0
+  const [progress, setProgress] = useState<LessonProgress>({
+    lessonId,
+    videoProgress: 0,
+    gameCompleted: false,
+    quizCompleted: false,
+    quizScore: 0,
+    lastAccessed: new Date().toISOString(),
+    completed: false
   });
   const [loading, setLoading] = useState(true);
 
   const loadProgress = async () => {
     if (user) {
       try {
-        const progressData = getLocalProgress(user.id, lessonId);
+        const progressData = LocalProgress.getLessonProgress(user.id, lessonId);
         setProgress(progressData);
       } catch (error) {
         console.error('Error loading progress:', error);
@@ -35,19 +37,14 @@ export function useProgress(lessonId: number) {
   const updateVideo = async (videoProgress: number, completed: boolean = false) => {
     if (user) {
       try {
-        setLocalProgress(user.id, lessonId, {
-          video_progress: videoProgress,
-          video_completed: completed
+        LocalProgress.updateLessonProgress(user.id, lessonId, {
+          videoProgress,
+          completed: completed && progress.gameCompleted && progress.quizCompleted
         });
         setProgress(prev => ({
           ...prev,
-          video_progress: videoProgress,
-          video_completed: completed,
-          total_progress: calculateTotalProgress({
-            ...prev,
-            video_progress: videoProgress,
-            video_completed: completed
-          })
+          videoProgress,
+          completed: completed && prev.gameCompleted && prev.quizCompleted
         }));
         return true;
       } catch (error) {
@@ -61,16 +58,14 @@ export function useProgress(lessonId: number) {
   const updateGame = async (completed: boolean) => {
     if (user) {
       try {
-        setLocalProgress(user.id, lessonId, {
-          game_completed: completed
+        LocalProgress.updateLessonProgress(user.id, lessonId, {
+          gameCompleted: completed,
+          completed: completed && progress.videoProgress >= 100 && progress.quizCompleted
         });
         setProgress(prev => ({
           ...prev,
-          game_completed: completed,
-          total_progress: calculateTotalProgress({
-            ...prev,
-            game_completed: completed
-          })
+          gameCompleted: completed,
+          completed: completed && prev.videoProgress >= 100 && prev.quizCompleted
         }));
         return true;
       } catch (error) {
@@ -81,19 +76,19 @@ export function useProgress(lessonId: number) {
     return false;
   };
 
-  const updateQuiz = async (completed: boolean) => {
+  const updateQuiz = async (completed: boolean, score: number = 0) => {
     if (user) {
       try {
-        setLocalProgress(user.id, lessonId, {
-          quiz_completed: completed
+        LocalProgress.updateLessonProgress(user.id, lessonId, {
+          quizCompleted: completed,
+          quizScore: score,
+          completed: completed && progress.videoProgress >= 100 && progress.gameCompleted
         });
         setProgress(prev => ({
           ...prev,
-          quiz_completed: completed,
-          total_progress: calculateTotalProgress({
-            ...prev,
-            quiz_completed: completed
-          })
+          quizCompleted: completed,
+          quizScore: score,
+          completed: completed && prev.videoProgress >= 100 && prev.gameCompleted
         }));
         return true;
       } catch (error) {
@@ -104,11 +99,11 @@ export function useProgress(lessonId: number) {
     return false;
   };
 
-  const calculateTotalProgress = (progressData: ProgressData): number => {
+  const calculateTotalProgress = (progressData: LessonProgress): number => {
     let total = 0;
-    if (progressData.video_completed) total += 50;
-    if (progressData.game_completed) total += 30;
-    if (progressData.quiz_completed) total += 20;
+    if (progressData.videoProgress >= 100) total += 40;
+    if (progressData.gameCompleted) total += 30;
+    if (progressData.quizCompleted) total += 30;
     return total;
   };
 
@@ -118,6 +113,7 @@ export function useProgress(lessonId: number) {
     updateVideo,
     updateGame,
     updateQuiz,
-    refresh: loadProgress
+    refresh: loadProgress,
+    totalProgress: calculateTotalProgress(progress)
   };
 }
