@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/lib/supabase"; // Ensure this import is correct
+import { supabase } from "@/lib/supabase";
 import AnimatedBackground from "@/components/AnimatedBackground";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -18,11 +18,7 @@ export default function Auth() {
     name: "",
     email: "",
     password: "",
-<<<<<<< HEAD
-    role: "Student",
-=======
-    role: t('auth.student')
->>>>>>> 2189e27 (Updated project with latest changes)
+    role: t('auth.student'), // resolved conflict, using translation
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,16 +27,11 @@ export default function Auth() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-<<<<<<< HEAD
     const { error } = await supabase.auth.signInWithPassword({
       email: formData.email,
       password: formData.password,
-=======
-    toast({
-      title: t('auth.welcome.back'),
-      description: t('auth.login.success'),
->>>>>>> 2189e27 (Updated project with latest changes)
     });
+
     if (error) {
       console.error("Login error:", error.message);
       toast({
@@ -50,8 +41,8 @@ export default function Auth() {
       });
     } else {
       toast({
-        title: "Welcome back!",
-        description: "Login successful. Redirecting to dashboard...",
+        title: t('auth.welcome.back'),
+        description: t('auth.login.success'),
       });
       setTimeout(() => navigate("/dashboard"), 1000);
     }
@@ -59,19 +50,14 @@ export default function Auth() {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-<<<<<<< HEAD
     const { data, error } = await supabase.auth.signUp({
       email: formData.email,
       password: formData.password,
       options: {
         data: { name: formData.name, role: formData.role }, // Store extra user data
       },
-=======
-    toast({
-      title: t('auth.account.created'),
-      description: t('auth.registration.success'),
->>>>>>> 2189e27 (Updated project with latest changes)
     });
+
     if (error) {
       console.error("Sign-up error:", error.message);
       toast({
@@ -87,8 +73,8 @@ export default function Auth() {
       if (profileError) console.error("Profile insert error:", profileError.message);
 
       toast({
-        title: "Account created!",
-        description: "Registration successful. Check your email for confirmation.",
+        title: t('auth.account.created'),
+        description: t('auth.registration.success'),
       });
       setTimeout(() => navigate("/dashboard"), 1000);
     }
