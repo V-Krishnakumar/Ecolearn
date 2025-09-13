@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Droplets, 
@@ -16,10 +16,13 @@ import {
 
 const LandingPage: React.FC = () => {
   const navigate = useNavigate();
+  const videoRef = useRef<HTMLVideoElement>(null);
   const [displayText, setDisplayText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTyping, setIsTyping] = useState(true);
   const [showCursor, setShowCursor] = useState(true);
+  const [scrollY, setScrollY] = useState(0);
+  const [isVideoVisible, setIsVideoVisible] = useState(true);
   
   const fullText = "Empowering students to learn sustainability through fun games, interactive lessons, and real-world actions.";
 
@@ -60,6 +63,20 @@ const LandingPage: React.FC = () => {
       return () => clearInterval(cursorInterval);
     }
   }, [showCursor]);
+
+  // Scroll effect handler
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      setScrollY(currentScrollY);
+      
+      // Determine if video should be visible (when at top of page)
+      setIsVideoVisible(currentScrollY < 100);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleGetStarted = () => {
     navigate('/auth');
@@ -118,11 +135,39 @@ const LandingPage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-100 via-blue-50 to-green-50 relative overflow-hidden">
-      {/* Floating Background Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Floating Leaves - Increased quantity for more immersive effect */}
-        {Array.from({ length: 50 }, (_, i) => {
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Full Background Video */}
+      <div className="fixed inset-0 w-full h-full z-0">
+        <video
+          ref={videoRef}
+          autoPlay
+          muted
+          loop
+          playsInline
+          className={`absolute inset-0 w-full h-full object-cover transition-all duration-1000 ${
+            isVideoVisible 
+              ? 'opacity-100 blur-0' 
+              : 'opacity-100 blur-md'
+          }`}
+          style={{
+            filter: `blur(${Math.min(scrollY / 20, 10)}px)`,
+            transform: `scale(${1 + scrollY / 2000})`
+          }}
+        >
+          <source src="/videos/bg-video.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        
+        {/* Video overlay for better content readability */}
+        <div className="absolute inset-0 bg-black/20"></div>
+      </div>
+
+      {/* Floating Background Elements - Only visible when video is not blurred */}
+      <div className={`absolute inset-0 overflow-hidden pointer-events-none transition-opacity duration-1000 ${
+        isVideoVisible ? 'opacity-100' : 'opacity-0'
+      }`}>
+        {/* Floating Leaves - Reduced quantity for better performance */}
+        {Array.from({ length: 20 }, (_, i) => {
           const positions = [
             { top: '20%', left: '10%' }, { top: '40%', right: '20%' }, { top: '60%', left: '25%' },
             { top: '80%', right: '33%' }, { top: '96%', left: '16%' }, { top: '32%', right: '10%' },
@@ -130,29 +175,19 @@ const LandingPage: React.FC = () => {
             { top: '15%', left: '5%' }, { top: '35%', right: '15%' }, { top: '55%', left: '40%' },
             { top: '75%', right: '40%' }, { top: '95%', left: '30%' }, { top: '25%', right: '5%' },
             { top: '45%', left: '15%' }, { top: '65%', right: '30%' }, { top: '85%', left: '45%' },
-            { top: '10%', right: '35%' }, { top: '30%', left: '50%' }, { top: '50%', right: '50%' },
-            { top: '70%', left: '10%' }, { top: '90%', right: '60%' }, { top: '12%', left: '70%' },
-            { top: '38%', right: '70%' }, { top: '58%', left: '60%' }, { top: '78%', right: '80%' },
-            { top: '98%', left: '80%' }, { top: '18%', right: '85%' }, { top: '42%', left: '85%' },
-            { top: '62%', right: '90%' }, { top: '82%', left: '90%' }, { top: '8%', right: '25%' },
-            { top: '28%', left: '75%' }, { top: '48%', right: '75%' }, { top: '68%', left: '35%' },
-            { top: '88%', right: '35%' }, { top: '22%', left: '65%' }, { top: '46%', right: '45%' },
-            { top: '66%', left: '55%' }, { top: '86%', right: '55%' }, { top: '14%', left: '95%' },
-            { top: '34%', right: '95%' }, { top: '54%', left: '95%' }, { top: '74%', right: '95%' },
-            { top: '94%', left: '95%' }, { top: '6%', right: '15%' }, { top: '26%', left: '25%' },
-            { top: '56%', right: '65%' }, { top: '76%', left: '65%' }, { top: '96%', right: '25%' }
+            { top: '10%', right: '35%' }, { top: '30%', left: '50%' }
           ];
           
           const position = positions[i % positions.length];
-          const sizes = ['w-4 h-4', 'w-5 h-5', 'w-6 h-6', 'w-7 h-7', 'w-8 h-8', 'w-9 h-9', 'w-10 h-10'] as const;
+          const sizes = ['w-4 h-4', 'w-5 h-5', 'w-6 h-6', 'w-7 h-7', 'w-8 h-8'] as const;
           const size = sizes[i % sizes.length];
-          const colors = ['text-green-400', 'text-orange-400', 'text-pink-400', 'text-green-500', 'text-yellow-400', 'text-green-300', 'text-orange-300', 'text-pink-300', 'text-emerald-400', 'text-lime-400'] as const;
+          const colors = ['text-green-400', 'text-orange-400', 'text-pink-400', 'text-green-500', 'text-yellow-400'] as const;
           const color = colors[i % colors.length];
           const opacities = ['opacity-40', 'opacity-45', 'opacity-50', 'opacity-55', 'opacity-60'] as const;
           const opacity = opacities[i % opacities.length];
           const animations = ['animate-float', 'animate-float-delayed', 'animate-float-slow'] as const;
           const animation = animations[i % animations.length];
-          const rotations = ['rotate-0', 'rotate-45', 'rotate-12', '-rotate-12', 'rotate-90', 'rotate-180', '-rotate-45', 'rotate-30', 'rotate-60', '-rotate-30', 'rotate-120', '-rotate-60', 'rotate-135', '-rotate-135', 'rotate-270'] as const;
+          const rotations = ['rotate-0', 'rotate-45', 'rotate-12', '-rotate-12', 'rotate-90', 'rotate-180', '-rotate-45', 'rotate-30', 'rotate-60', '-rotate-30'] as const;
           const rotation = rotations[i % rotations.length];
           
           return (
@@ -160,32 +195,6 @@ const LandingPage: React.FC = () => {
               key={i}
               className={`absolute ${size} ${color} ${opacity} ${animation}`}
               style={position}
-            >
-              <Leaf className={`w-full h-full transform ${rotation}`} />
-            </div>
-          );
-        })}
-        
-        {/* Additional scattered leaves for even more coverage */}
-        {Array.from({ length: 30 }, (_, i) => {
-          const randomTop = Math.random() * 100;
-          const randomLeft = Math.random() * 100;
-          const sizes = ['w-3 h-3', 'w-4 h-4', 'w-5 h-5', 'w-6 h-6'] as const;
-          const size = sizes[Math.floor(Math.random() * sizes.length)];
-          const colors = ['text-green-300', 'text-orange-300', 'text-pink-300', 'text-emerald-300', 'text-lime-300'] as const;
-          const color = colors[Math.floor(Math.random() * colors.length)];
-          const opacities = ['opacity-20', 'opacity-25', 'opacity-30', 'opacity-35'] as const;
-          const opacity = opacities[Math.floor(Math.random() * opacities.length)];
-          const animations = ['animate-float', 'animate-float-delayed', 'animate-float-slow'] as const;
-          const animation = animations[Math.floor(Math.random() * animations.length)];
-          const rotations = ['rotate-0', 'rotate-45', 'rotate-12', '-rotate-12', 'rotate-90', 'rotate-180', '-rotate-45', 'rotate-30', 'rotate-60', '-rotate-30', 'rotate-120', '-rotate-60'] as const;
-          const rotation = rotations[Math.floor(Math.random() * rotations.length)];
-          
-          return (
-            <div
-              key={`scattered-${i}`}
-              className={`absolute ${size} ${color} ${opacity} ${animation}`}
-              style={{ top: `${randomTop}%`, left: `${randomLeft}%` }}
             >
               <Leaf className={`w-full h-full transform ${rotation}`} />
             </div>
@@ -200,11 +209,12 @@ const LandingPage: React.FC = () => {
               <div className="bg-gradient-to-r from-green-500 to-blue-500 p-2 rounded-xl shadow-lg">
                 <Leaf className="h-6 w-6 text-white" />
               </div>
-              <span className="text-2xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">EcoLearn</span>
+              <span className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-600 bg-clip-text text-transparent drop-shadow-lg" style={{ textShadow: '0 0 15px rgba(34, 211, 238, 0.5)' }}>EcoLearn</span>
             </div>
             <button
               onClick={handleGetStarted}
-              className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white px-6 py-2 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+              className="bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white px-6 py-2 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border border-cyan-300/50"
+              style={{ boxShadow: '0 0 20px rgba(34, 211, 238, 0.3)' }}
             >
               Get Started
               <ArrowRight className="inline ml-2 h-4 w-4" />
@@ -213,71 +223,45 @@ const LandingPage: React.FC = () => {
         </div>
       </nav>
 
-      {/* Video Banner Section */}
-      <section className="pt-16 pb-8 relative">
-        <div className="relative w-full h-[60vh] min-h-[400px] max-h-[600px] overflow-hidden">
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover"
-          >
-            <source src="/videos/landing-video.mp4" type="video/mp4" />
-            {/* Fallback for browsers that don't support video */}
-            Your browser does not support the video tag.
-          </video>
-          
-          {/* Video overlay for better text readability */}
-          <div className="absolute inset-0 bg-black/30"></div>
-          
-          {/* Video content overlay */}
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="text-center text-white px-4">
-              <h2 className="text-4xl md:text-6xl font-bold mb-4 drop-shadow-lg">
-                Welcome to EcoLearn
-              </h2>
-              <p className="text-xl md:text-2xl drop-shadow-md opacity-90">
-                Discover Sustainable Learning
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* Hero Section - Moved Down */}
-      <section className="pt-16 pb-20 px-4 sm:px-6 lg:px-8 relative">
-        <div className="max-w-7xl mx-auto text-center relative z-10">
-          <div className="animate-fade-in">
+      {/* Hero Section */}
+      <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-7xl mx-auto text-center relative">
+          {/* Background overlay for better text readability */}
+          <div className="absolute inset-0 bg-black/10 rounded-3xl -m-8"></div>
+          <div className="animate-fade-in relative z-10">
             <div className="mb-8">
-              <div className="inline-flex items-center bg-gradient-to-r from-green-100 to-blue-100 px-6 py-3 rounded-full mb-6 shadow-lg">
+              <div className="inline-flex items-center bg-gradient-to-r from-green-100/90 to-blue-100/90 backdrop-blur-sm px-6 py-3 rounded-full mb-6 shadow-lg">
                 <Leaf className="h-5 w-5 text-green-600 mr-2" />
                 <span className="text-green-700 font-semibold">🌱 Sustainable Education Platform</span>
               </div>
             </div>
             <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-              <span className="bg-gradient-to-r from-green-600 via-blue-600 to-green-600 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent drop-shadow-2xl" style={{ textShadow: '0 0 20px rgba(34, 211, 238, 0.5)' }}>
                 EcoLearn
               </span>
               <br />
-              <span className="text-gray-800">Shaping a</span>{' '}
-              <span className="bg-gradient-to-r from-green-500 to-blue-500 bg-clip-text text-transparent">
+              <span className="text-white drop-shadow-2xl" style={{ textShadow: '0 0 15px rgba(255, 255, 255, 0.8)' }}>Shaping a</span>{' '}
+              <span className="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 bg-clip-text text-transparent drop-shadow-2xl" style={{ textShadow: '0 0 20px rgba(251, 191, 36, 0.6)' }}>
                 Sustainable Future
               </span>
             </h1>
-            <div className="text-xl md:text-2xl text-gray-700 mb-10 max-w-3xl mx-auto leading-relaxed font-medium min-h-[4rem]">
+            <div className="text-xl md:text-2xl mb-10 max-w-3xl mx-auto leading-relaxed font-medium min-h-[4rem]">
               <span className="typewriter-text">
                 {displayText.split(' ').map((word, index, array) => {
                   const isHighlighted = word === 'games' || word === 'lessons,' || word === 'actions.';
-                  const color = word === 'games' || word === 'actions.' ? 'text-green-600 font-bold' : 
-                               word === 'lessons,' ? 'text-blue-600 font-bold' : 'text-gray-700';
+                  const color = word === 'games' || word === 'actions.' ? 'text-yellow-400 font-bold drop-shadow-lg' : 
+                               word === 'lessons,' ? 'text-cyan-400 font-bold drop-shadow-lg' : 'text-white drop-shadow-lg';
+                  const shadowStyle = word === 'games' || word === 'actions.' ? { textShadow: '0 0 15px rgba(251, 191, 36, 0.8)' } :
+                                    word === 'lessons,' ? { textShadow: '0 0 15px rgba(34, 211, 238, 0.8)' } :
+                                    { textShadow: '0 0 10px rgba(255, 255, 255, 0.6)' };
                   return (
-                    <span key={index} className={color}>
+                    <span key={index} className={color} style={shadowStyle}>
                       {word}{index < array.length - 1 ? ' ' : ''}
                     </span>
                   );
                 })}
-                <span className={`text-green-500 font-bold ${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity duration-75`}>
+                <span className={`text-yellow-400 font-bold drop-shadow-lg ${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity duration-75`} style={{ textShadow: '0 0 15px rgba(251, 191, 36, 0.8)' }}>
                   |
                 </span>
               </span>
@@ -285,14 +269,16 @@ const LandingPage: React.FC = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <button
                 onClick={handleExplore}
-                className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl inline-flex items-center"
+                className="bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl inline-flex items-center border-2 border-cyan-300/50"
+                style={{ boxShadow: '0 0 25px rgba(34, 211, 238, 0.4)' }}
               >
                 Explore Our Mission
                 <ArrowRight className="ml-3 h-5 w-5" />
               </button>
               <button
                 onClick={handleGetStarted}
-                className="bg-white/90 hover:bg-white text-gray-800 px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border-2 border-green-200 hover:border-green-300"
+                className="bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-300 hover:to-orange-400 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border-2 border-yellow-300/50"
+                style={{ boxShadow: '0 0 25px rgba(251, 191, 36, 0.4)' }}
               >
                 Start Learning
               </button>
@@ -302,9 +288,11 @@ const LandingPage: React.FC = () => {
       </section>
 
       {/* SDG Goals Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white via-green-50/30 to-blue-50/30 relative">
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="text-center mb-16 animate-fade-in">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-7xl mx-auto relative">
+          {/* Background overlay */}
+          <div className="absolute inset-0 bg-white/95 backdrop-blur-sm rounded-3xl -m-4"></div>
+          <div className="text-center mb-16 animate-fade-in relative z-10">
             <div className="inline-flex items-center bg-gradient-to-r from-green-500 to-blue-500 p-4 rounded-2xl mb-8 shadow-xl">
               <Globe className="h-12 w-12 text-white" />
             </div>
@@ -320,7 +308,7 @@ const LandingPage: React.FC = () => {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative z-10">
             {sdgGoals.map((goal, index) => {
               const IconComponent = goal.icon;
               return (
@@ -358,9 +346,11 @@ const LandingPage: React.FC = () => {
       </section>
 
       {/* About Us Section */}
-      <section id="about-section" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50/50 via-white to-green-50/50 relative">
-        <div className="max-w-4xl mx-auto text-center relative z-10">
-          <div className="animate-fade-in">
+      <section id="about-section" className="py-20 px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-4xl mx-auto text-center relative">
+          {/* Background overlay */}
+          <div className="absolute inset-0 bg-white/95 backdrop-blur-sm rounded-3xl -m-4"></div>
+          <div className="animate-fade-in relative z-10">
             <div className="inline-flex items-center bg-gradient-to-r from-blue-500 to-green-500 p-4 rounded-2xl mb-8 shadow-xl">
               <Users className="h-12 w-12 text-white" />
             </div>
@@ -382,9 +372,11 @@ const LandingPage: React.FC = () => {
       </section>
 
       {/* Mission Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-green-50/50 via-white to-blue-50/50 relative">
-        <div className="max-w-4xl mx-auto text-center relative z-10">
-          <div className="animate-fade-in">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-4xl mx-auto text-center relative">
+          {/* Background overlay */}
+          <div className="absolute inset-0 bg-white/95 backdrop-blur-sm rounded-3xl -m-4"></div>
+          <div className="animate-fade-in relative z-10">
             <div className="inline-flex items-center bg-gradient-to-r from-green-500 to-blue-500 p-4 rounded-2xl mb-8 shadow-xl">
               <Target className="h-12 w-12 text-white" />
             </div>
@@ -406,8 +398,8 @@ const LandingPage: React.FC = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gradient-to-r from-gray-900 via-green-900 to-gray-900 text-white py-12 px-4 sm:px-6 lg:px-8 relative">
-        <div className="max-w-7xl mx-auto text-center relative z-10">
+      <footer className="bg-gradient-to-r from-gray-900 via-green-900 to-gray-900 text-white py-12 px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-7xl mx-auto text-center relative">
           <div className="flex items-center justify-center space-x-3 mb-6">
             <div className="bg-gradient-to-r from-green-500 to-blue-500 p-2 rounded-xl shadow-lg">
               <Leaf className="h-6 w-6 text-white" />
