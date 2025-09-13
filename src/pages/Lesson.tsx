@@ -35,6 +35,26 @@ const getLessonsData = (t: (key: string) => string) => ({
     difficulty: t('difficulty.beginner'),
     content:
       "Understanding waste management is crucial for environmental protection. This lesson covers the 3 R's: Reduce, Reuse, and Recycle. You'll learn about different types of waste, proper sorting techniques, composting methods, and how individuals and communities can implement effective waste management strategies.",
+    sdgContent: {
+      title: "♻ Waste Management - Sustainable Development Goals",
+      goals: [
+        {
+          number: "SDG 12",
+          title: "Responsible Consumption and Production",
+          description: "Promote reduce, reuse, and recycle."
+        },
+        {
+          number: "SDG 11", 
+          title: "Sustainable Cities and Communities",
+          description: "Cleaner cities through better waste systems."
+        },
+        {
+          number: "SDG 13",
+          title: "Climate Action", 
+          description: "Less waste means fewer greenhouse gas emissions."
+        }
+      ]
+    },
     videoDescription:
       "Watch this comprehensive guide to waste management practices and see real-world examples of successful recycling programs.",
   },
@@ -46,6 +66,26 @@ const getLessonsData = (t: (key: string) => string) => ({
     difficulty: t('difficulty.beginner'),
     content:
       "Water treatment is essential for public health and environmental sustainability. Learn about the multi-step process including screening, sedimentation, filtration, and disinfection. Understand how wastewater treatment plants work and the importance of protecting our water resources.",
+    sdgContent: {
+      title: "💧 Water Treatment - Sustainable Development Goals",
+      goals: [
+        {
+          number: "SDG 6",
+          title: "Clean Water and Sanitation",
+          description: "Ensure access to water and sanitation for all through effective treatment systems."
+        },
+        {
+          number: "SDG 3", 
+          title: "Good Health and Well-being",
+          description: "Protect public health by providing safe, clean water."
+        },
+        {
+          number: "SDG 14",
+          title: "Life Below Water", 
+          description: "Prevent water pollution to protect marine ecosystems."
+        }
+      ]
+    },
     videoDescription:
       "Take a virtual tour of a water treatment facility and see the amazing technology that keeps our water clean.",
   },
@@ -57,6 +97,26 @@ const getLessonsData = (t: (key: string) => string) => ({
     difficulty: t('difficulty.intermediate'),
     content:
       "Creating pollution-free zones requires understanding different types of pollution and implementing comprehensive solutions. Learn about air quality monitoring, green transportation, industrial emission controls, and community-based environmental protection initiatives.",
+    sdgContent: {
+      title: "🌱 Pollution-Free Zones - Sustainable Development Goals",
+      goals: [
+        {
+          number: "SDG 11",
+          title: "Sustainable Cities and Communities",
+          description: "Create cleaner, healthier urban spaces."
+        },
+        {
+          number: "SDG 13", 
+          title: "Climate Action",
+          description: "Lower pollution to cut greenhouse gases."
+        },
+        {
+          number: "SDG 15",
+          title: "Life on Land", 
+          description: "Protect ecosystems from harmful air pollution."
+        }
+      ]
+    },
     videoDescription:
       "Discover successful pollution-free zone projects around the world and learn how communities are fighting pollution.",
   },
@@ -68,6 +128,26 @@ const getLessonsData = (t: (key: string) => string) => ({
     difficulty: t('difficulty.beginner'),
     content:
       "Afforestation is the process of creating forests in areas that were not previously forested. Learn about tree species selection, planting techniques, forest ecosystem development, and the long-term benefits of afforestation for climate regulation and biodiversity conservation.",
+    sdgContent: {
+      title: "🌳 Afforestation - Sustainable Development Goals",
+      goals: [
+        {
+          number: "SDG 13",
+          title: "Climate Action",
+          description: "Trees absorb CO₂ and fight global warming."
+        },
+        {
+          number: "SDG 15", 
+          title: "Life on Land",
+          description: "Restore ecosystems and protect biodiversity."
+        },
+        {
+          number: "SDG 6",
+          title: "Clean Water and Sanitation", 
+          description: "Forests safeguard watersheds and water resources."
+        }
+      ]
+    },
     videoDescription:
       "Join forest restoration projects and witness the incredible transformation of barren land into thriving forests.",
   },
@@ -79,6 +159,26 @@ const getLessonsData = (t: (key: string) => string) => ({
     difficulty: t('difficulty.intermediate'),
     content:
       "Deforestation has far-reaching consequences for climate, biodiversity, and human communities. Understand the main drivers of forest loss, including agriculture, logging, and urban development. Learn about sustainable alternatives and conservation strategies.",
+    sdgContent: {
+      title: "🌲 Deforestation - Sustainable Development Goals",
+      goals: [
+        {
+          number: "SDG 15",
+          title: "Life on Land",
+          description: "Prevent biodiversity loss by protecting forests."
+        },
+        {
+          number: "SDG 13", 
+          title: "Climate Action",
+          description: "Forests store carbon and reduce global warming."
+        },
+        {
+          number: "SDG 6",
+          title: "Clean Water and Sanitation", 
+          description: "Forests regulate rainfall and the water cycle."
+        }
+      ]
+    },
     videoDescription:
       "Explore the impact of deforestation and discover how communities are working to protect their forests.",
   },
@@ -90,6 +190,26 @@ const getLessonsData = (t: (key: string) => string) => ({
     difficulty: t('difficulty.advanced'),
     content:
       "Renewable energy is key to reducing greenhouse gas emissions and achieving energy independence. Learn about different renewable technologies, their efficiency, costs, and environmental benefits. Understand how renewable energy systems work and their role in the global energy transition.",
+    sdgContent: {
+      title: "⚡ Renewable Energy - Sustainable Development Goals",
+      goals: [
+        {
+          number: "SDG 7",
+          title: "Affordable and Clean Energy",
+          description: "Expand access to clean energy sources like solar, wind, and hydro."
+        },
+        {
+          number: "SDG 13", 
+          title: "Climate Action",
+          description: "Cut emissions by shifting away from fossil fuels."
+        },
+        {
+          number: "SDG 9",
+          title: "Industry, Innovation, and Infrastructure", 
+          description: "Build sustainable energy systems and technology."
+        }
+      ]
+    },
     videoDescription:
       "See cutting-edge renewable energy installations and learn how clean energy is revolutionizing our world.",
   },
@@ -321,6 +441,46 @@ export default function Lesson() {
                 </p>
               </CardContent>
             </Card>
+
+            {/* SDG Content Section */}
+            {lesson.sdgContent && (
+              <Card className="shadow-card">
+                <CardHeader>
+                  <CardTitle className="text-xl font-bold text-green-700">
+                    {lesson.sdgContent.title}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <p className="text-sm text-muted-foreground mb-4">
+                      This module aligns with the following Sustainable Development Goals:
+                    </p>
+                    <div className="grid gap-4 md:grid-cols-1">
+                      {lesson.sdgContent.goals.map((goal, index) => (
+                        <div
+                          key={index}
+                          className="border border-green-200 rounded-lg p-4 bg-green-50/50 hover:bg-green-50 transition-colors"
+                        >
+                          <div className="flex items-start space-x-3">
+                            <div className="bg-green-600 text-white text-xs font-bold px-2 py-1 rounded-full min-w-[60px] text-center">
+                              {goal.number}
+                            </div>
+                            <div className="flex-1">
+                              <h4 className="font-semibold text-green-800 mb-1">
+                                {goal.title}
+                              </h4>
+                              <p className="text-sm text-green-700">
+                                {goal.description}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
           </TabsContent>
         </Tabs>
 

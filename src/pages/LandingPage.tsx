@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Droplets, 
@@ -16,6 +16,50 @@ import {
 
 const LandingPage: React.FC = () => {
   const navigate = useNavigate();
+  const [displayText, setDisplayText] = useState('');
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isTyping, setIsTyping] = useState(true);
+  const [showCursor, setShowCursor] = useState(true);
+  
+  const fullText = "Empowering students to learn sustainability through fun games, interactive lessons, and real-world actions.";
+
+  useEffect(() => {
+    if (isTyping) {
+      if (currentIndex < fullText.length) {
+        const timeout = setTimeout(() => {
+          setDisplayText(prev => prev + fullText[currentIndex]);
+          setCurrentIndex(prev => prev + 1);
+        }, 50); // Typing speed (50ms per character)
+
+        return () => clearTimeout(timeout);
+      } else {
+        // Finished typing, wait 10 seconds then restart
+        setIsTyping(false);
+        setShowCursor(false);
+        
+        const pauseTimeout = setTimeout(() => {
+          // Clear text and restart
+          setDisplayText('');
+          setCurrentIndex(0);
+          setIsTyping(true);
+          setShowCursor(true);
+        }, 10000); // 10 second pause
+
+        return () => clearTimeout(pauseTimeout);
+      }
+    }
+  }, [currentIndex, fullText, isTyping]);
+
+  // Cursor blinking effect
+  useEffect(() => {
+    if (showCursor) {
+      const cursorInterval = setInterval(() => {
+        setShowCursor(prev => !prev);
+      }, 500); // Blink every 500ms
+
+      return () => clearInterval(cursorInterval);
+    }
+  }, [showCursor]);
 
   const handleGetStarted = () => {
     navigate('/auth');
@@ -77,50 +121,76 @@ const LandingPage: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-green-100 via-blue-50 to-green-50 relative overflow-hidden">
       {/* Floating Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Floating Leaves */}
-        <div className="absolute top-20 left-10 w-8 h-8 text-green-400 opacity-60 animate-float">
-          <Leaf className="w-full h-full" />
-        </div>
-        <div className="absolute top-40 right-20 w-6 h-6 text-orange-400 opacity-50 animate-float-delayed">
-          <Leaf className="w-full h-full transform rotate-45" />
-        </div>
-        <div className="absolute top-60 left-1/4 w-10 h-10 text-pink-400 opacity-40 animate-float-slow">
-          <Leaf className="w-full h-full transform rotate-12" />
-        </div>
-        <div className="absolute top-80 right-1/3 w-7 h-7 text-green-500 opacity-55 animate-float">
-          <Leaf className="w-full h-full transform -rotate-12" />
-        </div>
-        <div className="absolute top-96 left-16 w-5 h-5 text-yellow-400 opacity-45 animate-float-delayed">
-          <Leaf className="w-full h-full transform rotate-90" />
-        </div>
+        {/* Floating Leaves - Increased quantity for more immersive effect */}
+        {Array.from({ length: 50 }, (_, i) => {
+          const positions = [
+            { top: '20%', left: '10%' }, { top: '40%', right: '20%' }, { top: '60%', left: '25%' },
+            { top: '80%', right: '33%' }, { top: '96%', left: '16%' }, { top: '32%', right: '10%' },
+            { top: '52%', left: '33%' }, { top: '72%', right: '25%' }, { top: '88%', left: '20%' },
+            { top: '15%', left: '5%' }, { top: '35%', right: '15%' }, { top: '55%', left: '40%' },
+            { top: '75%', right: '40%' }, { top: '95%', left: '30%' }, { top: '25%', right: '5%' },
+            { top: '45%', left: '15%' }, { top: '65%', right: '30%' }, { top: '85%', left: '45%' },
+            { top: '10%', right: '35%' }, { top: '30%', left: '50%' }, { top: '50%', right: '50%' },
+            { top: '70%', left: '10%' }, { top: '90%', right: '60%' }, { top: '12%', left: '70%' },
+            { top: '38%', right: '70%' }, { top: '58%', left: '60%' }, { top: '78%', right: '80%' },
+            { top: '98%', left: '80%' }, { top: '18%', right: '85%' }, { top: '42%', left: '85%' },
+            { top: '62%', right: '90%' }, { top: '82%', left: '90%' }, { top: '8%', right: '25%' },
+            { top: '28%', left: '75%' }, { top: '48%', right: '75%' }, { top: '68%', left: '35%' },
+            { top: '88%', right: '35%' }, { top: '22%', left: '65%' }, { top: '46%', right: '45%' },
+            { top: '66%', left: '55%' }, { top: '86%', right: '55%' }, { top: '14%', left: '95%' },
+            { top: '34%', right: '95%' }, { top: '54%', left: '95%' }, { top: '74%', right: '95%' },
+            { top: '94%', left: '95%' }, { top: '6%', right: '15%' }, { top: '26%', left: '25%' },
+            { top: '56%', right: '65%' }, { top: '76%', left: '65%' }, { top: '96%', right: '25%' }
+          ];
+          
+          const position = positions[i % positions.length];
+          const sizes = ['w-4 h-4', 'w-5 h-5', 'w-6 h-6', 'w-7 h-7', 'w-8 h-8', 'w-9 h-9', 'w-10 h-10'] as const;
+          const size = sizes[i % sizes.length];
+          const colors = ['text-green-400', 'text-orange-400', 'text-pink-400', 'text-green-500', 'text-yellow-400', 'text-green-300', 'text-orange-300', 'text-pink-300', 'text-emerald-400', 'text-lime-400'] as const;
+          const color = colors[i % colors.length];
+          const opacities = ['opacity-40', 'opacity-45', 'opacity-50', 'opacity-55', 'opacity-60'] as const;
+          const opacity = opacities[i % opacities.length];
+          const animations = ['animate-float', 'animate-float-delayed', 'animate-float-slow'] as const;
+          const animation = animations[i % animations.length];
+          const rotations = ['rotate-0', 'rotate-45', 'rotate-12', '-rotate-12', 'rotate-90', 'rotate-180', '-rotate-45', 'rotate-30', 'rotate-60', '-rotate-30', 'rotate-120', '-rotate-60', 'rotate-135', '-rotate-135', 'rotate-270'] as const;
+          const rotation = rotations[i % rotations.length];
+          
+          return (
+            <div
+              key={i}
+              className={`absolute ${size} ${color} ${opacity} ${animation}`}
+              style={position}
+            >
+              <Leaf className={`w-full h-full transform ${rotation}`} />
+            </div>
+          );
+        })}
         
-        {/* More floating elements */}
-        <div className="absolute top-32 right-10 w-4 h-4 text-green-300 opacity-50 animate-float-slow">
-          <Leaf className="w-full h-full transform rotate-180" />
-        </div>
-        <div className="absolute top-52 left-1/3 w-9 h-9 text-orange-300 opacity-40 animate-float">
-          <Leaf className="w-full h-full transform rotate-45" />
-        </div>
-        <div className="absolute top-72 right-1/4 w-6 h-6 text-pink-300 opacity-45 animate-float-delayed">
-          <Leaf className="w-full h-full transform -rotate-45" />
-        </div>
-        <div className="absolute top-88 left-20 w-8 h-8 text-green-400 opacity-50 animate-float-slow">
-          <Leaf className="w-full h-full transform rotate-30" />
-        </div>
-        
-        {/* Bottom section floating elements */}
-        <div className="absolute bottom-40 left-10 w-7 h-7 text-green-500 opacity-45 animate-float">
-          <Leaf className="w-full h-full transform rotate-60" />
-        </div>
-        <div className="absolute bottom-60 right-20 w-5 h-5 text-orange-400 opacity-40 animate-float-delayed">
-          <Leaf className="w-full h-full transform -rotate-30" />
-        </div>
-        <div className="absolute bottom-80 left-1/4 w-6 h-6 text-pink-400 opacity-50 animate-float-slow">
-          <Leaf className="w-full h-full transform rotate-120" />
-        </div>
-        <div className="absolute bottom-32 right-1/3 w-8 h-8 text-green-300 opacity-45 animate-float">
-          <Leaf className="w-full h-full transform -rotate-60" />
-        </div>
+        {/* Additional scattered leaves for even more coverage */}
+        {Array.from({ length: 30 }, (_, i) => {
+          const randomTop = Math.random() * 100;
+          const randomLeft = Math.random() * 100;
+          const sizes = ['w-3 h-3', 'w-4 h-4', 'w-5 h-5', 'w-6 h-6'] as const;
+          const size = sizes[Math.floor(Math.random() * sizes.length)];
+          const colors = ['text-green-300', 'text-orange-300', 'text-pink-300', 'text-emerald-300', 'text-lime-300'] as const;
+          const color = colors[Math.floor(Math.random() * colors.length)];
+          const opacities = ['opacity-20', 'opacity-25', 'opacity-30', 'opacity-35'] as const;
+          const opacity = opacities[Math.floor(Math.random() * opacities.length)];
+          const animations = ['animate-float', 'animate-float-delayed', 'animate-float-slow'] as const;
+          const animation = animations[Math.floor(Math.random() * animations.length)];
+          const rotations = ['rotate-0', 'rotate-45', 'rotate-12', '-rotate-12', 'rotate-90', 'rotate-180', '-rotate-45', 'rotate-30', 'rotate-60', '-rotate-30', 'rotate-120', '-rotate-60'] as const;
+          const rotation = rotations[Math.floor(Math.random() * rotations.length)];
+          
+          return (
+            <div
+              key={`scattered-${i}`}
+              className={`absolute ${size} ${color} ${opacity} ${animation}`}
+              style={{ top: `${randomTop}%`, left: `${randomLeft}%` }}
+            >
+              <Leaf className={`w-full h-full transform ${rotation}`} />
+            </div>
+          );
+        })}
       </div>
       {/* Navbar */}
       <nav className="fixed top-0 w-full bg-white/80 backdrop-blur-md border-b border-green-200/50 z-50 shadow-lg">
@@ -163,12 +233,23 @@ const LandingPage: React.FC = () => {
                 Sustainable Future
               </span>
             </h1>
-            <p className="text-xl md:text-2xl text-gray-700 mb-10 max-w-3xl mx-auto leading-relaxed font-medium">
-              Empowering students to learn sustainability through{' '}
-              <span className="text-green-600 font-bold">fun games</span>,{' '}
-              <span className="text-blue-600 font-bold">interactive lessons</span>, and{' '}
-              <span className="text-green-600 font-bold">real-world actions</span>.
-            </p>
+            <div className="text-xl md:text-2xl text-gray-700 mb-10 max-w-3xl mx-auto leading-relaxed font-medium min-h-[4rem]">
+              <span className="typewriter-text">
+                {displayText.split(' ').map((word, index, array) => {
+                  const isHighlighted = word === 'games' || word === 'lessons,' || word === 'actions.';
+                  const color = word === 'games' || word === 'actions.' ? 'text-green-600 font-bold' : 
+                               word === 'lessons,' ? 'text-blue-600 font-bold' : 'text-gray-700';
+                  return (
+                    <span key={index} className={color}>
+                      {word}{index < array.length - 1 ? ' ' : ''}
+                    </span>
+                  );
+                })}
+                <span className={`text-green-500 font-bold ${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity duration-75`}>
+                  |
+                </span>
+              </span>
+            </div>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <button
                 onClick={handleExplore}
@@ -345,6 +426,15 @@ const LandingPage: React.FC = () => {
           }
         }
         
+        @keyframes cursor-blink {
+          0%, 50% {
+            opacity: 1;
+          }
+          51%, 100% {
+            opacity: 0;
+          }
+        }
+        
         .animate-fade-in {
           animation: fade-in 0.8s ease-out forwards;
         }
@@ -361,6 +451,19 @@ const LandingPage: React.FC = () => {
         .animate-float-slow {
           animation: float-slow 10s ease-in-out infinite;
           animation-delay: 4s;
+        }
+        
+        .typewriter-text {
+          font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
+          font-weight: 600;
+          letter-spacing: 0.025em;
+          white-space: pre-wrap;
+          word-wrap: break-word;
+          line-height: 1.6;
+        }
+        
+        .typewriter-text span:last-child {
+          font-weight: 700;
         }
       `}</style>
     </div>

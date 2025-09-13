@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
+import { ensureUserProfile, fetchUserProfile } from '@/lib/profile';
 import type { User } from '@supabase/supabase-js';
 
 interface UserProfile {
@@ -29,7 +30,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.user) {
         setUser(session.user);
-        await fetchUserProfile(session.user.id);
+        await loadUserProfile(session.user.id);
       }
       setLoading(false);
     };
@@ -41,7 +42,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
       async (event, session) => {
         if (session?.user) {
           setUser(session.user);
-          await fetchUserProfile(session.user.id);
+          await loadUserProfile(session.user.id);
         } else {
           setUser(null);
           setProfile(null);
@@ -53,36 +54,33 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     return () => subscription.unsubscribe();
   }, []);
 
-  const fetchUserProfile = async (userId: string) => {
+  const loadUserProfile = async (userId: string) => {
     try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .single();
-
-      if (error) {
-        console.warn('Profile fetch error:', error.message);
-        // If profile doesn't exist, create a basic one
+      // Use the ensureUserProfile utility which handles creation if needed
+      const profile = await ensureUserProfile(userId);
+      
+      if (profile) {
+        setProfile(profile);
+      } else {
+        // Fallback to user metadata if profile creation fails
         const { data: userData } = await supabase.auth.getUser();
         if (userData.user) {
-          setProfile({
-            id: userData.user.id,
+          const fallbackProfile = {
+            id: userId,
             username: userData.user.user_metadata?.name || userData.user.email?.split('@')[0] || 'User',
             role: userData.user.user_metadata?.role || 'student',
             created_at: new Date().toISOString()
-          });
+          };
+          setProfile(fallbackProfile);
         }
-      } else {
-        setProfile(data);
       }
     } catch (error) {
-      console.error('Error fetching profile:', error);
-      // Fallback to user metadata
+      console.error('Error loading user profile:', error);
+      // Final fallback
       const { data: userData } = await supabase.auth.getUser();
       if (userData.user) {
         setProfile({
-          id: userData.user.id,
+          id: userId,
           username: userData.user.user_metadata?.name || userData.user.email?.split('@')[0] || 'User',
           role: userData.user.user_metadata?.role || 'student',
           created_at: new Date().toISOString()
