@@ -15,6 +15,7 @@ import Quiz from "./pages/Quiz";
 import Scoreboard from "./pages/Scoreboard";
 import RealTimeTasks from "./pages/RealTimeTasks";
 import AfforestationTask from "./pages/AfforestationTask";
+import CertificatePage from "./pages/CertificatePage";
 
 const queryClient = new QueryClient();
 
@@ -35,6 +36,7 @@ const App = () => (
               <Route path="/scoreboard" element={<Scoreboard />} />
               <Route path="/realtime-tasks" element={<RealTimeTasks />} />
               <Route path="/afforestation-task" element={<AfforestationTask />} />
+              <Route path="/certificate" element={<CertificatePage />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

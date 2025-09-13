@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
-import { PlayCircle, Clock, Trophy, Star } from "lucide-react";
+import { PlayCircle, Clock, Trophy, Star, FileText } from "lucide-react";
 import Chatbot from "@/components/Chatbot";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUser } from "@/contexts/UserContext";
@@ -176,6 +176,32 @@ export default function Dashboard() {
             <CardContent>
               <div className="text-3xl font-bold text-secondary">{totalTime.toFixed(1)}</div>
               <p className="text-sm text-muted-foreground">{t('dashboard.hours.learning')}</p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Certificate Section */}
+        <div className="mb-8">
+          <Card className="shadow-card hover:shadow-glow transition-all duration-300 bg-gradient-to-r from-green-50 to-blue-50 border-green-200">
+            <CardContent className="p-6">
+              <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
+                <div className="flex items-center space-x-4">
+                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                    <FileText className="w-6 h-6 text-green-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-800">Get Your Certificate</h3>
+                    <p className="text-gray-600">Download your personalized Eco Warrior certificate</p>
+                  </div>
+                </div>
+                <Button
+                  onClick={() => navigate('/certificate')}
+                  className="bg-green-600 hover:bg-green-700 text-white px-6 py-2"
+                >
+                  <FileText className="w-4 h-4 mr-2" />
+                  View Certificate
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </div>
