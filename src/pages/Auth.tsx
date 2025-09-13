@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/lib/supabase";
+import { useUser } from "@/contexts/UserContext";
 import AnimatedBackground from "@/components/AnimatedBackground";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -14,12 +14,13 @@ export default function Auth() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { t } = useLanguage();
+  const { signIn, signUp } = useUser();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
-    role: t('auth.student'), // resolved conflict, using translation
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -27,76 +28,65 @@ export default function Auth() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: formData.email,
-      password: formData.password,
-    });
+    setIsLoading(true);
+    
+    try {
+      const result = await signIn(formData.email, formData.password);
 
-    if (error) {
-      console.error("Login error:", error.message);
+      if (!result.success) {
+        toast({
+          title: "Login Failed",
+          description: result.error || "Invalid credentials",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: t('auth.welcome.back'),
+          description: t('auth.login.success'),
+        });
+        setTimeout(() => navigate("/dashboard"), 1000);
+      }
+    } catch (error) {
+      console.error("Unexpected login error:", error);
       toast({
         title: "Login Failed",
-        description: error.message.includes("Email not confirmed") 
-          ? "Please check your email and click the confirmation link, or try registering again."
-          : error.message,
+        description: "An unexpected error occurred. Please try again.",
         variant: "destructive",
       });
-    } else {
-      toast({
-        title: t('auth.welcome.back'),
-        description: t('auth.login.success'),
-      });
-      setTimeout(() => navigate("/dashboard"), 1000);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { data, error } = await supabase.auth.signUp({
-      email: formData.email,
-      password: formData.password,
-      options: {
-        data: { name: formData.name, role: formData.role }, // Store extra user data
-        emailRedirectTo: `${window.location.origin}/dashboard`, // Redirect after email confirmation
-      },
-    });
+    setIsLoading(true);
+    
+    try {
+      const result = await signUp(formData.name, formData.email, formData.password);
 
-    if (error) {
-      console.error("Sign-up error:", error.message);
+      if (!result.success) {
+        toast({
+          title: "Registration Failed",
+          description: result.error || "Registration failed",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Account Created Successfully! 🎉",
+          description: "Welcome to EcoLearn! Redirecting to dashboard...",
+        });
+        setTimeout(() => navigate("/dashboard"), 2000);
+      }
+    } catch (error) {
+      console.error("Unexpected registration error:", error);
       toast({
         title: "Registration Failed",
-        description: error.message,
+        description: "An unexpected error occurred. Please try again.",
         variant: "destructive",
       });
-    } else if (data.user) {
-      // Try to insert into profiles table, but don't fail if RLS blocks it
-      try {
-        const { error: profileError } = await supabase
-          .from("profiles")
-          .insert({ 
-            id: data.user.id, 
-            username: formData.name, 
-            role: formData.role,
-            created_at: new Date().toISOString() 
-          });
-        if (profileError) {
-          console.warn("Profile insert warning (RLS may be blocking):", profileError.message);
-        }
-      } catch (profileError) {
-        console.warn("Profile creation skipped due to RLS policy");
-      }
-
-      toast({
-        title: t('auth.account.created'),
-        description: data.user.email_confirmed_at 
-          ? t('auth.registration.success')
-          : "Please check your email and click the confirmation link to complete registration.",
-      });
-      
-      // Only navigate if email is confirmed, otherwise show message
-      if (data.user.email_confirmed_at) {
-        setTimeout(() => navigate("/dashboard"), 1000);
-      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -160,8 +150,12 @@ export default function Auth() {
                       className="border-border focus:ring-primary"
                     />
                   </div>
-                  <Button type="submit" className="w-full bg-gradient-nature hover:opacity-90 transition-all duration-200 shadow-glow">
-                    {t('auth.login.to.ecolearn')}
+                  <Button 
+                    type="submit" 
+                    disabled={isLoading}
+                    className="w-full bg-gradient-nature hover:opacity-90 transition-all duration-200 shadow-glow disabled:opacity-50"
+                  >
+                    {isLoading ? "Signing in..." : t('auth.login.to.ecolearn')}
                   </Button>
                 </form>
               </TabsContent>
@@ -207,14 +201,12 @@ export default function Auth() {
                       className="border-border focus:ring-primary"
                     />
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="role">{t('auth.role')}</Label>
-                    <div className="p-3 bg-muted rounded-lg">
-                      <span className="text-sm font-medium text-muted-foreground">{t('auth.student')}</span>
-                    </div>
-                  </div>
-                  <Button type="submit" className="w-full bg-gradient-nature hover:opacity-90 transition-all duration-200 shadow-glow">
-                    {t('auth.create.account')}
+                  <Button 
+                    type="submit" 
+                    disabled={isLoading}
+                    className="w-full bg-gradient-nature hover:opacity-90 transition-all duration-200 shadow-glow disabled:opacity-50"
+                  >
+                    {isLoading ? "Creating account..." : t('auth.create.account')}
                   </Button>
                 </form>
               </TabsContent>

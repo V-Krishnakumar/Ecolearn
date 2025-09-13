@@ -1,40 +1,47 @@
 // src/components/ActivityForm.tsx
 import { useState } from 'react';
-import { supabase } from '@/lib/supabase';
+import { useUser } from '@/contexts/UserContext';
+import { createActivity, updateLeaderboard } from '@/lib/profile';
 
 const ActivityForm = () => {
+  const { user } = useUser();
   const [type, setType] = useState('');
   const [points, setPoints] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-      alert('Please log in to submit an activity.');
-      return;
-    }
+    setLoading(true);
+    
+    try {
+      if (!user) {
+        alert('Please log in to submit an activity.');
+        return;
+      }
 
-    const { error: activityError } = await supabase
-      .from('activities')
-      .insert({ user_id: user.id, type, points });
+      // Create activity
+      const activityResult = await createActivity(user.id, type, points);
+      if (!activityResult.success) {
+        alert(`Error adding activity: ${activityResult.error}`);
+        return;
+      }
 
-    if (activityError) {
-      console.error('Error adding activity:', activityError);
-      return;
-    }
+      // Update leaderboard
+      const leaderboardResult = await updateLeaderboard(user.id, points);
+      if (!leaderboardResult.success) {
+        console.error('Error updating leaderboard:', leaderboardResult.error);
+        alert('Activity logged but leaderboard update failed.');
+        return;
+      }
 
-    // Update leaderboard points
-    const { error: leaderboardError } = await supabase.rpc('increment_points', {
-      user_id_param: user.id,
-      points_param: points
-    });
-
-    if (leaderboardError) {
-      console.error('Error updating leaderboard:', leaderboardError);
-    } else {
       alert('Activity logged and points updated!');
       setType('');
       setPoints(0);
+    } catch (error) {
+      console.error('Unexpected error:', error);
+      alert('An unexpected error occurred. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -58,8 +65,12 @@ const ActivityForm = () => {
           className="w-full p-2 border rounded"
           required
         />
-        <button type="submit" className="px-4 py-2 bg-primary text-primary-foreground rounded">
-          Submit
+        <button 
+          type="submit" 
+          disabled={loading}
+          className="px-4 py-2 bg-primary text-primary-foreground rounded disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {loading ? 'Submitting...' : 'Submit'}
         </button>
       </form>
     </div>

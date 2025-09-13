@@ -11,8 +11,8 @@ export function Navigation() {
   const { language, toggleLanguage, t } = useLanguage();
   const { profile, signOut } = useUser();
 
-  const handleLogout = async () => {
-    await signOut();
+  const handleLogout = () => {
+    signOut();
     toast({
       title: t('nav.logout.success'),
       description: t('nav.logout.message'),

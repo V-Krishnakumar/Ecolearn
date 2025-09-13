@@ -5,12 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { VideoPlayer } from "@/components/VideoPlayer";
-import { getVideoSrc, hasVideo } from "@/lib/videos";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowRight, Clock, BookOpen, Play } from "lucide-react";
+import { Play, Pause, RotateCcw, ArrowRight, Clock, BookOpen } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useProgress } from "@/lib/localProgress";
+import VideoPlayer from "@/components/VideoPlayer";
 
 // Import games
 import { WasteManagementGame } from "@/components/games/WasteManagementGame";
@@ -35,10 +35,29 @@ const getLessonsData = (t: (key: string) => string) => ({
     image: wasteManagementImg,
     duration: `15 ${t('common.minutes')}`,
     difficulty: t('difficulty.beginner'),
-    content:
-      "Understanding waste management is crucial for environmental protection. This lesson covers the 3 R's: Reduce, Reuse, and Recycle. You'll learn about different types of waste, proper sorting techniques, composting methods, and how individuals and communities can implement effective waste management strategies.",
-    videoDescription:
-      "Watch this comprehensive guide to waste management practices and see real-world examples of successful recycling programs.",
+    content: t('lesson.waste.management.content'),
+    sdgContent: {
+      title: t('sdg.waste.management.title'),
+      goals: [
+        {
+          number: "SDG 12",
+          title: t('sdg.12.title'),
+          description: t('sdg.12.desc')
+        },
+        {
+          number: "SDG 11", 
+          title: t('sdg.11.title'),
+          description: t('sdg.11.desc')
+        },
+        {
+          number: "SDG 13",
+          title: t('sdg.13.title'), 
+          description: t('sdg.13.desc')
+        }
+      ]
+    },
+    videoDescription: t('video.waste.management.desc'),
+    videoSrc: "/videos/Waste Management.mp4",
   },
   2: {
     title: t('lesson.water.treatment'),
@@ -46,10 +65,29 @@ const getLessonsData = (t: (key: string) => string) => ({
     image: waterTreatmentImg,
     duration: `12 ${t('common.minutes')}`,
     difficulty: t('difficulty.beginner'),
-    content:
-      "Water treatment is essential for public health and environmental sustainability. Learn about the multi-step process including screening, sedimentation, filtration, and disinfection. Understand how wastewater treatment plants work and the importance of protecting our water resources.",
-    videoDescription:
-      "Take a virtual tour of a water treatment facility and see the amazing technology that keeps our water clean.",
+    content: t('lesson.water.treatment.content'),
+    sdgContent: {
+      title: t('sdg.water.treatment.title'),
+      goals: [
+        {
+          number: "SDG 6",
+          title: t('sdg.6.title'),
+          description: t('sdg.6.desc')
+        },
+        {
+          number: "SDG 3", 
+          title: t('sdg.3.title'),
+          description: t('sdg.3.desc')
+        },
+        {
+          number: "SDG 14",
+          title: t('sdg.14.title'), 
+          description: t('sdg.14.desc')
+        }
+      ]
+    },
+    videoDescription: t('video.water.treatment.desc'),
+    videoSrc: "/videos/Water Treatment.mp4",
   },
   3: {
     title: t('lesson.pollution.free'),
@@ -57,10 +95,29 @@ const getLessonsData = (t: (key: string) => string) => ({
     image: pollutionFreeImg,
     duration: `18 ${t('common.minutes')}`,
     difficulty: t('difficulty.intermediate'),
-    content:
-      "Creating pollution-free zones requires understanding different types of pollution and implementing comprehensive solutions. Learn about air quality monitoring, green transportation, industrial emission controls, and community-based environmental protection initiatives.",
-    videoDescription:
-      "Discover successful pollution-free zone projects around the world and learn how communities are fighting pollution.",
+    content: t('lesson.pollution.free.content'),
+    sdgContent: {
+      title: t('sdg.pollution.free.title'),
+      goals: [
+        {
+          number: "SDG 11",
+          title: t('sdg.11.title'),
+          description: t('sdg.11.desc')
+        },
+        {
+          number: "SDG 13", 
+          title: t('sdg.13.title'),
+          description: t('sdg.13.desc')
+        },
+        {
+          number: "SDG 15",
+          title: t('sdg.15.title'), 
+          description: t('sdg.15.desc')
+        }
+      ]
+    },
+    videoDescription: t('video.pollution.free.desc'),
+    videoSrc: "/videos/Pollution - Free Zones.mp4",
   },
   4: {
     title: t('lesson.afforestation'),
@@ -68,10 +125,29 @@ const getLessonsData = (t: (key: string) => string) => ({
     image: afforestationImg,
     duration: `14 ${t('common.minutes')}`,
     difficulty: t('difficulty.beginner'),
-    content:
-      "Afforestation is the process of creating forests in areas that were not previously forested. Learn about tree species selection, planting techniques, forest ecosystem development, and the long-term benefits of afforestation for climate regulation and biodiversity conservation.",
-    videoDescription:
-      "Join forest restoration projects and witness the incredible transformation of barren land into thriving forests.",
+    content: t('lesson.afforestation.content'),
+    sdgContent: {
+      title: t('sdg.afforestation.title'),
+      goals: [
+        {
+          number: "SDG 13",
+          title: t('sdg.13.title'),
+          description: t('sdg.13.desc')
+        },
+        {
+          number: "SDG 15", 
+          title: t('sdg.15.title'),
+          description: t('sdg.15.desc')
+        },
+        {
+          number: "SDG 6",
+          title: t('sdg.6.title'), 
+          description: t('sdg.6.desc')
+        }
+      ]
+    },
+    videoDescription: t('video.afforestation.desc'),
+    videoSrc: "/videos/Afforestation.mp4",
   },
   5: {
     title: t('lesson.deforestation'),
@@ -79,10 +155,29 @@ const getLessonsData = (t: (key: string) => string) => ({
     image: deforestationImg,
     duration: `16 ${t('common.minutes')}`,
     difficulty: t('difficulty.intermediate'),
-    content:
-      "Deforestation has far-reaching consequences for climate, biodiversity, and human communities. Understand the main drivers of forest loss, including agriculture, logging, and urban development. Learn about sustainable alternatives and conservation strategies.",
-    videoDescription:
-      "Explore the impact of deforestation and discover how communities are working to protect their forests.",
+    content: t('lesson.deforestation.content'),
+    sdgContent: {
+      title: t('sdg.deforestation.title'),
+      goals: [
+        {
+          number: "SDG 15",
+          title: t('sdg.15.title'),
+          description: t('sdg.15.desc')
+        },
+        {
+          number: "SDG 13", 
+          title: t('sdg.13.title'),
+          description: t('sdg.13.desc')
+        },
+        {
+          number: "SDG 6",
+          title: t('sdg.6.title'), 
+          description: t('sdg.6.desc')
+        }
+      ]
+    },
+    videoDescription: t('video.deforestation.desc'),
+    videoSrc: "/videos/Deforestation.mp4",
   },
   6: {
     title: t('lesson.renewable.energy'),
@@ -90,10 +185,29 @@ const getLessonsData = (t: (key: string) => string) => ({
     image: renewableEnergyImg,
     duration: `20 ${t('common.minutes')}`,
     difficulty: t('difficulty.advanced'),
-    content:
-      "Renewable energy is key to reducing greenhouse gas emissions and achieving energy independence. Learn about different renewable technologies, their efficiency, costs, and environmental benefits. Understand how renewable energy systems work and their role in the global energy transition.",
-    videoDescription:
-      "See cutting-edge renewable energy installations and learn how clean energy is revolutionizing our world.",
+    content: t('lesson.renewable.energy.content'),
+    sdgContent: {
+      title: t('sdg.renewable.energy.title'),
+      goals: [
+        {
+          number: "SDG 7",
+          title: t('sdg.7.title'),
+          description: t('sdg.7.desc')
+        },
+        {
+          number: "SDG 13", 
+          title: t('sdg.13.title'),
+          description: t('sdg.13.desc')
+        },
+        {
+          number: "SDG 9",
+          title: t('sdg.9.title'), 
+          description: t('sdg.9.desc')
+        }
+      ]
+    },
+    videoDescription: t('video.renewable.energy.desc'),
+    videoSrc: "/videos/Renewable Energy.mp4",
   },
 });
 
@@ -101,29 +215,43 @@ export default function Lesson() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { t } = useLanguage();
+  const { updateLessonProgress, getLessonProgress } = useProgress();
   const [progress, setProgress] = useState(0);
+  const [lessonProgress, setLessonProgress] = useState<any>(null);
 
   const lessonsData = getLessonsData(t);
   const lesson = id
     ? lessonsData[parseInt(id) as keyof typeof lessonsData]
     : null;
 
-  const lessonId = id ? parseInt(id) : 0;
-  const videoSrc = getVideoSrc(lessonId);
-  const hasVideoForLesson = hasVideo(lessonId);
+  useEffect(() => {
+    if (id) {
+      const progressData = getLessonProgress(parseInt(id));
+      setLessonProgress(progressData);
+      setProgress(progressData.videoProgress);
+    }
+  }, [id, getLessonProgress]);
 
-  const handleVideoProgress = (newProgress: number) => {
-    setProgress(newProgress);
+  const handleVideoProgress = (videoProgress: number) => {
+    setProgress(videoProgress);
+    if (id) {
+      updateLessonProgress(parseInt(id), { videoProgress });
+    }
   };
 
   const handleVideoComplete = () => {
-    setProgress(100);
+    if (id) {
+      updateLessonProgress(parseInt(id), { videoProgress: 100 });
+    }
   };
 
   const handleStartQuiz = () => navigate(`/quiz/${id}`);
 
   const handleGameComplete = () => {
     console.log("Game completed! Quiz unlocked!");
+    if (id) {
+      updateLessonProgress(parseInt(id), { gameCompleted: true });
+    }
   };
 
   const renderGame = () => {
@@ -211,43 +339,14 @@ export default function Lesson() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    {/* Real Video Player */}
-                    {hasVideoForLesson && videoSrc ? (
-                      <VideoPlayer
-                        src={videoSrc}
-                        title={lesson.title}
-                        onProgress={handleVideoProgress}
-                        onComplete={handleVideoComplete}
-                        className="w-full"
-                      />
-                    ) : (
-                      <div className="relative bg-black rounded-lg overflow-hidden aspect-video">
-                        <img
-                          src={lesson.image}
-                          alt={lesson.title}
-                          className="w-full h-full object-cover"
-                        />
-                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                          <div className="text-center">
-                            <p className="text-white text-lg mb-2">
-                              {t('lesson.video.not.available')}
-                            </p>
-                            <p className="text-white text-sm opacity-80">
-                              {lesson.videoDescription}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    <div className="text-center">
-                      <p className="text-muted-foreground mb-4">
-                        {hasVideoForLesson 
-                          ? t('lesson.video.instructional') 
-                          : t('lesson.video.coming.soon')
-                        }
-                      </p>
-                    </div>
+                    {/* Video Player */}
+                    <VideoPlayer
+                      src={lesson.videoSrc}
+                      title={lesson.title}
+                      description={lesson.videoDescription}
+                      onProgress={handleVideoProgress}
+                      onComplete={handleVideoComplete}
+                    />
                   </CardContent>
                 </Card>
               </div>
@@ -272,6 +371,46 @@ export default function Lesson() {
                 </p>
               </CardContent>
             </Card>
+
+            {/* SDG Content Section */}
+            {lesson.sdgContent && (
+              <Card className="shadow-card">
+                <CardHeader>
+                  <CardTitle className="text-xl font-bold text-green-700">
+                    {lesson.sdgContent.title}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <p className="text-sm text-muted-foreground mb-4">
+                      {t('sdg.aligns.with')}
+                    </p>
+                    <div className="grid gap-4 md:grid-cols-1">
+                      {lesson.sdgContent.goals.map((goal, index) => (
+                        <div
+                          key={index}
+                          className="border border-green-200 rounded-lg p-4 bg-green-50/50 hover:bg-green-50 transition-colors"
+                        >
+                          <div className="flex items-start space-x-3">
+                            <div className="bg-green-600 text-white text-xs font-bold px-2 py-1 rounded-full min-w-[60px] text-center">
+                              {goal.number}
+                            </div>
+                            <div className="flex-1">
+                              <h4 className="font-semibold text-green-800 mb-1">
+                                {goal.title}
+                              </h4>
+                              <p className="text-sm text-green-700">
+                                {goal.description}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
           </TabsContent>
         </Tabs>
 
@@ -336,7 +475,7 @@ export default function Lesson() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {lesson.title === "Waste Management" && (
+                {id === "1" && (
                   <>
                     <div className="flex items-center space-x-2">
                       <span className="text-xl">♻️</span>
@@ -350,7 +489,7 @@ export default function Lesson() {
                     </div>
                   </>
                 )}
-                {lesson.title === "Water Treatment" && (
+                {id === "2" && (
                   <>
                     <div className="flex items-center space-x-2">
                       <span className="text-xl">💧</span>
@@ -364,10 +503,7 @@ export default function Lesson() {
                     </div>
                   </>
                 )}
-                {(lesson.title === "Pollution-Free Zones" ||
-                  lesson.title === "Afforestation" ||
-                  lesson.title === "Deforestation" ||
-                  lesson.title === "Renewable Energy") && (
+                {(id === "3" || id === "4" || id === "5" || id === "6") && (
                   <>
                     <div className="flex items-center space-x-2">
                       <span className="text-xl">🌱</span>

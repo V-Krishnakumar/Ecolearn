@@ -11,8 +11,4 @@ export const supabase = createClient(supabaseUrl, supabaseKey, {
   },
 });
 
-// Optional: Create a function to check auth status
-export const getUser = async () => {
-  const { data } = await supabase.auth.getUser();
-  return data.user;
-};
+// Supabase client for database operations only
