@@ -1,6 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Home, BookOpen, User, Trophy, LogOut, Languages, Camera } from "lucide-react";
+import { Home, BookOpen, User, Trophy, LogOut, Languages, Camera, GraduationCap } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useUser } from "@/contexts/UserContext";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -73,6 +73,16 @@ export function Navigation() {
               <Trophy className="w-4 h-4" />
               <span>{t('nav.scoreboard')}</span>
             </NavLink>
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => navigate('/advanced-modules')}
+              className="flex items-center space-x-2"
+            >
+              <GraduationCap className="w-4 h-4" />
+              <span>Advanced Modules</span>
+            </Button>
           </div>
         </div>
 
