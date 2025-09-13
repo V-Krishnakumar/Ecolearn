@@ -20,8 +20,6 @@ const LandingPage: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTyping, setIsTyping] = useState(true);
   const [showCursor, setShowCursor] = useState(true);
-  const [videoLoaded, setVideoLoaded] = useState(false);
-  const [videoError, setVideoError] = useState(false);
   
   const fullText = "Empowering students to learn sustainability through fun games, interactive lessons, and real-world actions.";
 
@@ -121,61 +119,8 @@ const LandingPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-100 via-blue-50 to-green-50 relative overflow-hidden">
-      {/* Background Video */}
-      <div className="absolute inset-0 w-full h-full z-0">
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className={`w-full h-full object-cover transition-opacity duration-1000 ${
-            videoLoaded ? 'opacity-40' : 'opacity-0'
-          }`}
-          style={{
-            filter: 'blur(0.5px)',
-            transform: 'scale(1.02)'
-          }}
-          onLoadedData={() => {
-            console.log('Video loaded successfully');
-            setVideoLoaded(true);
-          }}
-          onError={(e) => {
-            console.error('Video failed to load:', e);
-            setVideoError(true);
-          }}
-          onLoadStart={() => console.log('Video loading started')}
-        >
-          <source src="/videos/background-video.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-        
-        {/* Loading indicator */}
-        {!videoLoaded && !videoError && (
-          <div className="absolute inset-0 bg-gradient-to-br from-green-100 via-blue-50 to-green-50 flex items-center justify-center">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
-              <p className="text-green-600 font-medium">Loading video...</p>
-            </div>
-          </div>
-        )}
-        
-        {/* Fallback background if video fails to load */}
-        {videoError && (
-          <div className="absolute inset-0 bg-gradient-to-br from-green-100 via-blue-50 to-green-50 flex items-center justify-center">
-            <div className="text-center">
-              <p className="text-green-600 font-medium">Video unavailable - using static background</p>
-            </div>
-          </div>
-        )}
-        
-        {/* Video overlay for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-br from-green-100/60 via-blue-50/60 to-green-50/60"></div>
-        {/* Additional overlay for better contrast */}
-        <div className="absolute inset-0 bg-black/5"></div>
-      </div>
-      
       {/* Floating Background Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-10">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Floating Leaves - Increased quantity for more immersive effect */}
         {Array.from({ length: 50 }, (_, i) => {
           const positions = [
@@ -268,8 +213,40 @@ const LandingPage: React.FC = () => {
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <section className="pt-24 pb-20 px-4 sm:px-6 lg:px-8 relative z-20">
+      {/* Video Banner Section */}
+      <section className="pt-16 pb-8 relative">
+        <div className="relative w-full h-[60vh] min-h-[400px] max-h-[600px] overflow-hidden">
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+          >
+            <source src="/videos/landing-video.mp4" type="video/mp4" />
+            {/* Fallback for browsers that don't support video */}
+            Your browser does not support the video tag.
+          </video>
+          
+          {/* Video overlay for better text readability */}
+          <div className="absolute inset-0 bg-black/30"></div>
+          
+          {/* Video content overlay */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="text-center text-white px-4">
+              <h2 className="text-4xl md:text-6xl font-bold mb-4 drop-shadow-lg">
+                Welcome to EcoLearn
+              </h2>
+              <p className="text-xl md:text-2xl drop-shadow-md opacity-90">
+                Discover Sustainable Learning
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Hero Section - Moved Down */}
+      <section className="pt-16 pb-20 px-4 sm:px-6 lg:px-8 relative">
         <div className="max-w-7xl mx-auto text-center relative z-10">
           <div className="animate-fade-in">
             <div className="mb-8">
@@ -325,7 +302,7 @@ const LandingPage: React.FC = () => {
       </section>
 
       {/* SDG Goals Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white via-green-50/30 to-blue-50/30 relative z-20">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white via-green-50/30 to-blue-50/30 relative">
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center mb-16 animate-fade-in">
             <div className="inline-flex items-center bg-gradient-to-r from-green-500 to-blue-500 p-4 rounded-2xl mb-8 shadow-xl">
@@ -381,7 +358,7 @@ const LandingPage: React.FC = () => {
       </section>
 
       {/* About Us Section */}
-      <section id="about-section" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50/50 via-white to-green-50/50 relative z-20">
+      <section id="about-section" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50/50 via-white to-green-50/50 relative">
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <div className="animate-fade-in">
             <div className="inline-flex items-center bg-gradient-to-r from-blue-500 to-green-500 p-4 rounded-2xl mb-8 shadow-xl">
@@ -405,7 +382,7 @@ const LandingPage: React.FC = () => {
       </section>
 
       {/* Mission Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-green-50/50 via-white to-blue-50/50 relative z-20">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-green-50/50 via-white to-blue-50/50 relative">
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <div className="animate-fade-in">
             <div className="inline-flex items-center bg-gradient-to-r from-green-500 to-blue-500 p-4 rounded-2xl mb-8 shadow-xl">
@@ -429,7 +406,7 @@ const LandingPage: React.FC = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gradient-to-r from-gray-900 via-green-900 to-gray-900 text-white py-12 px-4 sm:px-6 lg:px-8 relative z-20">
+      <footer className="bg-gradient-to-r from-gray-900 via-green-900 to-gray-900 text-white py-12 px-4 sm:px-6 lg:px-8 relative">
         <div className="max-w-7xl mx-auto text-center relative z-10">
           <div className="flex items-center justify-center space-x-3 mb-6">
             <div className="bg-gradient-to-r from-green-500 to-blue-500 p-2 rounded-xl shadow-lg">

@@ -646,6 +646,63 @@ const translations = {
     'common.percent': '%',
     'common.points': 'pts',
     'common.days': 'days',
+    
+    // SDG Content
+    'sdg.title.waste': '♻ Waste Management - Sustainable Development Goals',
+    'sdg.title.water': '💧 Water Treatment - Sustainable Development Goals',
+    'sdg.title.pollution': '🌱 Pollution-Free Zones - Sustainable Development Goals',
+    'sdg.title.afforestation': '🌳 Afforestation - Sustainable Development Goals',
+    'sdg.title.deforestation': '🌲 Deforestation - Sustainable Development Goals',
+    'sdg.title.renewable': '⚡ Renewable Energy - Sustainable Development Goals',
+    'sdg.description': 'This module aligns with the following Sustainable Development Goals:',
+    
+    // SDG Goals
+    'sdg.12.title': 'Responsible Consumption and Production',
+    'sdg.12.desc': 'Promote reduce, reuse, and recycle.',
+    'sdg.11.title': 'Sustainable Cities and Communities',
+    'sdg.11.desc': 'Cleaner cities through better waste systems.',
+    'sdg.13.title': 'Climate Action',
+    'sdg.13.desc': 'Less waste means fewer greenhouse gas emissions.',
+    'sdg.6.title': 'Clean Water and Sanitation',
+    'sdg.6.desc': 'Ensure access to water and sanitation for all through effective treatment systems.',
+    'sdg.3.title': 'Good Health and Well-being',
+    'sdg.3.desc': 'Protect public health by providing safe, clean water.',
+    'sdg.14.title': 'Life Below Water',
+    'sdg.14.desc': 'Prevent water pollution to protect marine ecosystems.',
+    'sdg.15.title': 'Life on Land',
+    'sdg.15.desc': 'Protect ecosystems from harmful air pollution.',
+    'sdg.7.title': 'Affordable and Clean Energy',
+    'sdg.7.desc': 'Expand access to clean energy sources like solar, wind, and hydro.',
+    'sdg.9.title': 'Industry, Innovation, and Infrastructure',
+    'sdg.9.desc': 'Build sustainable energy systems and technology.',
+    
+    // SDG Water Treatment specific
+    'sdg.water.11.desc': 'Create cleaner, healthier urban spaces.',
+    'sdg.water.13.desc': 'Lower pollution to cut greenhouse gases.',
+    'sdg.water.15.desc': 'Protect ecosystems from harmful air pollution.',
+    
+    // SDG Afforestation specific
+    'sdg.afforestation.13.desc': 'Trees absorb CO₂ and fight global warming.',
+    'sdg.afforestation.15.desc': 'Restore ecosystems and protect biodiversity.',
+    'sdg.afforestation.6.desc': 'Forests safeguard watersheds and water resources.',
+    
+    // SDG Deforestation specific
+    'sdg.deforestation.15.desc': 'Prevent biodiversity loss by protecting forests.',
+    'sdg.deforestation.13.desc': 'Forests store carbon and reduce global warming.',
+    'sdg.deforestation.6.desc': 'Forests regulate rainfall and the water cycle.',
+    
+    // SDG Renewable Energy specific
+    'sdg.renewable.7.desc': 'Expand access to clean energy sources like solar, wind, and hydro.',
+    'sdg.renewable.13.desc': 'Cut emissions by shifting away from fossil fuels.',
+    'sdg.renewable.9.desc': 'Build sustainable energy systems and technology.',
+    
+    // Lesson Content
+    'lesson.content.waste': 'Understanding waste management is crucial for environmental protection. This lesson covers the 3 R\'s: Reduce, Reuse, and Recycle. You\'ll learn about different types of waste, proper sorting techniques, composting methods, and how individuals and communities can implement effective waste management strategies.',
+    'lesson.content.water': 'Water treatment is essential for public health and environmental sustainability. Learn about the multi-step process including screening, sedimentation, filtration, and disinfection. Understand how wastewater treatment plants work and the importance of protecting our water resources.',
+    'lesson.content.pollution': 'Creating pollution-free zones requires understanding different types of pollution and implementing comprehensive solutions. Learn about air quality monitoring, green transportation, industrial emission controls, and community-based environmental protection initiatives.',
+    'lesson.content.afforestation': 'Afforestation is the process of creating forests in areas that were not previously forested. Learn about tree species selection, planting techniques, forest ecosystem development, and the long-term benefits of afforestation for climate regulation and biodiversity conservation.',
+    'lesson.content.deforestation': 'Deforestation has far-reaching consequences for climate, biodiversity, and human communities. Understand the main drivers of forest loss, including agriculture, logging, and urban development. Learn about sustainable alternatives and conservation strategies.',
+    'lesson.content.renewable': 'Renewable energy is key to reducing greenhouse gas emissions and achieving energy independence. Learn about different renewable technologies, their efficiency, costs, and environmental benefits. Understand how renewable energy systems work and their role in the global energy transition.',
   },
   hi: {
     // Navigation
@@ -1281,6 +1338,63 @@ const translations = {
     'common.percent': '%',
     'common.points': 'अंक',
     'common.days': 'दिन',
+    
+    // SDG Content
+    'sdg.title.waste': '♻ अपशिष्ट प्रबंधन - सतत विकास लक्ष्य',
+    'sdg.title.water': '💧 जल उपचार - सतत विकास लक्ष्य',
+    'sdg.title.pollution': '🌱 प्रदूषण मुक्त क्षेत्र - सतत विकास लक्ष्य',
+    'sdg.title.afforestation': '🌳 वनरोपण - सतत विकास लक्ष्य',
+    'sdg.title.deforestation': '🌲 वनों की कटाई - सतत विकास लक्ष्य',
+    'sdg.title.renewable': '⚡ नवीकरणीय ऊर्जा - सतत विकास लक्ष्य',
+    'sdg.description': 'यह मॉड्यूल निम्नलिखित सतत विकास लक्ष्यों के साथ संरेखित है:',
+    
+    // SDG Goals
+    'sdg.12.title': 'जिम्मेदार उपभोग और उत्पादन',
+    'sdg.12.desc': 'कम करें, पुनः उपयोग और पुनर्चक्रण को बढ़ावा दें।',
+    'sdg.11.title': 'स्थायी शहर और समुदाय',
+    'sdg.11.desc': 'बेहतर अपशिष्ट प्रणालियों के माध्यम से स्वच्छ शहर।',
+    'sdg.13.title': 'जलवायु कार्य',
+    'sdg.13.desc': 'कम अपशिष्ट का मतलब कम ग्रीनहाउस गैस उत्सर्जन।',
+    'sdg.6.title': 'स्वच्छ जल और स्वच्छता',
+    'sdg.6.desc': 'प्रभावी उपचार प्रणालियों के माध्यम से सभी के लिए जल और स्वच्छता की पहुंच सुनिश्चित करें।',
+    'sdg.3.title': 'अच्छा स्वास्थ्य और कल्याण',
+    'sdg.3.desc': 'सुरक्षित, स्वच्छ जल प्रदान करके जनस्वास्थ्य की रक्षा करें।',
+    'sdg.14.title': 'जल के नीचे जीवन',
+    'sdg.14.desc': 'समुद्री पारिस्थितिकी तंत्र की रक्षा के लिए जल प्रदूषण को रोकें।',
+    'sdg.15.title': 'भूमि पर जीवन',
+    'sdg.15.desc': 'हानिकारक वायु प्रदूषण से पारिस्थितिकी तंत्र की रक्षा करें।',
+    'sdg.7.title': 'सस्ती और स्वच्छ ऊर्जा',
+    'sdg.7.desc': 'सौर, पवन और जलविद्युत जैसे स्वच्छ ऊर्जा स्रोतों तक पहुंच का विस्तार करें।',
+    'sdg.9.title': 'उद्योग, नवाचार और बुनियादी ढांचा',
+    'sdg.9.desc': 'स्थायी ऊर्जा प्रणाली और प्रौद्योगिकी का निर्माण करें।',
+    
+    // SDG Water Treatment specific
+    'sdg.water.11.desc': 'स्वच्छ, स्वस्थ शहरी स्थान बनाएं।',
+    'sdg.water.13.desc': 'ग्रीनहाउस गैसों को कम करने के लिए प्रदूषण को कम करें।',
+    'sdg.water.15.desc': 'हानिकारक वायु प्रदूषण से पारिस्थितिकी तंत्र की रक्षा करें।',
+    
+    // SDG Afforestation specific
+    'sdg.afforestation.13.desc': 'पेड़ CO₂ अवशोषित करते हैं और ग्लोबल वार्मिंग से लड़ते हैं।',
+    'sdg.afforestation.15.desc': 'पारिस्थितिकी तंत्र को बहाल करें और जैव विविधता की रक्षा करें।',
+    'sdg.afforestation.6.desc': 'वन जलग्रहण क्षेत्रों और जल संसाधनों की रक्षा करते हैं।',
+    
+    // SDG Deforestation specific
+    'sdg.deforestation.15.desc': 'वनों की रक्षा करके जैव विविधता के नुकसान को रोकें।',
+    'sdg.deforestation.13.desc': 'वन कार्बन संग्रहीत करते हैं और ग्लोबल वार्मिंग को कम करते हैं।',
+    'sdg.deforestation.6.desc': 'वन वर्षा और जल चक्र को नियंत्रित करते हैं।',
+    
+    // SDG Renewable Energy specific
+    'sdg.renewable.7.desc': 'सौर, पवन और जलविद्युत जैसे स्वच्छ ऊर्जा स्रोतों तक पहुंच का विस्तार करें।',
+    'sdg.renewable.13.desc': 'जीवाश्म ईंधन से दूर जाकर उत्सर्जन को कम करें।',
+    'sdg.renewable.9.desc': 'स्थायी ऊर्जा प्रणाली और प्रौद्योगिकी का निर्माण करें।',
+    
+    // Lesson Content
+    'lesson.content.waste': 'पर्यावरण संरक्षण के लिए अपशिष्ट प्रबंधन को समझना महत्वपूर्ण है। यह पाठ 3 R के सिद्धांतों को कवर करता है: कम करें, पुनः उपयोग और पुनर्चक्रण। आप विभिन्न प्रकार के अपशिष्ट, उचित छंटाई तकनीकों, खाद बनाने की विधियों और व्यक्तियों और समुदायों के लिए प्रभावी अपशिष्ट प्रबंधन रणनीतियों को कैसे लागू करना है, इसके बारे में जानेंगे।',
+    'lesson.content.water': 'जनस्वास्थ्य और पर्यावरणीय स्थिरता के लिए जल उपचार आवश्यक है। छानना, अवसादन, फिल्टर करना और कीटाणुशोधन सहित बहु-चरणीय प्रक्रिया के बारे में जानें। समझें कि अपशिष्ट जल उपचार संयंत्र कैसे काम करते हैं और हमारे जल संसाधनों की रक्षा करने का महत्व।',
+    'lesson.content.pollution': 'प्रदूषण मुक्त क्षेत्र बनाने के लिए विभिन्न प्रकार के प्रदूषण को समझना और व्यापक समाधान लागू करना आवश्यक है। हवा की गुणवत्ता निगरानी, हरित परिवहन, औद्योगिक उत्सर्जन नियंत्रण और समुदाय-आधारित पर्यावरण संरक्षण पहल के बारे में जानें।',
+    'lesson.content.afforestation': 'वनरोपण उन क्षेत्रों में जंगल बनाने की प्रक्रिया है जो पहले वनाच्छादित नहीं थे। पेड़ की प्रजातियों का चयन, रोपण तकनीकों, वन पारिस्थितिकी तंत्र विकास और जलवायु नियंत्रण और जैव विविधता संरक्षण के लिए वनरोपण के दीर्घकालिक लाभों के बारे में जानें।',
+    'lesson.content.deforestation': 'वनों की कटाई के जलवायु, जैव विविधता और मानव समुदायों पर दूरगामी परिणाम होते हैं। कृषि, लकड़ी काटना और शहरी विकास सहित वन हानि के मुख्य कारकों को समझें। स्थायी विकल्पों और संरक्षण रणनीतियों के बारे में जानें।',
+    'lesson.content.renewable': 'नवीकरणीय ऊर्जा ग्रीनहाउस गैस उत्सर्जन को कम करने और ऊर्जा स्वतंत्रता हासिल करने की कुंजी है। विभिन्न नवीकरणीय प्रौद्योगिकियों, उनकी दक्षता, लागत और पर्यावरणीय लाभों के बारे में जानें। समझें कि नवीकरणीय ऊर्जा प्रणालियां कैसे काम करती हैं और वैश्विक ऊर्जा संक्रमण में उनकी भूमिका।',
   }
 };
 
