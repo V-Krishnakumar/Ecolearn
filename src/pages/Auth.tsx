@@ -27,7 +27,7 @@ export default function Auth() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email: formData.email,
       password: formData.password,
     });
@@ -36,7 +36,9 @@ export default function Auth() {
       console.error("Login error:", error.message);
       toast({
         title: "Login Failed",
-        description: error.message,
+        description: error.message.includes("Email not confirmed") 
+          ? "Please check your email and click the confirmation link, or try registering again."
+          : error.message,
         variant: "destructive",
       });
     } else {
@@ -55,6 +57,7 @@ export default function Auth() {
       password: formData.password,
       options: {
         data: { name: formData.name, role: formData.role }, // Store extra user data
+        emailRedirectTo: `${window.location.origin}/dashboard`, // Redirect after email confirmation
       },
     });
 
@@ -66,17 +69,34 @@ export default function Auth() {
         variant: "destructive",
       });
     } else if (data.user) {
-      // Optionally insert into profiles table (requires RLS)
-      const { error: profileError } = await supabase
-        .from("profiles")
-        .insert({ id: data.user.id, username: formData.name, created_at: new Date().toISOString() });
-      if (profileError) console.error("Profile insert error:", profileError.message);
+      // Try to insert into profiles table, but don't fail if RLS blocks it
+      try {
+        const { error: profileError } = await supabase
+          .from("profiles")
+          .insert({ 
+            id: data.user.id, 
+            username: formData.name, 
+            role: formData.role,
+            created_at: new Date().toISOString() 
+          });
+        if (profileError) {
+          console.warn("Profile insert warning (RLS may be blocking):", profileError.message);
+        }
+      } catch (profileError) {
+        console.warn("Profile creation skipped due to RLS policy");
+      }
 
       toast({
         title: t('auth.account.created'),
-        description: t('auth.registration.success'),
+        description: data.user.email_confirmed_at 
+          ? t('auth.registration.success')
+          : "Please check your email and click the confirmation link to complete registration.",
       });
-      setTimeout(() => navigate("/dashboard"), 1000);
+      
+      // Only navigate if email is confirmed, otherwise show message
+      if (data.user.email_confirmed_at) {
+        setTimeout(() => navigate("/dashboard"), 1000);
+      }
     }
   };
 

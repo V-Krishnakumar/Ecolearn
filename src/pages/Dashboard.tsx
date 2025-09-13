@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { PlayCircle, Clock, Trophy, Star } from "lucide-react";
 import Chatbot from "@/components/Chatbot";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useUser } from "@/contexts/UserContext";
 
 // Import lesson images
 import wasteManagementImg from "@/assets/lesson-waste-management.jpg";
@@ -82,6 +83,7 @@ const getLessons = (t: (key: string) => string) => [
 export default function Dashboard() {
   const navigate = useNavigate();
   const { t } = useLanguage();
+  const { profile } = useUser();
   const lessons = getLessons(t);
   
   const completedLessons = lessons.filter(lesson => lesson.completed).length;
@@ -95,7 +97,7 @@ export default function Dashboard() {
         {/* Header Section */}
         <div className="mb-8 text-center animate-slide-up">
           <h1 className="text-4xl font-bold text-foreground mb-4">
-            {t('dashboard.welcome')}
+            {profile?.username ? `Welcome, ${profile.username}! 🌍` : t('dashboard.welcome')}
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             {t('dashboard.subtitle')}

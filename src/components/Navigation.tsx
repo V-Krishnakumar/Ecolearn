@@ -2,15 +2,17 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Home, BookOpen, User, Trophy, LogOut, Languages, Camera } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useUser } from "@/contexts/UserContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 export function Navigation() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { language, toggleLanguage, t } = useLanguage();
+  const { profile, signOut } = useUser();
 
-  const handleLogout = () => {
-    // Simple logout simulation
+  const handleLogout = async () => {
+    await signOut();
     toast({
       title: t('nav.logout.success'),
       description: t('nav.logout.message'),
@@ -87,7 +89,9 @@ export function Navigation() {
           </Button>
           <div className="flex items-center space-x-2 text-sm">
             <User className="w-4 h-4 text-muted-foreground" />
-            <span className="font-medium">{t('nav.user')}</span>
+            <span className="font-medium">
+              {profile?.username || t('nav.user')}
+            </span>
           </div>
           <Button
             variant="outline"

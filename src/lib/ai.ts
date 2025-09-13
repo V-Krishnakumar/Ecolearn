@@ -67,11 +67,27 @@ export async function askAI(messages: ChatMessage[]): Promise<string> {
   const apiKey = import.meta.env.VITE_GOOGLE_API_KEY as string | undefined;
   const last = messages.filter(m => m.role === "user").pop()?.content || "";
   
+  // Debug environment variables
+  console.log("🔍 Environment Debug:", {
+    hasApiKey: !!apiKey,
+    apiKeyLength: apiKey?.length || 0,
+    apiKeyStart: apiKey?.substring(0, 15) || "none",
+    isPlaceholder: apiKey === "your_google_api_key_here",
+    allEnvKeys: Object.keys(import.meta.env).filter(key => key.includes('GOOGLE') || key.includes('API')),
+    allEnvVars: Object.keys(import.meta.env),
+    googleApiKey: import.meta.env.VITE_GOOGLE_API_KEY,
+    usingHardcoded: !import.meta.env.VITE_GOOGLE_API_KEY
+  });
+
+  
+  
+
+  
   // Always try AI first if we have an API key
-  if (apiKey) {
+  if (apiKey && apiKey !== "your_google_api_key_here" && apiKey.length > 20) {
     try {
-      console.log("Using Google Gemini API with key:", apiKey.substring(0, 20) + "...");
-      console.log("Question:", last);
+      console.log("🤖 Using Google Gemini API with key:", apiKey.substring(0, 20) + "...");
+      console.log("❓ Question:", last);
       
       // Use Google Gemini API for comprehensive environmental answers
       const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
@@ -98,24 +114,24 @@ Student question: ${last}`
       
       if (res.ok) {
         const data = await res.json();
-        console.log("Full API response:", data);
+        console.log("✅ Google Gemini API Response received");
         const aiResponse = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
         if (aiResponse) {
-          console.log("AI Response received:", aiResponse.substring(0, 100) + "...");
+          console.log("🎉 AI Response:", aiResponse.substring(0, 100) + "...");
           return aiResponse;
         } else {
-          console.log("No AI response found in data");
+          console.log("⚠️ No AI response found in data");
         }
       } else {
         const errorText = await res.text();
-        console.error("Google Gemini API Error:", res.status, errorText);
+        console.error("❌ Google Gemini API Error:", res.status, errorText);
       }
     } catch (error) {
       console.error("AI Error:", error);
       // Fall through to knowledge base
     }
   } else {
-    console.log("No API key found, using knowledge base");
+    console.log("No Google API key found, using knowledge base");
   }
   
   // Fallback to knowledge base if AI fails
