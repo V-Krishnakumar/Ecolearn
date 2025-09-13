@@ -1,10 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-<<<<<<< HEAD
-import { Home, BookOpen, User, Trophy, LogOut, Languages, Camera, GraduationCap } from "lucide-react";
-=======
-import { Home, BookOpen, User, Trophy, LogOut, Languages, Camera, FileText } from "lucide-react";
->>>>>>> f5560166e88de45d93afeaae6c0b0266a6160204
+import { Home, BookOpen, User, Trophy, LogOut, Languages, Camera, GraduationCap, FileText } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useUser } from "@/contexts/UserContext";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -78,7 +74,6 @@ export function Navigation() {
               <span>{t('nav.scoreboard')}</span>
             </NavLink>
 
-<<<<<<< HEAD
             <Button
               variant="outline"
               size="sm"
@@ -88,7 +83,7 @@ export function Navigation() {
               <GraduationCap className="w-4 h-4" />
               <span>Advanced Modules</span>
             </Button>
-=======
+
             <NavLink
               to="/certificate"
               className={({ isActive }) =>
@@ -102,7 +97,6 @@ export function Navigation() {
               <FileText className="w-4 h-4" />
               <span>Certificate</span>
             </NavLink>
->>>>>>> f5560166e88de45d93afeaae6c0b0266a6160204
           </div>
         </div>
 
