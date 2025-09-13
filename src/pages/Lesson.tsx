@@ -5,9 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { VideoPlayer } from "@/components/VideoPlayer";
+import { getVideoSrc, hasVideo } from "@/lib/videos";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Play, Pause, RotateCcw, ArrowRight, Clock, BookOpen } from "lucide-react";
+import { ArrowRight, Clock, BookOpen, Play } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 // Import games
@@ -99,8 +101,6 @@ export default function Lesson() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { t } = useLanguage();
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
   const [progress, setProgress] = useState(0);
 
   const lessonsData = getLessonsData(t);
@@ -108,32 +108,16 @@ export default function Lesson() {
     ? lessonsData[parseInt(id) as keyof typeof lessonsData]
     : null;
 
-  const videoDuration = 15; // Simulated 15-second video
+  const lessonId = id ? parseInt(id) : 0;
+  const videoSrc = getVideoSrc(lessonId);
+  const hasVideoForLesson = hasVideo(lessonId);
 
-  useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (isPlaying && currentTime < videoDuration) {
-      interval = setInterval(() => {
-        setCurrentTime((prev) => {
-          const newTime = prev + 0.1;
-          setProgress((newTime / videoDuration) * 100);
-          if (newTime >= videoDuration) {
-            setIsPlaying(false);
-            return videoDuration;
-          }
-          return newTime;
-        });
-      }, 100);
-    }
-    return () => clearInterval(interval);
-  }, [isPlaying, currentTime, videoDuration]);
+  const handleVideoProgress = (newProgress: number) => {
+    setProgress(newProgress);
+  };
 
-  const handlePlayPause = () => setIsPlaying(!isPlaying);
-
-  const handleRestart = () => {
-    setCurrentTime(0);
-    setProgress(0);
-    setIsPlaying(false);
+  const handleVideoComplete = () => {
+    setProgress(100);
   };
 
   const handleStartQuiz = () => navigate(`/quiz/${id}`);
@@ -163,11 +147,6 @@ export default function Lesson() {
     }
   };
 
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs.toString().padStart(2, "0")}`;
-  };
 
   if (!lesson) {
     return (
@@ -232,69 +211,41 @@ export default function Lesson() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    {/* Video Player Simulation */}
-                    <div className="relative bg-black rounded-lg overflow-hidden aspect-video">
-                      <img
-                        src={lesson.image}
-                        alt={lesson.title}
-                        className="w-full h-full object-cover"
+                    {/* Real Video Player */}
+                    {hasVideoForLesson && videoSrc ? (
+                      <VideoPlayer
+                        src={videoSrc}
+                        title={lesson.title}
+                        onProgress={handleVideoProgress}
+                        onComplete={handleVideoComplete}
+                        className="w-full"
                       />
-                      <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                        <div className="text-center">
-                          <Button
-                            size="lg"
-                            onClick={handlePlayPause}
-                            className="mb-4 bg-white/20 hover:bg-white/30 text-white backdrop-blur-sm border-white/30"
-                          >
-                            {isPlaying ? (
-                              <Pause className="w-8 h-8" />
-                            ) : (
-                              <Play className="w-8 h-8" />
-                            )}
-                          </Button>
-                          <p className="text-white text-sm opacity-80">
-                            {lesson.videoDescription}
-                          </p>
-                        </div>
-                      </div>
-
-                      {/* Video Controls */}
-                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
-                        <div className="flex items-center space-x-3">
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={handlePlayPause}
-                            className="text-white hover:bg-white/20"
-                          >
-                            {isPlaying ? (
-                              <Pause className="w-4 h-4" />
-                            ) : (
-                              <Play className="w-4 h-4" />
-                            )}
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={handleRestart}
-                            className="text-white hover:bg-white/20"
-                          >
-                            <RotateCcw className="w-4 h-4" />
-                          </Button>
-                          <div className="flex-1">
-                            <Progress value={progress} className="h-2" />
+                    ) : (
+                      <div className="relative bg-black rounded-lg overflow-hidden aspect-video">
+                        <img
+                          src={lesson.image}
+                          alt={lesson.title}
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                          <div className="text-center">
+                            <p className="text-white text-lg mb-2">
+                              {t('lesson.video.not.available')}
+                            </p>
+                            <p className="text-white text-sm opacity-80">
+                              {lesson.videoDescription}
+                            </p>
                           </div>
-                          <span className="text-white text-sm">
-                            {formatTime(currentTime)} / {""}
-                            {formatTime(videoDuration)}
-                          </span>
                         </div>
                       </div>
-                    </div>
+                    )}
 
                     <div className="text-center">
                       <p className="text-muted-foreground mb-4">
-                        {t('lesson.video.simulated')}
+                        {hasVideoForLesson 
+                          ? t('lesson.video.instructional') 
+                          : t('lesson.video.coming.soon')
+                        }
                       </p>
                     </div>
                   </CardContent>
