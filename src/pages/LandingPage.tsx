@@ -213,8 +213,40 @@ const LandingPage: React.FC = () => {
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <section className="pt-24 pb-20 px-4 sm:px-6 lg:px-8 relative">
+      {/* Video Banner Section */}
+      <section className="pt-16 pb-8 relative">
+        <div className="relative w-full h-[60vh] min-h-[400px] max-h-[600px] overflow-hidden">
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+          >
+            <source src="/videos/landing-video.mp4" type="video/mp4" />
+            {/* Fallback for browsers that don't support video */}
+            Your browser does not support the video tag.
+          </video>
+          
+          {/* Video overlay for better text readability */}
+          <div className="absolute inset-0 bg-black/30"></div>
+          
+          {/* Video content overlay */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="text-center text-white px-4">
+              <h2 className="text-4xl md:text-6xl font-bold mb-4 drop-shadow-lg">
+                Welcome to EcoLearn
+              </h2>
+              <p className="text-xl md:text-2xl drop-shadow-md opacity-90">
+                Discover Sustainable Learning
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Hero Section - Moved Down */}
+      <section className="pt-16 pb-20 px-4 sm:px-6 lg:px-8 relative">
         <div className="max-w-7xl mx-auto text-center relative z-10">
           <div className="animate-fade-in">
             <div className="mb-8">

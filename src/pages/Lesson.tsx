@@ -33,25 +33,24 @@ const getLessonsData = (t: (key: string) => string) => ({
     image: wasteManagementImg,
     duration: `15 ${t('common.minutes')}`,
     difficulty: t('difficulty.beginner'),
-    content:
-      "Understanding waste management is crucial for environmental protection. This lesson covers the 3 R's: Reduce, Reuse, and Recycle. You'll learn about different types of waste, proper sorting techniques, composting methods, and how individuals and communities can implement effective waste management strategies.",
+    content: t('lesson.content.waste'),
     sdgContent: {
-      title: "♻ Waste Management - Sustainable Development Goals",
+      title: t('sdg.title.waste'),
       goals: [
         {
           number: "SDG 12",
-          title: "Responsible Consumption and Production",
-          description: "Promote reduce, reuse, and recycle."
+          title: t('sdg.12.title'),
+          description: t('sdg.12.desc')
         },
         {
           number: "SDG 11", 
-          title: "Sustainable Cities and Communities",
-          description: "Cleaner cities through better waste systems."
+          title: t('sdg.11.title'),
+          description: t('sdg.11.desc')
         },
         {
           number: "SDG 13",
-          title: "Climate Action", 
-          description: "Less waste means fewer greenhouse gas emissions."
+          title: t('sdg.13.title'), 
+          description: t('sdg.13.desc')
         }
       ]
     },
@@ -64,25 +63,24 @@ const getLessonsData = (t: (key: string) => string) => ({
     image: waterTreatmentImg,
     duration: `12 ${t('common.minutes')}`,
     difficulty: t('difficulty.beginner'),
-    content:
-      "Water treatment is essential for public health and environmental sustainability. Learn about the multi-step process including screening, sedimentation, filtration, and disinfection. Understand how wastewater treatment plants work and the importance of protecting our water resources.",
+    content: t('lesson.content.water'),
     sdgContent: {
-      title: "💧 Water Treatment - Sustainable Development Goals",
+      title: t('sdg.title.water'),
       goals: [
         {
           number: "SDG 6",
-          title: "Clean Water and Sanitation",
-          description: "Ensure access to water and sanitation for all through effective treatment systems."
+          title: t('sdg.6.title'),
+          description: t('sdg.6.desc')
         },
         {
           number: "SDG 3", 
-          title: "Good Health and Well-being",
-          description: "Protect public health by providing safe, clean water."
+          title: t('sdg.3.title'),
+          description: t('sdg.3.desc')
         },
         {
           number: "SDG 14",
-          title: "Life Below Water", 
-          description: "Prevent water pollution to protect marine ecosystems."
+          title: t('sdg.14.title'), 
+          description: t('sdg.14.desc')
         }
       ]
     },
@@ -95,25 +93,24 @@ const getLessonsData = (t: (key: string) => string) => ({
     image: pollutionFreeImg,
     duration: `18 ${t('common.minutes')}`,
     difficulty: t('difficulty.intermediate'),
-    content:
-      "Creating pollution-free zones requires understanding different types of pollution and implementing comprehensive solutions. Learn about air quality monitoring, green transportation, industrial emission controls, and community-based environmental protection initiatives.",
+    content: t('lesson.content.pollution'),
     sdgContent: {
-      title: "🌱 Pollution-Free Zones - Sustainable Development Goals",
+      title: t('sdg.title.pollution'),
       goals: [
         {
           number: "SDG 11",
-          title: "Sustainable Cities and Communities",
-          description: "Create cleaner, healthier urban spaces."
+          title: t('sdg.11.title'),
+          description: t('sdg.water.11.desc')
         },
         {
           number: "SDG 13", 
-          title: "Climate Action",
-          description: "Lower pollution to cut greenhouse gases."
+          title: t('sdg.13.title'),
+          description: t('sdg.water.13.desc')
         },
         {
           number: "SDG 15",
-          title: "Life on Land", 
-          description: "Protect ecosystems from harmful air pollution."
+          title: t('sdg.15.title'), 
+          description: t('sdg.water.15.desc')
         }
       ]
     },
@@ -126,25 +123,24 @@ const getLessonsData = (t: (key: string) => string) => ({
     image: afforestationImg,
     duration: `14 ${t('common.minutes')}`,
     difficulty: t('difficulty.beginner'),
-    content:
-      "Afforestation is the process of creating forests in areas that were not previously forested. Learn about tree species selection, planting techniques, forest ecosystem development, and the long-term benefits of afforestation for climate regulation and biodiversity conservation.",
+    content: t('lesson.content.afforestation'),
     sdgContent: {
-      title: "🌳 Afforestation - Sustainable Development Goals",
+      title: t('sdg.title.afforestation'),
       goals: [
         {
           number: "SDG 13",
-          title: "Climate Action",
-          description: "Trees absorb CO₂ and fight global warming."
+          title: t('sdg.13.title'),
+          description: t('sdg.afforestation.13.desc')
         },
         {
           number: "SDG 15", 
-          title: "Life on Land",
-          description: "Restore ecosystems and protect biodiversity."
+          title: t('sdg.15.title'),
+          description: t('sdg.afforestation.15.desc')
         },
         {
           number: "SDG 6",
-          title: "Clean Water and Sanitation", 
-          description: "Forests safeguard watersheds and water resources."
+          title: t('sdg.6.title'), 
+          description: t('sdg.afforestation.6.desc')
         }
       ]
     },
@@ -157,25 +153,24 @@ const getLessonsData = (t: (key: string) => string) => ({
     image: deforestationImg,
     duration: `16 ${t('common.minutes')}`,
     difficulty: t('difficulty.intermediate'),
-    content:
-      "Deforestation has far-reaching consequences for climate, biodiversity, and human communities. Understand the main drivers of forest loss, including agriculture, logging, and urban development. Learn about sustainable alternatives and conservation strategies.",
+    content: t('lesson.content.deforestation'),
     sdgContent: {
-      title: "🌲 Deforestation - Sustainable Development Goals",
+      title: t('sdg.title.deforestation'),
       goals: [
         {
           number: "SDG 15",
-          title: "Life on Land",
-          description: "Prevent biodiversity loss by protecting forests."
+          title: t('sdg.15.title'),
+          description: t('sdg.deforestation.15.desc')
         },
         {
           number: "SDG 13", 
-          title: "Climate Action",
-          description: "Forests store carbon and reduce global warming."
+          title: t('sdg.13.title'),
+          description: t('sdg.deforestation.13.desc')
         },
         {
           number: "SDG 6",
-          title: "Clean Water and Sanitation", 
-          description: "Forests regulate rainfall and the water cycle."
+          title: t('sdg.6.title'), 
+          description: t('sdg.deforestation.6.desc')
         }
       ]
     },
@@ -188,25 +183,24 @@ const getLessonsData = (t: (key: string) => string) => ({
     image: renewableEnergyImg,
     duration: `20 ${t('common.minutes')}`,
     difficulty: t('difficulty.advanced'),
-    content:
-      "Renewable energy is key to reducing greenhouse gas emissions and achieving energy independence. Learn about different renewable technologies, their efficiency, costs, and environmental benefits. Understand how renewable energy systems work and their role in the global energy transition.",
+    content: t('lesson.content.renewable'),
     sdgContent: {
-      title: "⚡ Renewable Energy - Sustainable Development Goals",
+      title: t('sdg.title.renewable'),
       goals: [
         {
           number: "SDG 7",
-          title: "Affordable and Clean Energy",
-          description: "Expand access to clean energy sources like solar, wind, and hydro."
+          title: t('sdg.7.title'),
+          description: t('sdg.renewable.7.desc')
         },
         {
           number: "SDG 13", 
-          title: "Climate Action",
-          description: "Cut emissions by shifting away from fossil fuels."
+          title: t('sdg.13.title'),
+          description: t('sdg.renewable.13.desc')
         },
         {
           number: "SDG 9",
-          title: "Industry, Innovation, and Infrastructure", 
-          description: "Build sustainable energy systems and technology."
+          title: t('sdg.9.title'), 
+          description: t('sdg.renewable.9.desc')
         }
       ]
     },
@@ -453,7 +447,7 @@ export default function Lesson() {
                 <CardContent>
                   <div className="space-y-4">
                     <p className="text-sm text-muted-foreground mb-4">
-                      This module aligns with the following Sustainable Development Goals:
+                      {t('sdg.description')}
                     </p>
                     <div className="grid gap-4 md:grid-cols-1">
                       {lesson.sdgContent.goals.map((goal, index) => (
