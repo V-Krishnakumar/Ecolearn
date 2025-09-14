@@ -1,10 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-<<<<<<< HEAD
-import { Home, BookOpen, User, Trophy, LogOut, Languages, Camera, GraduationCap } from "lucide-react";
-=======
 import { Home, BookOpen, User, Trophy, LogOut, Languages, Camera, FileText } from "lucide-react";
->>>>>>> f5560166e88de45d93afeaae6c0b0266a6160204
 import { useToast } from "@/hooks/use-toast";
 import { useUser } from "@/contexts/UserContext";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -18,8 +14,8 @@ export function Navigation() {
   const handleLogout = () => {
     signOut();
     toast({
-      title: t('nav.logout.success'),
-      description: t('nav.logout.message'),
+      title: t("nav.logout.success"),
+      description: t("nav.logout.message"),
     });
     navigate("/auth");
   };
@@ -47,7 +43,7 @@ export function Navigation() {
               }
             >
               <Home className="w-4 h-4" />
-              <span>{t('nav.dashboard')}</span>
+              <span>{t("nav.dashboard")}</span>
             </NavLink>
 
             <NavLink
@@ -61,7 +57,7 @@ export function Navigation() {
               }
             >
               <Camera className="w-4 h-4" />
-              <span>{t('nav.realtime.tasks')}</span>
+              <span>{t("nav.realtime.tasks")}</span>
             </NavLink>
 
             <NavLink
@@ -75,20 +71,9 @@ export function Navigation() {
               }
             >
               <Trophy className="w-4 h-4" />
-              <span>{t('nav.scoreboard')}</span>
+              <span>{t("nav.scoreboard")}</span>
             </NavLink>
 
-<<<<<<< HEAD
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => navigate('/advanced-modules')}
-              className="flex items-center space-x-2"
-            >
-              <GraduationCap className="w-4 h-4" />
-              <span>Advanced Modules</span>
-            </Button>
-=======
             <NavLink
               to="/certificate"
               className={({ isActive }) =>
@@ -102,7 +87,6 @@ export function Navigation() {
               <FileText className="w-4 h-4" />
               <span>Certificate</span>
             </NavLink>
->>>>>>> f5560166e88de45d93afeaae6c0b0266a6160204
           </div>
         </div>
 
@@ -112,15 +96,17 @@ export function Navigation() {
             size="sm"
             onClick={toggleLanguage}
             className="flex items-center space-x-2"
-            title={language === 'en' ? 'Switch to Hindi' : 'Switch to English'}
+            title={language === "en" ? "Switch to Hindi" : "Switch to English"}
           >
             <Languages className="w-4 h-4" />
-            <span className="hidden sm:inline">{language === 'en' ? 'हिंदी' : 'English'}</span>
+            <span className="hidden sm:inline">
+              {language === "en" ? "हिंदी" : "English"}
+            </span>
           </Button>
           <div className="flex items-center space-x-2 text-sm">
             <User className="w-4 h-4 text-muted-foreground" />
             <span className="font-medium">
-              {profile?.username || t('nav.user')}
+              {profile?.username || t("nav.user")}
             </span>
           </div>
           <Button
@@ -130,7 +116,7 @@ export function Navigation() {
             className="flex items-center space-x-2"
           >
             <LogOut className="w-4 h-4" />
-            <span className="hidden sm:inline">{t('nav.logout')}</span>
+            <span className="hidden sm:inline">{t("nav.logout")}</span>
           </Button>
         </div>
       </div>
