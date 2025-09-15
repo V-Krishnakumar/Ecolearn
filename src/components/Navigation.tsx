@@ -1,6 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Home, BookOpen, User, Trophy, LogOut, Languages, Camera, GraduationCap, FileText } from "lucide-react";
+import { Home, BookOpen, User, Trophy, LogOut, Languages, Camera, GraduationCap, FileText, Award } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useUser } from "@/contexts/UserContext";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -72,6 +72,20 @@ export function Navigation() {
             >
               <Trophy className="w-4 h-4" />
               <span>{t("nav.scoreboard")}</span>
+            </NavLink>
+
+            <NavLink
+              to="/achievements"
+              className={({ isActive }) =>
+                `flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-200 ${
+                  isActive
+                    ? "bg-primary text-primary-foreground shadow-glow"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                }`
+              }
+            >
+              <Award className="w-4 h-4" />
+              <span>Achievements</span>
             </NavLink>
 
             <Button

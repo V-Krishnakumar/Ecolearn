@@ -10,8 +10,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Play, Pause, RotateCcw, ArrowRight, Clock, BookOpen } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useProgress } from "@/lib/localProgress";
+import { useAchievements } from "@/hooks/useAchievements";
 import VideoPlayer from "@/components/VideoPlayer";
 import NewsFacts from "@/components/NewsFacts";
+import { AchievementNotification } from "@/components/AchievementNotification";
 
 // Import games
 import { WasteManagementGame } from "@/components/games/WasteManagementGame";
@@ -217,6 +219,7 @@ export default function Lesson() {
   const navigate = useNavigate();
   const { t } = useLanguage();
   const { updateLessonProgress, getLessonProgress } = useProgress();
+  const { updateProgress, newAchievements, dismissNotification } = useAchievements();
   const [progress, setProgress] = useState(0);
   const [lessonProgress, setLessonProgress] = useState<any>(null);
 
@@ -243,6 +246,9 @@ export default function Lesson() {
   const handleVideoComplete = () => {
     if (id) {
       updateLessonProgress(parseInt(id), { videoProgress: 100 });
+      // Update achievement progress
+      updateProgress('video_watched', 1);
+      updateProgress('lessons_completed', 1);
     }
   };
 
@@ -252,6 +258,8 @@ export default function Lesson() {
     console.log("Game completed! Quiz unlocked!");
     if (id) {
       updateLessonProgress(parseInt(id), { gameCompleted: true });
+      // Update achievement progress
+      updateProgress('games_won', 1);
     }
   };
 
@@ -533,6 +541,15 @@ export default function Lesson() {
           </div>
         </div>
       </main>
+
+      {/* Achievement Notifications */}
+      {newAchievements.map((achievement) => (
+        <AchievementNotification
+          key={achievement.id}
+          achievement={achievement}
+          onClose={() => dismissNotification(achievement.id)}
+        />
+      ))}
     </div>
   );
 }

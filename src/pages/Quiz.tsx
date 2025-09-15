@@ -9,6 +9,8 @@ import { CheckCircle, XCircle, ArrowRight, RotateCcw, Trophy } from "lucide-reac
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useProgress } from "@/lib/localProgress";
+import { useAchievements } from "@/hooks/useAchievements";
+import { AchievementNotification } from "@/components/AchievementNotification";
 
 const getQuizData = (t: (key: string) => string) => ({
   1: {
@@ -247,6 +249,7 @@ export default function Quiz() {
   const { toast } = useToast();
   const { t } = useLanguage();
   const { updateLessonProgress } = useProgress();
+  const { updateProgress, newAchievements, dismissNotification } = useAchievements();
   
   const quizData = getQuizData(t);
   const quiz = id ? quizData[parseInt(id) as keyof typeof quizData] : null;
@@ -311,6 +314,12 @@ export default function Quiz() {
           quizCompleted: true, 
           quizScore: Math.round(percentage) 
         });
+        
+        // Update achievement progress
+        updateProgress('lessons_completed', 1);
+        if (percentage === 100) {
+          updateProgress('quiz_perfect', 1);
+        }
       }
     }
   };
@@ -533,6 +542,15 @@ export default function Quiz() {
           </CardContent>
         </Card>
       </main>
+
+      {/* Achievement Notifications */}
+      {newAchievements.map((achievement) => (
+        <AchievementNotification
+          key={achievement.id}
+          achievement={achievement}
+          onClose={() => dismissNotification(achievement.id)}
+        />
+      ))}
     </div>
   );
 }

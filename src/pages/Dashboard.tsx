@@ -10,6 +10,9 @@ import NewsFacts from "@/components/NewsFacts";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUser } from "@/contexts/UserContext";
 import { useProgress } from "@/lib/localProgress";
+import { useAchievements } from "@/hooks/useAchievements";
+import { AchievementStats } from "@/components/AchievementStats";
+import { AchievementNotification } from "@/components/AchievementNotification";
 import { useEffect, useState } from "react";
 
 // Import lesson images
@@ -76,6 +79,7 @@ export default function Dashboard() {
   const { t } = useLanguage();
   const { profile } = useUser();
   const { getDashboardData } = useProgress();
+  const { stats, newAchievements, dismissNotification } = useAchievements();
   const [dashboardData, setDashboardData] = useState<any>(null);
   const [lessons, setLessons] = useState<any[]>([]);
 
@@ -210,6 +214,17 @@ export default function Dashboard() {
           </Card>
         </div>
 
+        {/* Achievement Stats */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center space-x-2">
+            <Trophy className="w-6 h-6 text-yellow-500" />
+            <span>Achievements</span>
+          </h2>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <AchievementStats stats={stats} />
+          </div>
+        </div>
+
         {/* Lessons Grid */}
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center space-x-2">
@@ -315,6 +330,15 @@ export default function Dashboard() {
         </div>
       </main>
       <Chatbot />
+
+      {/* Achievement Notifications */}
+      {newAchievements.map((achievement) => (
+        <AchievementNotification
+          key={achievement.id}
+          achievement={achievement}
+          onClose={() => dismissNotification(achievement.id)}
+        />
+      ))}
     </div>
   );
 }

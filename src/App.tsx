@@ -19,6 +19,7 @@ import EnvironmentalPolicy from "./pages/EnvironmentalPolicy";
 import ClimateChange from "./pages/ClimateChange";
 import Biodiversity from "./pages/Biodiversity";
 import AdvancedModules from "./pages/AdvancedModules";
+import Achievements from "./pages/Achievements";
 import CertificatePage from "./pages/CertificatePage";
 
 const queryClient = new QueryClient();
@@ -44,6 +45,7 @@ const App = () => (
               <Route path="/lesson/climate-change" element={<ClimateChange />} />
               <Route path="/lesson/biodiversity" element={<Biodiversity />} />
               <Route path="/advanced-modules" element={<AdvancedModules />} />
+              <Route path="/achievements" element={<Achievements />} />
               <Route path="/certificate" element={<CertificatePage />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
