@@ -14,8 +14,8 @@ export function Navigation() {
   const handleLogout = () => {
     signOut();
     toast({
-      title: t('nav.logout.success'),
-      description: t('nav.logout.message'),
+      title: t("nav.logout.success"),
+      description: t("nav.logout.message"),
     });
     navigate("/auth");
   };
@@ -43,7 +43,7 @@ export function Navigation() {
               }
             >
               <Home className="w-4 h-4" />
-              <span>{t('nav.dashboard')}</span>
+              <span>{t("nav.dashboard")}</span>
             </NavLink>
 
             <NavLink
@@ -57,7 +57,7 @@ export function Navigation() {
               }
             >
               <Camera className="w-4 h-4" />
-              <span>{t('nav.realtime.tasks')}</span>
+              <span>{t("nav.realtime.tasks")}</span>
             </NavLink>
 
             <NavLink
@@ -71,7 +71,7 @@ export function Navigation() {
               }
             >
               <Trophy className="w-4 h-4" />
-              <span>{t('nav.scoreboard')}</span>
+              <span>{t("nav.scoreboard")}</span>
             </NavLink>
 
             <Button
@@ -106,15 +106,17 @@ export function Navigation() {
             size="sm"
             onClick={toggleLanguage}
             className="flex items-center space-x-2"
-            title={language === 'en' ? 'Switch to Hindi' : 'Switch to English'}
+            title={language === "en" ? "Switch to Hindi" : "Switch to English"}
           >
             <Languages className="w-4 h-4" />
-            <span className="hidden sm:inline">{language === 'en' ? 'हिंदी' : 'English'}</span>
+            <span className="hidden sm:inline">
+              {language === "en" ? "हिंदी" : "English"}
+            </span>
           </Button>
           <div className="flex items-center space-x-2 text-sm">
             <User className="w-4 h-4 text-muted-foreground" />
             <span className="font-medium">
-              {profile?.username || t('nav.user')}
+              {profile?.username || t("nav.user")}
             </span>
           </div>
           <Button
@@ -124,7 +126,7 @@ export function Navigation() {
             className="flex items-center space-x-2"
           >
             <LogOut className="w-4 h-4" />
-            <span className="hidden sm:inline">{t('nav.logout')}</span>
+            <span className="hidden sm:inline">{t("nav.logout")}</span>
           </Button>
         </div>
       </div>
