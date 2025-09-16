@@ -118,3 +118,4 @@ sdgContent: {
 ### 🎉 **Issue Resolved**
 
 The SDG content section now properly responds to language changes, ensuring a consistent multilingual experience throughout the EcoLearn application!
+

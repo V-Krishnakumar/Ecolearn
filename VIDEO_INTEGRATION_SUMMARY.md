@@ -95,3 +95,4 @@ public/
 ### 🎉 **Result**
 
 Your custom video from the OneDrive Desktop folder is now successfully integrated into the EcoLearn landing page! The video will auto-play as a banner at the top of the page, creating an engaging first impression for visitors while maintaining all existing functionality and design elements.
+

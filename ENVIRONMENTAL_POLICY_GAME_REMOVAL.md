@@ -44,3 +44,4 @@ The Environmental Policy module now has a cleaner, more focused interface with j
 - ✅ `src/pages/EnvironmentalPolicy.tsx` - Removed game tab and cleaned up imports
 
 The module is ready to use with the simplified 2-tab structure! 🎉
+
