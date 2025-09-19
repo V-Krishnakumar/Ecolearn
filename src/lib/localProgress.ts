@@ -247,10 +247,15 @@ export const useProgress = () => {
     LocalProgress.resetProgress(user.id);
   };
 
+  const getUserProgress = (userId: string) => {
+    return LocalProgress.getUserProgress(userId);
+  };
+
   return {
     updateLessonProgress,
     getLessonProgress,
     getDashboardData,
+    getUserProgress,
     resetProgress
   };
 };

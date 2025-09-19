@@ -1,9 +1,12 @@
 import { supabase } from './supabase';
 
+export type UserRole = 'student' | 'teacher';
+
 export interface UserProfile {
   id: string;
   username: string;
   email: string;
+  role?: UserRole;
   created_at: string;
 }
 
@@ -35,7 +38,8 @@ export interface LeaderboardEntry {
 export const createUserProfile = async (
   userId: string,
   username: string,
-  email: string
+  email: string,
+  role: UserRole = 'student'
 ): Promise<{ success: boolean; error?: string; profile?: UserProfile }> => {
   try {
     console.log('Creating profile with data:', { userId, username, email });
@@ -45,7 +49,8 @@ export const createUserProfile = async (
       .insert({
         id: userId,
         username: username.trim(),
-        email: email.trim()
+        email: email.trim(),
+        role: role
       })
       .select()
       .single();

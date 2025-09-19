@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { LocalAuth, LocalUser } from '@/lib/localAuth';
+import { LocalAuth, LocalUser, UserRole } from '@/lib/localAuth';
 import { UserProfile } from '@/lib/profile';
 
 interface UserContextType {
@@ -7,8 +7,8 @@ interface UserContextType {
   profile: UserProfile | null;
   loading: boolean;
   signOut: () => void;
-  signIn: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
-  signUp: (name: string, email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  signIn: (email: string, password: string) => Promise<{ success: boolean; user?: LocalUser; error?: string }>;
+  signUp: (name: string, email: string, password: string, role: UserRole) => Promise<{ success: boolean; user?: LocalUser; error?: string }>;
   updateProfile: (updates: { username?: string; email?: string }) => Promise<{ success: boolean; error?: string }>;
 }
 
@@ -30,6 +30,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
           id: currentUser.id,
           username: currentUser.username,
           email: currentUser.email,
+          role: currentUser.role,
           created_at: currentUser.created_at
         });
       }
@@ -49,32 +50,34 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
           id: result.user.id,
           username: result.user.username,
           email: result.user.email,
+          role: result.user.role,
           created_at: result.user.created_at
         });
       }
       setLoading(false);
-      return result;
+      return { ...result, user: result.user };
     } catch (error) {
       setLoading(false);
       return { success: false, error: 'Login failed' };
     }
   };
 
-  const signUp = async (name: string, email: string, password: string) => {
+  const signUp = async (name: string, email: string, password: string, role: UserRole) => {
     setLoading(true);
     try {
-      const result = await LocalAuth.register({ name, email, password });
+      const result = await LocalAuth.register({ name, email, password, role });
       if (result.success && result.user) {
         setUser(result.user);
         setProfile({
           id: result.user.id,
           username: result.user.username,
           email: result.user.email,
+          role: result.user.role,
           created_at: result.user.created_at
         });
       }
       setLoading(false);
-      return result;
+      return { ...result, user: result.user };
     } catch (error) {
       setLoading(false);
       return { success: false, error: 'Registration failed' };
@@ -97,6 +100,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         id: updatedUser.id,
         username: updatedUser.username,
         email: updatedUser.email,
+        role: updatedUser.role,
         created_at: updatedUser.created_at
       });
     }

@@ -5,10 +5,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/use-toast";
 import { useUser } from "@/contexts/UserContext";
 import AnimatedBackground from "@/components/AnimatedBackground";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { UserRole } from "@/lib/localAuth";
 
 export default function Auth() {
   const navigate = useNavigate();
@@ -19,11 +21,16 @@ export default function Auth() {
     name: "",
     email: "",
     password: "",
+    role: "student" as UserRole,
   });
   const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleRoleChange = (value: string) => {
+    setFormData({ ...formData, role: value as UserRole });
   };
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -44,7 +51,9 @@ export default function Auth() {
           title: t('auth.welcome.back'),
           description: t('auth.login.success'),
         });
-        setTimeout(() => navigate("/dashboard"), 1000);
+        // Redirect based on role
+        const redirectPath = result.user?.role === 'teacher' ? '/teacher/dashboard' : '/student/dashboard';
+        setTimeout(() => navigate(redirectPath), 1000);
       }
     } catch (error) {
       console.error("Unexpected login error:", error);
@@ -63,7 +72,7 @@ export default function Auth() {
     setIsLoading(true);
     
     try {
-      const result = await signUp(formData.name, formData.email, formData.password);
+      const result = await signUp(formData.name, formData.email, formData.password, formData.role);
 
       if (!result.success) {
         toast({
@@ -76,7 +85,9 @@ export default function Auth() {
           title: "Account Created Successfully! 🎉",
           description: "Welcome to EcoLearn! Redirecting to dashboard...",
         });
-        setTimeout(() => navigate("/dashboard"), 2000);
+        // Redirect based on role
+        const redirectPath = result.user?.role === 'teacher' ? '/teacher/dashboard' : '/student/dashboard';
+        setTimeout(() => navigate(redirectPath), 2000);
       }
     } catch (error) {
       console.error("Unexpected registration error:", error);
@@ -201,6 +212,29 @@ export default function Auth() {
                       className="border-border focus:ring-primary"
                     />
                   </div>
+                  <div className="space-y-3">
+                    <Label>I am a:</Label>
+                    <RadioGroup
+                      value={formData.role}
+                      onValueChange={handleRoleChange}
+                      className="flex flex-col space-y-2"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="student" id="student" />
+                        <Label htmlFor="student" className="flex items-center space-x-2 cursor-pointer">
+                          <span className="text-lg">🎓</span>
+                          <span>Student - Learn about environmental topics</span>
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="teacher" id="teacher" />
+                        <Label htmlFor="teacher" className="flex items-center space-x-2 cursor-pointer">
+                          <span className="text-lg">👩‍🏫</span>
+                          <span>Teacher - Manage classes and assignments</span>
+                        </Label>
+                      </div>
+                    </RadioGroup>
+                  </div>
                   <Button 
                     type="submit" 
                     disabled={isLoading}
@@ -220,7 +254,7 @@ export default function Auth() {
             <Button
               variant="link"
               className="text-white underline p-0 ml-1"
-              onClick={() => navigate("/dashboard")}
+              onClick={() => navigate("/student/dashboard")}
             >
               {t('auth.view.demo')}
             </Button>

@@ -107,6 +107,11 @@ export function useAchievements() {
     setNewAchievements([]);
   }, []);
 
+  // Mark achievement as seen (alias for dismissNotification)
+  const markAchievementAsSeen = useCallback((achievementId: string) => {
+    setNewAchievements(prev => prev.filter(a => a.id !== achievementId));
+  }, []);
+
   // Get achievements by category
   const getAchievementsByCategory = useCallback((category: string) => {
     return achievements.filter(achievement => achievement.category === category);
@@ -153,6 +158,7 @@ export function useAchievements() {
     updateSpecificAchievement,
     dismissNotification,
     dismissAllNotifications,
+    markAchievementAsSeen,
     getAchievementsByCategory,
     getAchievementsByRarity,
     getUnlockedAchievements,

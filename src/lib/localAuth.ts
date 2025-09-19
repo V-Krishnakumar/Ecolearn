@@ -2,10 +2,13 @@
 import { supabase } from './supabase';
 import { createUserProfile, fetchUserProfile, updateUserProfile, UserProfile } from './profile';
 
+export type UserRole = 'student' | 'teacher';
+
 export interface LocalUser {
   id: string;
   username: string;
   email: string;
+  role: UserRole;
   created_at: string;
 }
 
@@ -18,6 +21,7 @@ export interface RegisterCredentials {
   name: string;
   email: string;
   password: string;
+  role: UserRole;
 }
 
 /**
@@ -57,7 +61,8 @@ export class LocalAuth {
       const profileResult = await createUserProfile(
         userId, 
         credentials.name.trim(), // Store full name in username
-        credentials.email.trim()  // Store email in email field
+        credentials.email.trim(),  // Store email in email field
+        credentials.role // Store user role
       );
       
       if (!profileResult.success) {
@@ -82,6 +87,7 @@ export class LocalAuth {
         id: userId,
         username: credentials.name.trim(), // Display name
         email: credentials.email,
+        role: credentials.role,
         created_at: new Date().toISOString()
       };
 
@@ -138,6 +144,7 @@ export class LocalAuth {
         id: profile.id,
         username: storedUsername, // Display name
         email: profile.email,
+        role: (profile.role as UserRole) || 'student', // Default to student if no role
         created_at: profile.created_at
       };
 
