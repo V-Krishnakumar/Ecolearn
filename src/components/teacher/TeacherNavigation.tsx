@@ -8,34 +8,35 @@ import {
   BarChart3, 
   Award,
   LogOut,
-  User
+  User,
+  Languages
 } from "lucide-react";
 import { useUser } from "@/contexts/UserContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-const navigationItems = [
+const getNavigationItems = (t: (key: string) => string) => [
   {
-    name: 'Dashboard',
+    name: t('teacher.nav.dashboard'),
     href: '/teacher/dashboard',
     icon: LayoutDashboard
   },
   {
-    name: 'Classes',
+    name: t('teacher.nav.classes'),
     href: '/teacher/classes',
     icon: Users
   },
   {
-    name: 'Assignments',
+    name: t('teacher.nav.assignments'),
     href: '/teacher/assignments',
     icon: ClipboardList
   },
   {
-    name: 'Reports',
+    name: t('teacher.nav.reports'),
     href: '/teacher/reports',
     icon: BarChart3
   },
   {
-    name: 'Achievements',
+    name: t('teacher.nav.achievements'),
     href: '/teacher/achievements',
     icon: Award
   }
@@ -45,7 +46,9 @@ export default function TeacherNavigation() {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, signOut } = useUser();
-  const { t } = useLanguage();
+  const { t, language, toggleLanguage } = useLanguage();
+  
+  const navigationItems = getNavigationItems(t);
 
   const handleSignOut = () => {
     signOut();
@@ -60,11 +63,11 @@ export default function TeacherNavigation() {
           <div className="flex items-center space-x-4">
             <Link to="/teacher/dashboard" className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-blue-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">E</span>
+                <span className="text-white font-bold text-sm">🌱</span>
               </div>
               <span className="text-xl font-bold text-gray-900">EcoLearn</span>
             </Link>
-            <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded">Teacher Portal</span>
+            <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded">{t('teacher.nav.portal')}</span>
           </div>
 
           {/* Navigation Links */}
@@ -92,6 +95,18 @@ export default function TeacherNavigation() {
 
           {/* User Menu */}
           <div className="flex items-center space-x-4">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={toggleLanguage}
+              className="flex items-center space-x-2"
+              title={language === "en" ? "Switch to Hindi" : "Switch to English"}
+            >
+              <Languages className="h-4 w-4" />
+              <span className="hidden sm:inline">
+                {language === "en" ? "हिंदी" : "English"}
+              </span>
+            </Button>
             <div className="flex items-center space-x-2 text-sm text-gray-600">
               <User className="h-4 w-4" />
               <span>{user?.username}</span>
@@ -103,7 +118,7 @@ export default function TeacherNavigation() {
               className="flex items-center space-x-2"
             >
               <LogOut className="h-4 w-4" />
-              <span className="hidden sm:inline">Sign Out</span>
+              <span className="hidden sm:inline">{t('teacher.nav.sign.out')}</span>
             </Button>
           </div>
         </div>

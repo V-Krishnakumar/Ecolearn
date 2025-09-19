@@ -286,6 +286,83 @@ export class TeacherDataManager {
   }
 
   /**
+   * Create demo data for a demo teacher
+   */
+  static createDemoData(teacherId: string): void {
+    const data = this.getTeacherData();
+    
+    // Create demo classes
+    const demoClass1 = this.addClass(teacherId, 'Environmental Science 101', 'Introduction to environmental concepts');
+    const demoClass2 = this.addClass(teacherId, 'Eco Warriors Club', 'Advanced environmental studies');
+    
+    // Create demo students for class 1
+    this.addStudent(demoClass1.id, 'Alex Johnson', 'alex.j@demo.com');
+    this.addStudent(demoClass1.id, 'Sarah Chen', 'sarah.c@demo.com');
+    this.addStudent(demoClass1.id, 'Michael Brown', 'michael.b@demo.com');
+    
+    // Create demo students for class 2
+    this.addStudent(demoClass2.id, 'Emma Wilson', 'emma.w@demo.com');
+    this.addStudent(demoClass2.id, 'David Lee', 'david.l@demo.com');
+    
+    // Add some eco points and badges to students
+    const allStudents = data.students.filter(s => s.classId === demoClass1.id || s.classId === demoClass2.id);
+    allStudents.forEach((student, index) => {
+      student.ecoPoints = Math.floor(Math.random() * 150) + 50; // 50-200 points
+      student.badges = this.getRandomBadges();
+    });
+    
+    // Create demo assignments
+    this.createAssignment(
+      demoClass1.id,
+      'lesson',
+      'Waste Management Basics',
+      'Learn about the 3 R\'s of waste management',
+      new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 7 days from now
+      '1'
+    );
+    
+    this.createAssignment(
+      demoClass1.id,
+      'quiz',
+      'Water Treatment Quiz',
+      'Test your knowledge about water treatment processes',
+      new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 10 days from now
+      '2'
+    );
+    
+    this.createAssignment(
+      demoClass2.id,
+      'task',
+      'Climate Change Research Project',
+      'Research and present on climate change impacts',
+      new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 14 days from now
+      '3'
+    );
+    
+    this.saveTeacherData(data);
+  }
+
+  /**
+   * Get random badges for demo students
+   */
+  private static getRandomBadges(): string[] {
+    const allBadges = [
+      'Green Hero',
+      'Recycling Champion',
+      'Water Saver',
+      'Energy Efficient',
+      'Eco Warrior',
+      'Climate Advocate',
+      'Biodiversity Protector',
+      'Waste Reducer'
+    ];
+    
+    const numBadges = Math.floor(Math.random() * 3) + 1; // 1-3 badges
+    const shuffled = allBadges.sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, numBadges);
+  }
+
+  /**
    * Generate a simple ID
    */
   private static generateId(): string {

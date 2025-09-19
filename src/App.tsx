@@ -49,7 +49,13 @@ const RoleRoute = ({ children, allowedRoles }: { children: React.ReactNode; allo
     return <Navigate to="/auth" replace />;
   }
   
+  // Allow demo users to access their respective dashboards
   if (!allowedRoles.includes(user.role)) {
+    // If it's a demo user, redirect to appropriate dashboard
+    if (user.id.startsWith('demo-')) {
+      const demoRole = user.role;
+      return <Navigate to={`/${demoRole}/dashboard`} replace />;
+    }
     return <Navigate to="/auth" replace />;
   }
   

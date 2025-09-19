@@ -286,6 +286,32 @@ export class LocalAuth {
   }
 
   /**
+   * Create a demo user for testing purposes
+   */
+  static createDemoUser(role: UserRole): LocalUser {
+    const demoUser: LocalUser = {
+      id: `demo-${role}-${Date.now()}`,
+      username: role === 'student' ? 'Demo Student' : 'Demo Teacher',
+      email: role === 'student' ? 'demo.student@ecolearn.com' : 'demo.teacher@ecolearn.com',
+      role: role,
+      created_at: new Date().toISOString()
+    };
+
+    // Store demo user in localStorage
+    this.setUser(demoUser);
+    
+    // Create demo data for teachers
+    if (role === 'teacher') {
+      // Import TeacherDataManager dynamically to avoid circular imports
+      import('./teacherData').then(({ TeacherDataManager }) => {
+        TeacherDataManager.createDemoData(demoUser.id);
+      });
+    }
+    
+    return demoUser;
+  }
+
+  /**
    * Store user in localStorage
    */
   private static setUser(user: LocalUser): void {

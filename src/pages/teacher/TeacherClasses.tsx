@@ -93,26 +93,26 @@ export default function TeacherClasses() {
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">My Classes</h1>
-            <p className="text-gray-600">Manage your classes and student rosters</p>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">{t('teacher.classes.title')}</h1>
+            <p className="text-gray-600">{t('teacher.classes.subtitle')}</p>
           </div>
           <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
             <DialogTrigger asChild>
               <Button className="bg-blue-600 hover:bg-blue-700">
                 <Plus className="h-4 w-4 mr-2" />
-                Create Class
+                {t('teacher.classes.create.new')}
               </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Create New Class</DialogTitle>
+                <DialogTitle>{t('teacher.classes.create.new')}</DialogTitle>
                 <DialogDescription>
-                  Add a new class to start managing students and assignments
+                  {t('teacher.classes.create.first')}
                 </DialogDescription>
               </DialogHeader>
               <div className="space-y-4">
                 <div>
-                  <Label htmlFor="className">Class Name</Label>
+                  <Label htmlFor="className">{t('teacher.classes.class.name')}</Label>
                   <Input
                     id="className"
                     placeholder="e.g., Grade 7 Eco Club"
@@ -121,7 +121,7 @@ export default function TeacherClasses() {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="classDescription">Description (Optional)</Label>
+                  <Label htmlFor="classDescription">{t('teacher.classes.description')}</Label>
                   <Textarea
                     id="classDescription"
                     placeholder="Brief description of the class..."
@@ -131,10 +131,10 @@ export default function TeacherClasses() {
                 </div>
                 <div className="flex justify-end space-x-2">
                   <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
-                    Cancel
+                    {t('teacher.classes.cancel')}
                   </Button>
                   <Button onClick={handleCreateClass}>
-                    Create Class
+                    {t('teacher.classes.create')}
                   </Button>
                 </div>
               </div>
@@ -158,7 +158,7 @@ export default function TeacherClasses() {
                         )}
                       </div>
                       <Badge variant="secondary">
-                        {classStudents.length} students
+                        {t('teacher.classes.students.count').replace('{count}', classStudents.length.toString())}
                       </Badge>
                     </div>
                   </CardHeader>
@@ -168,24 +168,24 @@ export default function TeacherClasses() {
                       <div className="grid grid-cols-2 gap-4 text-sm">
                         <div className="flex items-center space-x-2">
                           <Users className="h-4 w-4 text-blue-600" />
-                          <span>{classStudents.length} Students</span>
+                          <span>{t('teacher.classes.students.count').replace('{count}', classStudents.length.toString())}</span>
                         </div>
                         <div className="flex items-center space-x-2">
                           <BookOpen className="h-4 w-4 text-green-600" />
-                          <span>{TeacherDataManager.getClassAssignments(cls.id).length} Assignments</span>
+                          <span>{t('teacher.classes.assignments.count').replace('{count}', TeacherDataManager.getClassAssignments(cls.id).length.toString())}</span>
                         </div>
                       </div>
 
                       {/* Students List */}
                       <div>
-                        <h4 className="font-medium text-gray-900 mb-2">Students</h4>
+                        <h4 className="font-medium text-gray-900 mb-2">{t('teacher.classes.students.capital')}</h4>
                         {classStudents.length > 0 ? (
                           <div className="space-y-2 max-h-32 overflow-y-auto">
                             {classStudents.map((student) => (
                               <div key={student.id} className="flex items-center justify-between p-2 bg-gray-50 rounded">
                                 <div>
                                   <p className="text-sm font-medium">{student.name}</p>
-                                  <p className="text-xs text-gray-600">{student.ecoPoints} eco points</p>
+                                  <p className="text-xs text-gray-600">{t('teacher.classes.eco.points').replace('{points}', student.ecoPoints.toString())}</p>
                                 </div>
                                 <div className="flex space-x-1">
                                   {student.badges.slice(0, 2).map((badge, idx) => (
@@ -198,7 +198,7 @@ export default function TeacherClasses() {
                             ))}
                           </div>
                         ) : (
-                          <p className="text-sm text-gray-500 italic">No students enrolled</p>
+                          <p className="text-sm text-gray-500 italic">{t('teacher.classes.no.students.in.class')}</p>
                         )}
                       </div>
 
@@ -214,7 +214,7 @@ export default function TeacherClasses() {
                           className="flex-1"
                         >
                           <UserPlus className="h-4 w-4 mr-1" />
-                          Add Student
+                          {t('teacher.classes.add.student.to.class')}
                         </Button>
                         <Button
                           variant="outline"
@@ -223,7 +223,7 @@ export default function TeacherClasses() {
                           className="flex-1"
                         >
                           <Edit className="h-4 w-4 mr-1" />
-                          Manage
+                          {t('teacher.classes.manage')}
                         </Button>
                       </div>
                     </div>
@@ -236,13 +236,13 @@ export default function TeacherClasses() {
           <Card className="bg-white shadow-lg border-0">
             <CardContent className="text-center py-12">
               <Users className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">No Classes Yet</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">{t('teacher.classes.no.classes.yet')}</h3>
               <p className="text-gray-600 mb-6">
-                Create your first class to start managing students and assignments
+                {t('teacher.classes.create.first.description')}
               </p>
               <Button onClick={() => setIsCreateDialogOpen(true)} className="bg-blue-600 hover:bg-blue-700">
                 <Plus className="h-4 w-4 mr-2" />
-                Create Your First Class
+                {t('teacher.classes.create.your.first.class')}
               </Button>
             </CardContent>
           </Card>
@@ -252,37 +252,37 @@ export default function TeacherClasses() {
         <Dialog open={isAddStudentDialogOpen} onOpenChange={setIsAddStudentDialogOpen}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Add Student to {selectedClass?.name}</DialogTitle>
+              <DialogTitle>{t('teacher.classes.add.student.to.class.title').replace('{className}', selectedClass?.name || '')}</DialogTitle>
               <DialogDescription>
-                Add a new student to this class
+                {t('teacher.classes.add.student.to.class.desc')}
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4">
               <div>
-                <Label htmlFor="studentName">Student Name</Label>
+                <Label htmlFor="studentName">{t('teacher.classes.student.name')}</Label>
                 <Input
                   id="studentName"
-                  placeholder="Enter student's full name"
+                  placeholder={t('teacher.classes.student.name.placeholder')}
                   value={newStudent.name}
                   onChange={(e) => setNewStudent(prev => ({ ...prev, name: e.target.value }))}
                 />
               </div>
               <div>
-                <Label htmlFor="studentEmail">Email Address</Label>
+                <Label htmlFor="studentEmail">{t('teacher.classes.student.email')}</Label>
                 <Input
                   id="studentEmail"
                   type="email"
-                  placeholder="student@example.com"
+                  placeholder={t('teacher.classes.student.email.placeholder')}
                   value={newStudent.email}
                   onChange={(e) => setNewStudent(prev => ({ ...prev, email: e.target.value }))}
                 />
               </div>
               <div className="flex justify-end space-x-2">
                 <Button variant="outline" onClick={() => setIsAddStudentDialogOpen(false)}>
-                  Cancel
+                  {t('teacher.classes.cancel')}
                 </Button>
                 <Button onClick={handleAddStudent}>
-                  Add Student
+                  {t('teacher.classes.add')}
                 </Button>
               </div>
             </div>

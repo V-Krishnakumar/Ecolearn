@@ -16,7 +16,7 @@ export default function Auth() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { t } = useLanguage();
-  const { signIn, signUp } = useUser();
+  const { signIn, signUp, startDemo } = useUser();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -31,6 +31,26 @@ export default function Auth() {
 
   const handleRoleChange = (value: string) => {
     setFormData({ ...formData, role: value as UserRole });
+  };
+
+  const handleDemoStart = (role: UserRole) => {
+    const result = startDemo(role);
+    
+    if (result.success && result.user) {
+      toast({
+        title: t('demo.started.title'),
+        description: role === 'student' ? t('demo.started.student.desc') : t('demo.started.teacher.desc'),
+      });
+      // Redirect based on role
+      const redirectPath = role === 'teacher' ? '/teacher/dashboard' : '/student/dashboard';
+      setTimeout(() => navigate(redirectPath), 1000);
+    } else {
+      toast({
+        title: t('demo.failed.title'),
+        description: result.error || t('demo.failed.desc'),
+        variant: "destructive",
+      });
+    }
   };
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -249,16 +269,27 @@ export default function Auth() {
         </Card>
 
         <div className="text-center mt-6">
-          <p className="text-white/80 text-sm">
-            {t('auth.ready.explore')} 
-            <Button
-              variant="link"
-              className="text-white underline p-0 ml-1"
-              onClick={() => navigate("/student/dashboard")}
-            >
-              {t('auth.view.demo')}
-            </Button>
+          <p className="text-white/80 text-sm mb-4">
+            {t('demo.ready.explore')}
           </p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Button
+              variant="outline"
+              className="bg-white/10 border-white/20 text-white hover:bg-white/20"
+              onClick={() => handleDemoStart('student')}
+            >
+              <span className="text-lg mr-2">🎓</span>
+              {t('demo.student.title')}
+            </Button>
+            <Button
+              variant="outline"
+              className="bg-white/10 border-white/20 text-white hover:bg-white/20"
+              onClick={() => handleDemoStart('teacher')}
+            >
+              <span className="text-lg mr-2">👩‍🏫</span>
+              {t('demo.teacher.title')}
+            </Button>
+          </div>
         </div>
       </div>
     </div>

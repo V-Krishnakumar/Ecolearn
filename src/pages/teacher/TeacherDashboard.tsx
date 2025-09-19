@@ -33,6 +33,7 @@ export default function TeacherDashboard() {
     averageEcoPoints: 0
   });
 
+
   useEffect(() => {
     if (user?.role !== 'teacher') {
       navigate('/auth');
@@ -90,12 +91,22 @@ export default function TeacherDashboard() {
       <TeacherNavigation />
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Welcome back, {user?.username}! 👩‍🏫
-          </h1>
-          <p className="text-gray-600">
-            Manage your classes, assignments, and track student progress
+        <div className="mb-8 text-center">
+          <div className="flex items-center justify-center space-x-3 mb-4">
+            <div className="w-12 h-12 bg-gradient-nature rounded-full flex items-center justify-center">
+              <span className="text-white text-2xl font-bold">🌱</span>
+            </div>
+            <h1 className="text-4xl font-bold text-gray-900">
+              {t('teacher.dashboard.welcome').replace('{username}', user?.username || '')}
+            </h1>
+            {user?.id.startsWith('demo-') && (
+              <Badge variant="secondary" className="bg-blue-100 text-blue-800 border-blue-200">
+                {t('demo.mode.badge')}
+              </Badge>
+            )}
+          </div>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            {t('teacher.dashboard.subtitle')}
           </p>
         </div>
 
@@ -105,7 +116,7 @@ export default function TeacherDashboard() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Total Classes</p>
+                  <p className="text-sm font-medium text-gray-600">{t('teacher.dashboard.total.classes')}</p>
                   <p className="text-2xl font-bold text-gray-900">{stats.totalClasses}</p>
                 </div>
                 <div className="p-3 bg-blue-100 rounded-full">
@@ -119,7 +130,7 @@ export default function TeacherDashboard() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Total Students</p>
+                  <p className="text-sm font-medium text-gray-600">{t('teacher.dashboard.total.students')}</p>
                   <p className="text-2xl font-bold text-gray-900">{stats.totalStudents}</p>
                 </div>
                 <div className="p-3 bg-green-100 rounded-full">
@@ -133,7 +144,7 @@ export default function TeacherDashboard() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Active Assignments</p>
+                  <p className="text-sm font-medium text-gray-600">{t('teacher.dashboard.active.assignments')}</p>
                   <p className="text-2xl font-bold text-gray-900">{stats.totalAssignments}</p>
                 </div>
                 <div className="p-3 bg-purple-100 rounded-full">
@@ -147,7 +158,7 @@ export default function TeacherDashboard() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Avg Eco Points</p>
+                  <p className="text-sm font-medium text-gray-600">{t('teacher.dashboard.avg.eco.points')}</p>
                   <p className="text-2xl font-bold text-gray-900">{stats.averageEcoPoints}</p>
                 </div>
                 <div className="p-3 bg-yellow-100 rounded-full">
@@ -164,10 +175,10 @@ export default function TeacherDashboard() {
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <Users className="h-5 w-5 text-blue-600" />
-                <span>Classes</span>
+                <span>{t('teacher.dashboard.classes')}</span>
               </CardTitle>
               <CardDescription>
-                Manage your classes and student rosters
+                {t('teacher.dashboard.manage.classes')}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -179,23 +190,23 @@ export default function TeacherDashboard() {
                         <div>
                           <p className="font-medium">{cls.name}</p>
                           <p className="text-sm text-gray-600">
-                            {TeacherDataManager.getClassStudents(cls.id).length} students
+                            {TeacherDataManager.getClassStudents(cls.id).length} {t('teacher.dashboard.students')}
                           </p>
                         </div>
-                        <Badge variant="secondary">Active</Badge>
+                        <Badge variant="secondary">{t('teacher.dashboard.active')}</Badge>
                       </div>
                     ))}
                     {classes.length > 3 && (
-                      <p className="text-sm text-gray-500">+{classes.length - 3} more classes</p>
+                      <p className="text-sm text-gray-500">{t('teacher.dashboard.more.classes').replace('{count}', (classes.length - 3).toString())}</p>
                     )}
                   </div>
                 ) : (
                   <div className="text-center py-6">
                     <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                    <p className="text-gray-500 mb-4">No classes yet</p>
+                    <p className="text-gray-500 mb-4">{t('teacher.dashboard.no.classes')}</p>
                     <Button onClick={handleCreateClass} className="bg-blue-600 hover:bg-blue-700">
                       <Plus className="h-4 w-4 mr-2" />
-                      Create First Class
+                      {t('teacher.dashboard.create.first.class')}
                     </Button>
                   </div>
                 )}
@@ -204,7 +215,7 @@ export default function TeacherDashboard() {
                   className="w-full" 
                   onClick={handleViewClasses}
                 >
-                  View All Classes
+                  {t('teacher.dashboard.view.all.classes')}
                 </Button>
               </div>
             </CardContent>
@@ -214,10 +225,10 @@ export default function TeacherDashboard() {
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <ClipboardList className="h-5 w-5 text-purple-600" />
-                <span>Recent Assignments</span>
+                <span>{t('teacher.dashboard.recent.assignments')}</span>
               </CardTitle>
               <CardDescription>
-                Track assignment progress and due dates
+                {t('teacher.dashboard.track.assignments')}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -229,7 +240,7 @@ export default function TeacherDashboard() {
                         <div>
                           <p className="font-medium">{assignment.title}</p>
                           <p className="text-sm text-gray-600">
-                            Due: {new Date(assignment.dueDate).toLocaleDateString()}
+                            {t('teacher.dashboard.due')} {new Date(assignment.dueDate).toLocaleDateString()}
                           </p>
                         </div>
                         <Badge variant={new Date(assignment.dueDate) > new Date() ? "default" : "destructive"}>
@@ -238,16 +249,16 @@ export default function TeacherDashboard() {
                       </div>
                     ))}
                     {assignments.length > 3 && (
-                      <p className="text-sm text-gray-500">+{assignments.length - 3} more assignments</p>
+                      <p className="text-sm text-gray-500">{t('teacher.dashboard.more.assignments').replace('{count}', (assignments.length - 3).toString())}</p>
                     )}
                   </div>
                 ) : (
                   <div className="text-center py-6">
                     <ClipboardList className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                    <p className="text-gray-500 mb-4">No assignments yet</p>
+                    <p className="text-gray-500 mb-4">{t('teacher.dashboard.no.assignments')}</p>
                     <Button onClick={handleViewAssignments} className="bg-purple-600 hover:bg-purple-700">
                       <Plus className="h-4 w-4 mr-2" />
-                      Create Assignment
+                      {t('teacher.dashboard.create.assignment')}
                     </Button>
                   </div>
                 )}
@@ -256,7 +267,7 @@ export default function TeacherDashboard() {
                   className="w-full" 
                   onClick={handleViewAssignments}
                 >
-                  View All Assignments
+                  {t('teacher.dashboard.view.all.assignments')}
                 </Button>
               </div>
             </CardContent>
@@ -268,10 +279,10 @@ export default function TeacherDashboard() {
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
               <TrendingUp className="h-5 w-5 text-green-600" />
-              <span>Top Performing Students</span>
+              <span>{t('teacher.dashboard.top.students')}</span>
             </CardTitle>
             <CardDescription>
-              Students with the highest eco points across all classes
+              {t('teacher.dashboard.top.students.desc')}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -289,12 +300,12 @@ export default function TeacherDashboard() {
                         <div>
                           <p className="font-medium">{student.name}</p>
                           <p className="text-sm text-gray-600">
-                            {student.badges.length} badges earned
+                            {t('teacher.dashboard.badges.earned').replace('{count}', student.badges.length.toString())}
                           </p>
                         </div>
                       </div>
                       <div className="text-right">
-                        <p className="font-bold text-green-600">{student.ecoPoints} pts</p>
+                        <p className="font-bold text-green-600">{student.ecoPoints} {t('teacher.dashboard.pts')}</p>
                         <div className="flex space-x-1">
                           {student.badges.slice(0, 3).map((badge, idx) => (
                             <Badge key={idx} variant="secondary" className="text-xs">
@@ -309,7 +320,7 @@ export default function TeacherDashboard() {
             ) : (
               <div className="text-center py-8">
                 <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-500">No students enrolled yet</p>
+                <p className="text-gray-500">{t('teacher.dashboard.no.students')}</p>
               </div>
             )}
           </CardContent>

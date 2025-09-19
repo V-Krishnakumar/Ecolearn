@@ -8,83 +8,84 @@ import { Progress } from "@/components/ui/progress";
 import { Camera, Upload, TreePine, Users, Award, Clock, CheckCircle } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-const tasks = [
+const getTasksTemplate = (t: (key: string) => string) => [
   {
     id: 1,
-    title: 'Plant a Tree',
-    description: 'Plant a tree in your community and share a photo of your environmental action.',
+    title: t('student.tasks.plant.tree'),
+    description: t('student.tasks.plant.tree.desc'),
     icon: TreePine,
-    difficulty: 'Beginner',
+    difficulty: t('student.tasks.difficulty.beginner'),
     participants: 1250,
     completed: 890,
     timeEstimate: '15-30 min',
     status: 'active',
     points: 50,
-    category: 'Afforestation'
+    category: t('student.tasks.category.afforestation')
   },
   {
     id: 2,
-    title: 'Community Cleanup',
-    description: 'Organize or participate in a local cleanup event to remove waste from public spaces.',
+    title: t('student.tasks.community.cleanup'),
+    description: t('student.tasks.community.cleanup.desc'),
     icon: Users,
-    difficulty: 'Intermediate',
+    difficulty: t('student.tasks.difficulty.intermediate'),
     participants: 850,
     completed: 420,
     timeEstimate: '1-2 hours',
     status: 'coming-soon',
     points: 75,
-    category: 'Waste Management'
+    category: t('student.tasks.category.waste.management')
   },
   {
     id: 3,
-    title: 'Waste Audit',
-    description: 'Analyze your household waste for one week and create a reduction plan.',
+    title: t('student.tasks.waste.audit'),
+    description: t('student.tasks.waste.audit.desc'),
     icon: Award,
-    difficulty: 'Advanced',
+    difficulty: t('student.tasks.difficulty.advanced'),
     participants: 320,
     completed: 180,
     timeEstimate: '2-3 hours',
     status: 'coming-soon',
     points: 100,
-    category: 'Waste Management'
+    category: t('student.tasks.category.waste.management')
   },
   {
     id: 4,
-    title: 'Water Conservation Challenge',
-    description: 'Implement water-saving practices for one week and track your savings.',
+    title: t('student.tasks.water.conservation.challenge'),
+    description: t('student.tasks.water.conservation.challenge.desc'),
     icon: Award,
-    difficulty: 'Intermediate',
+    difficulty: t('student.tasks.difficulty.intermediate'),
     participants: 650,
     completed: 320,
     timeEstimate: '1 week',
     status: 'active',
     points: 60,
-    category: 'Water Conservation'
+    category: t('student.tasks.category.water.conservation')
   },
   {
     id: 5,
-    title: 'Energy Efficiency Audit',
-    description: 'Audit your home for energy efficiency and implement improvements.',
+    title: t('student.tasks.energy.efficiency.audit'),
+    description: t('student.tasks.energy.efficiency.audit.desc'),
     icon: Award,
-    difficulty: 'Advanced',
+    difficulty: t('student.tasks.difficulty.advanced'),
     participants: 280,
     completed: 150,
     timeEstimate: '3-4 hours',
     status: 'coming-soon',
     points: 80,
-    category: 'Energy Conservation'
+    category: t('student.tasks.category.energy.conservation')
   }
 ];
 
 export default function StudentTasks() {
   const navigate = useNavigate();
   const { t } = useLanguage();
+  const tasks = getTasksTemplate(t);
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case 'Beginner': return 'bg-green-100 text-green-800';
-      case 'Intermediate': return 'bg-yellow-100 text-yellow-800';
-      case 'Advanced': return 'bg-red-100 text-red-800';
+      case t('student.tasks.difficulty.beginner'): return 'bg-green-100 text-green-800';
+      case t('student.tasks.difficulty.intermediate'): return 'bg-yellow-100 text-yellow-800';
+      case t('student.tasks.difficulty.advanced'): return 'bg-red-100 text-red-800';
       default: return 'bg-gray-100 text-gray-800';
     }
   };
@@ -100,10 +101,10 @@ export default function StudentTasks() {
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case 'active': return 'Available Now';
-      case 'coming-soon': return 'Coming Soon';
-      case 'completed': return 'Completed';
-      default: return 'Unknown';
+      case 'active': return t('student.tasks.status.available.now');
+      case 'coming-soon': return t('student.tasks.status.coming.soon');
+      case 'completed': return t('student.tasks.status.completed');
+      default: return t('student.tasks.status.unknown');
     }
   };
 
@@ -117,10 +118,15 @@ export default function StudentTasks() {
       
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Real-Time Tasks</h1>
-          <p className="text-gray-600 text-lg">
-            Take action for the environment and earn eco points by completing real-world tasks
+        <div className="mb-8 text-center">
+          <div className="flex items-center justify-center space-x-3 mb-4">
+            <div className="w-12 h-12 bg-gradient-nature rounded-full flex items-center justify-center">
+              <span className="text-white text-2xl font-bold">🌱</span>
+            </div>
+            <h1 className="text-4xl font-bold text-gray-900">{t('student.tasks.real.time.tasks')}</h1>
+          </div>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            {t('student.tasks.real.time.tasks.desc')}
           </p>
         </div>
 
@@ -130,7 +136,7 @@ export default function StudentTasks() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Active Tasks</p>
+                  <p className="text-sm font-medium text-gray-600">{t('student.tasks.active.tasks')}</p>
                   <p className="text-2xl font-bold text-green-600">{activeTasks.length}</p>
                 </div>
                 <div className="p-3 bg-green-100 rounded-full">
@@ -144,7 +150,7 @@ export default function StudentTasks() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Completed</p>
+                  <p className="text-sm font-medium text-gray-600">{t('student.tasks.completed.tasks')}</p>
                   <p className="text-2xl font-bold text-blue-600">{completedTasks.length}</p>
                 </div>
                 <div className="p-3 bg-blue-100 rounded-full">
@@ -158,7 +164,7 @@ export default function StudentTasks() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Total Points</p>
+                  <p className="text-sm font-medium text-gray-600">{t('student.tasks.eco.points.earned')}</p>
                   <p className="text-2xl font-bold text-purple-600">
                     {completedTasks.reduce((sum, task) => sum + task.points, 0)}
                   </p>
@@ -173,7 +179,7 @@ export default function StudentTasks() {
 
         {/* Active Tasks */}
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Available Now</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('student.tasks.available.now')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {activeTasks.map((task) => {
               const Icon = task.icon;
@@ -209,18 +215,18 @@ export default function StudentTasks() {
                             </div>
                             <div className="flex items-center space-x-1">
                               <Users className="h-4 w-4" />
-                              <span>{task.participants} participants</span>
+                              <span>{task.participants} {t('student.tasks.participants')}</span>
                             </div>
                           </div>
                           <div className="flex items-center space-x-1">
                             <Award className="h-4 w-4" />
-                            <span className="font-medium text-green-600">{task.points} points</span>
+                            <span className="font-medium text-green-600">{task.points} {t('student.tasks.points')}</span>
                           </div>
                         </div>
 
                         <div className="space-y-2">
                           <div className="flex justify-between text-sm">
-                            <span>Completion Rate</span>
+                            <span>{t('student.tasks.completion.rate')}</span>
                             <span>{Math.round(completionRate)}%</span>
                           </div>
                           <Progress value={completionRate} className="h-2" />
@@ -231,7 +237,7 @@ export default function StudentTasks() {
                           className="w-full bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white"
                         >
                           <Camera className="h-4 w-4 mr-2" />
-                          Start Task
+                          {t('student.tasks.start.task')}
                         </Button>
                       </div>
                     </div>
@@ -244,7 +250,7 @@ export default function StudentTasks() {
 
         {/* Coming Soon Tasks */}
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Coming Soon</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('student.tasks.status.coming.soon')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {upcomingTasks.map((task) => {
               const Icon = task.icon;

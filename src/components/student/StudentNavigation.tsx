@@ -8,7 +8,8 @@ import {
   Trophy,
   LogOut,
   User,
-  MessageCircle
+  MessageCircle,
+  Languages
 } from "lucide-react";
 import { useUser } from "@/contexts/UserContext";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -41,7 +42,7 @@ export default function StudentNavigation() {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, signOut } = useUser();
-  const { t } = useLanguage();
+  const { t, language, toggleLanguage } = useLanguage();
 
   const handleSignOut = () => {
     signOut();
@@ -57,7 +58,7 @@ export default function StudentNavigation() {
             <div className="flex items-center space-x-4">
               <Link to="/student/dashboard" className="flex items-center space-x-2">
                 <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-blue-600 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">E</span>
+                  <span className="text-white font-bold text-sm">🌱</span>
                 </div>
                 <span className="text-xl font-bold text-gray-900">EcoLearn</span>
               </Link>
@@ -89,6 +90,18 @@ export default function StudentNavigation() {
 
             {/* User Menu */}
             <div className="flex items-center space-x-4">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={toggleLanguage}
+                className="flex items-center space-x-2"
+                title={language === "en" ? "Switch to Hindi" : "Switch to English"}
+              >
+                <Languages className="h-4 w-4" />
+                <span className="hidden sm:inline">
+                  {language === "en" ? "हिंदी" : "English"}
+                </span>
+              </Button>
               <div className="flex items-center space-x-2 text-sm text-gray-600">
                 <User className="h-4 w-4" />
                 <span>{user?.username}</span>
@@ -100,7 +113,7 @@ export default function StudentNavigation() {
                 className="flex items-center space-x-2"
               >
                 <LogOut className="h-4 w-4" />
-                <span className="hidden sm:inline">Sign Out</span>
+                <span className="hidden sm:inline">{t('teacher.nav.sign.out')}</span>
               </Button>
             </div>
           </div>

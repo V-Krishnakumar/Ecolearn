@@ -81,6 +81,7 @@ export default function StudentDashboard() {
   const { achievements, stats, newAchievements, markAchievementAsSeen } = useAchievements();
   const [showAchievementNotification, setShowAchievementNotification] = useState(false);
 
+
   const userProgress = user ? getUserProgress(user.id) : null;
   const lessons = getLessonsTemplate(t);
 
@@ -127,11 +128,21 @@ export default function StudentDashboard() {
       
       <div className="container mx-auto px-4 py-8">
         {/* Welcome Section */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            {t('dashboard.welcome')}
-          </h1>
-          <p className="text-gray-600 text-lg">
+        <div className="mb-8 text-center">
+          <div className="flex items-center justify-center space-x-3 mb-4">
+            <div className="w-12 h-12 bg-gradient-nature rounded-full flex items-center justify-center">
+              <span className="text-white text-2xl font-bold">🌱</span>
+            </div>
+            <h1 className="text-4xl font-bold text-gray-900">
+              {t('dashboard.welcome')}
+            </h1>
+            {user?.id.startsWith('demo-') && (
+              <Badge variant="secondary" className="bg-blue-100 text-blue-800 border-blue-200">
+                {t('demo.mode.badge')}
+              </Badge>
+            )}
+          </div>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             {t('dashboard.subtitle')}
           </p>
         </div>
@@ -185,7 +196,7 @@ export default function StudentDashboard() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Achievements</p>
+                  <p className="text-sm font-medium text-gray-600">{t('student.dashboard.achievements')}</p>
                   <p className="text-2xl font-bold text-gray-900">{stats.unlockedAchievements}</p>
                 </div>
                 <div className="p-3 bg-yellow-100 rounded-full">
@@ -203,7 +214,7 @@ export default function StudentDashboard() {
               {t('dashboard.environmental.lessons')}
             </CardTitle>
             <CardDescription>
-              Continue your environmental learning journey
+              {t('student.dashboard.continue.learning')}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -248,7 +259,7 @@ export default function StudentDashboard() {
                         {status === 'in-progress' && (
                           <div className="space-y-2">
                             <div className="flex justify-between text-sm">
-                              <span>Progress</span>
+                              <span>{t('student.dashboard.progress')}</span>
                               <span>{Math.round(progress)}%</span>
                             </div>
                             <Progress value={progress} />
@@ -260,7 +271,7 @@ export default function StudentDashboard() {
                           className="w-full bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white"
                         >
                           <PlayCircle className="h-4 w-4 mr-2" />
-                          {status === 'completed' ? 'Review' : status === 'in-progress' ? 'Continue' : t('lesson.start')}
+                          {status === 'completed' ? t('lesson.review') : status === 'in-progress' ? t('lesson.continue') : t('lesson.start')}
                         </Button>
                       </div>
                     </CardContent>

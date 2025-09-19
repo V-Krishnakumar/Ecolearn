@@ -10,6 +10,7 @@ interface UserContextType {
   signIn: (email: string, password: string) => Promise<{ success: boolean; user?: LocalUser; error?: string }>;
   signUp: (name: string, email: string, password: string, role: UserRole) => Promise<{ success: boolean; user?: LocalUser; error?: string }>;
   updateProfile: (updates: { username?: string; email?: string }) => Promise<{ success: boolean; error?: string }>;
+  startDemo: (role: UserRole) => { success: boolean; user?: LocalUser; error?: string };
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -107,8 +108,29 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     return result;
   };
 
+  const startDemo = (role: UserRole) => {
+    try {
+      const demoUser = LocalAuth.createDemoUser(role);
+      setUser(demoUser);
+      setProfile({
+        id: demoUser.id,
+        username: demoUser.username,
+        email: demoUser.email,
+        role: demoUser.role,
+        created_at: demoUser.created_at
+      });
+      return { success: true, user: demoUser };
+    } catch (error) {
+      console.error('Demo start error:', error);
+      return { 
+        success: false, 
+        error: error instanceof Error ? error.message : 'Failed to start demo' 
+      };
+    }
+  };
+
   return (
-    <UserContext.Provider value={{ user, profile, loading, signOut, signIn, signUp, updateProfile }}>
+    <UserContext.Provider value={{ user, profile, loading, signOut, signIn, signUp, updateProfile, startDemo }}>
       {children}
     </UserContext.Provider>
   );

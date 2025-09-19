@@ -22,6 +22,10 @@ import { useAchievements } from "@/hooks/useAchievements";
 import { AchievementCard } from "@/components/AchievementCard";
 import { AchievementStats } from "@/components/AchievementStats";
 import { AchievementNotification } from "@/components/AchievementNotification";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useUser } from "@/contexts/UserContext";
+import StudentNavigation from "@/components/student/StudentNavigation";
+import TeacherNavigation from "@/components/teacher/TeacherNavigation";
 
 export default function Achievements() {
   const {
@@ -35,6 +39,9 @@ export default function Achievements() {
     getLockedAchievements,
     dismissNotification
   } = useAchievements();
+  
+  const { t } = useLanguage();
+  const { user } = useUser();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -75,29 +82,32 @@ export default function Achievements() {
   };
 
   const categories = [
-    { id: 'all', name: 'All', icon: <Trophy className="w-4 h-4" /> },
-    { id: 'learning', name: 'Learning', icon: <BookOpen className="w-4 h-4" /> },
-    { id: 'environmental', name: 'Environmental', icon: <Leaf className="w-4 h-4" /> },
-    { id: 'games', name: 'Games', icon: <Gamepad2 className="w-4 h-4" /> },
-    { id: 'streak', name: 'Streak', icon: <Flame className="w-4 h-4" /> },
-    { id: 'special', name: 'Special', icon: <Star className="w-4 h-4" /> }
+    { id: 'all', name: t('achievements.categories.all'), icon: <Trophy className="w-4 h-4" /> },
+    { id: 'learning', name: t('achievements.categories.learning'), icon: <BookOpen className="w-4 h-4" /> },
+    { id: 'environmental', name: t('achievements.categories.environmental'), icon: <Leaf className="w-4 h-4" /> },
+    { id: 'games', name: t('achievements.categories.games'), icon: <Gamepad2 className="w-4 h-4" /> },
+    { id: 'streak', name: t('achievements.categories.streak'), icon: <Flame className="w-4 h-4" /> },
+    { id: 'special', name: t('achievements.categories.special'), icon: <Star className="w-4 h-4" /> }
   ];
 
   const rarities = [
-    { id: 'all', name: 'All', color: 'bg-gray-100 text-gray-800' },
-    { id: 'common', name: 'Common', color: 'bg-gray-100 text-gray-800' },
-    { id: 'rare', name: 'Rare', color: 'bg-blue-100 text-blue-800' },
-    { id: 'epic', name: 'Epic', color: 'bg-purple-100 text-purple-800' },
-    { id: 'legendary', name: 'Legendary', color: 'bg-yellow-100 text-yellow-800' }
+    { id: 'all', name: t('achievements.rarities.all'), color: 'bg-gray-100 text-gray-800' },
+    { id: 'common', name: t('achievements.rarities.common'), color: 'bg-gray-100 text-gray-800' },
+    { id: 'rare', name: t('achievements.rarities.rare'), color: 'bg-blue-100 text-blue-800' },
+    { id: 'epic', name: t('achievements.rarities.epic'), color: 'bg-purple-100 text-purple-800' },
+    { id: 'legendary', name: t('achievements.rarities.legendary'), color: 'bg-yellow-100 text-yellow-800' }
   ];
 
   if (loading) {
     return (
-      <div className="container mx-auto p-6">
-        <div className="flex items-center justify-center h-64">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-            <p className="text-muted-foreground">Loading achievements...</p>
+      <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
+        {user?.role === 'teacher' ? <TeacherNavigation /> : <StudentNavigation />}
+        <div className="container mx-auto p-6">
+          <div className="flex items-center justify-center h-64">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+              <p className="text-muted-foreground">Loading achievements...</p>
+            </div>
           </div>
         </div>
       </div>
@@ -105,15 +115,21 @@ export default function Achievements() {
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
+      {user?.role === 'teacher' ? <TeacherNavigation /> : <StudentNavigation />}
+      <div className="container mx-auto p-6 space-y-6">
       {/* Header */}
-      <div className="text-center space-y-2">
-        <h1 className="text-4xl font-bold flex items-center justify-center space-x-3">
-          <Trophy className="w-10 h-10 text-yellow-500" />
-          <span>Achievements</span>
-        </h1>
-        <p className="text-muted-foreground text-lg">
-          Track your environmental learning progress and unlock rewards!
+      <div className="mb-8 text-center">
+        <div className="flex items-center justify-center space-x-3 mb-4">
+          <div className="w-12 h-12 bg-gradient-nature rounded-full flex items-center justify-center">
+            <span className="text-white text-2xl font-bold">🏆</span>
+          </div>
+          <h1 className="text-4xl font-bold text-gray-900">
+            {t('achievements.title')}
+          </h1>
+        </div>
+        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          {t('achievements.subtitle')}
         </p>
       </div>
 
@@ -134,7 +150,7 @@ export default function Achievements() {
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">Unlocked</span>
+                <span className="text-sm text-muted-foreground">{t('achievements.stats.unlocked')}</span>
                 <div className="flex items-center space-x-2">
                   <CheckCircle className="w-4 h-4 text-green-500" />
                   <span className="font-bold">{stats.unlockedAchievements}</span>
@@ -142,7 +158,7 @@ export default function Achievements() {
               </div>
               
               <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">Locked</span>
+                <span className="text-sm text-muted-foreground">{t('achievements.stats.locked')}</span>
                 <div className="flex items-center space-x-2">
                   <Lock className="w-4 h-4 text-gray-400" />
                   <span className="font-bold">{stats.totalAchievements - stats.unlockedAchievements}</span>
@@ -166,7 +182,7 @@ export default function Achievements() {
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
             <Filter className="w-5 h-5" />
-            <span>Filters</span>
+            <span>{t('achievements.filters')}</span>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -174,7 +190,7 @@ export default function Achievements() {
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
             <Input
-              placeholder="Search achievements..."
+              placeholder={t('achievements.search.placeholder')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10"
@@ -183,7 +199,7 @@ export default function Achievements() {
 
           {/* Category Filters */}
           <div className="space-y-2">
-            <label className="text-sm font-medium">Category</label>
+            <label className="text-sm font-medium">{t('achievements.category')}</label>
             <div className="flex flex-wrap gap-2">
               {categories.map((category) => (
                 <Button
@@ -206,7 +222,7 @@ export default function Achievements() {
 
           {/* Rarity Filters */}
           <div className="space-y-2">
-            <label className="text-sm font-medium">Rarity</label>
+            <label className="text-sm font-medium">{t('achievements.rarity')}</label>
             <div className="flex flex-wrap gap-2">
               {rarities.map((rarity) => (
                 <Button
@@ -232,7 +248,7 @@ export default function Achievements() {
               className="rounded"
             />
             <label htmlFor="unlocked-only" className="text-sm font-medium">
-              Show only unlocked achievements
+              {t('achievements.filter.unlocked.only')}
             </label>
           </div>
         </CardContent>
@@ -255,9 +271,9 @@ export default function Achievements() {
           <Card>
             <CardContent className="text-center py-12">
               <Trophy className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">No achievements found</h3>
+              <h3 className="text-lg font-semibold mb-2">{t('achievements.no.achievements')}</h3>
               <p className="text-muted-foreground">
-                Try adjusting your filters or search terms.
+                {t('achievements.try.different.filters')}
               </p>
             </CardContent>
           </Card>
@@ -282,6 +298,7 @@ export default function Achievements() {
           onClose={() => dismissNotification(achievement.id)}
         />
       ))}
+      </div>
     </div>
   );
 }

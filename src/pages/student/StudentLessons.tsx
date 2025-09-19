@@ -100,9 +100,9 @@ export default function StudentLessons() {
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case 'Beginner': return 'bg-green-100 text-green-800';
-      case 'Intermediate': return 'bg-yellow-100 text-yellow-800';
-      case 'Advanced': return 'bg-red-100 text-red-800';
+      case t('difficulty.beginner'): return 'bg-green-100 text-green-800';
+      case t('difficulty.intermediate'): return 'bg-yellow-100 text-yellow-800';
+      case t('difficulty.advanced'): return 'bg-red-100 text-red-800';
       default: return 'bg-gray-100 text-gray-800';
     }
   };
@@ -116,10 +116,17 @@ export default function StudentLessons() {
       
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Environmental Lessons</h1>
-          <p className="text-gray-600 text-lg">
-            Learn about environmental protection through interactive lessons and activities
+        <div className="mb-8 text-center">
+          <div className="flex items-center justify-center space-x-3 mb-4">
+            <div className="w-12 h-12 bg-gradient-nature rounded-full flex items-center justify-center">
+              <span className="text-white text-2xl font-bold">🌱</span>
+            </div>
+            <h1 className="text-4xl font-bold text-gray-900">
+              {t('student.lessons.title')}
+            </h1>
+          </div>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            {t('student.lessons.subtitle')}
           </p>
         </div>
 
@@ -129,7 +136,7 @@ export default function StudentLessons() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Total Lessons</p>
+                  <p className="text-sm font-medium text-gray-600">{t('student.lessons.total.lessons')}</p>
                   <p className="text-2xl font-bold text-gray-900">{lessons.length}</p>
                 </div>
                 <div className="p-3 bg-blue-100 rounded-full">
@@ -143,7 +150,7 @@ export default function StudentLessons() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Completed</p>
+                  <p className="text-sm font-medium text-gray-600">{t('student.lessons.completed')}</p>
                   <p className="text-2xl font-bold text-green-600">{completedLessons}</p>
                 </div>
                 <div className="p-3 bg-green-100 rounded-full">
@@ -157,7 +164,7 @@ export default function StudentLessons() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">In Progress</p>
+                  <p className="text-sm font-medium text-gray-600">{t('student.lessons.in.progress')}</p>
                   <p className="text-2xl font-bold text-yellow-600">{inProgressLessons}</p>
                 </div>
                 <div className="p-3 bg-yellow-100 rounded-full">
