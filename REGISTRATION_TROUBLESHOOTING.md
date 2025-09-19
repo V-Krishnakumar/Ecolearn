@@ -112,3 +112,4 @@ If registration is completely stuck, you can:
 3. **Reset Supabase**: Clear all auth data and start fresh
 
 The enhanced logging should help identify exactly where the process is getting stuck!
+

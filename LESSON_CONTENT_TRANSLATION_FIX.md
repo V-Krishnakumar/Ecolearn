@@ -74,3 +74,4 @@ content: t('lesson.content.waste'),
 ### 🎉 **Issue Completely Resolved**
 
 The lesson overview content now properly translates between English and Hindi, ensuring a fully consistent multilingual experience across the entire EcoLearn application!
+

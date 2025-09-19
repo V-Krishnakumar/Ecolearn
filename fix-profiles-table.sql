@@ -72,3 +72,4 @@ CREATE INDEX IF NOT EXISTS profiles_username_idx ON public.profiles(username);
 CREATE INDEX IF NOT EXISTS profiles_role_idx ON public.profiles(role);
 
 RAISE NOTICE 'Profiles table setup completed successfully!';
+

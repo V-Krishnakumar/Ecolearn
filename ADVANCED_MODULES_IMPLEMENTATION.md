@@ -174,3 +174,4 @@ All modules are fully functional and ready for use:
 - Include downloadable resources and materials
 - Add progress persistence across sessions
 - Implement module completion certificates
+

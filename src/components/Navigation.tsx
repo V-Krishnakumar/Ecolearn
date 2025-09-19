@@ -1,3 +1,4 @@
+
 import { NavLink, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Home, BookOpen, User, Trophy, LogOut, Languages, Camera, GraduationCap, FileText, Award } from "lucide-react";
@@ -24,6 +25,7 @@ export function Navigation() {
     <nav className="bg-card border-b border-border shadow-soft">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <div className="flex items-center space-x-8">
+          {/* Logo + Branding */}
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-gradient-nature rounded-full flex items-center justify-center">
               <span className="text-white text-sm font-bold">🌱</span>
@@ -31,6 +33,7 @@ export function Navigation() {
             <span className="text-xl font-bold text-foreground">EcoLearn</span>
           </div>
 
+          {/* Nav Links */}
           <div className="hidden md:flex items-center space-x-6">
             <NavLink
               to="/dashboard"
@@ -88,16 +91,18 @@ export function Navigation() {
               <span>Achievements</span>
             </NavLink>
 
+            {/* Advanced Modules */}
             <Button
               variant="outline"
               size="sm"
-              onClick={() => navigate('/advanced-modules')}
+              onClick={() => navigate("/advanced-modules")}
               className="flex items-center space-x-2"
             >
               <GraduationCap className="w-4 h-4" />
               <span>Advanced Modules</span>
             </Button>
 
+            {/* Certificate Page */}
             <NavLink
               to="/certificate"
               className={({ isActive }) =>
@@ -114,6 +119,7 @@ export function Navigation() {
           </div>
         </div>
 
+        {/* Right Section (Language, User, Logout) */}
         <div className="flex items-center space-x-4">
           <Button
             variant="outline"
@@ -127,12 +133,14 @@ export function Navigation() {
               {language === "en" ? "हिंदी" : "English"}
             </span>
           </Button>
+
           <div className="flex items-center space-x-2 text-sm">
             <User className="w-4 h-4 text-muted-foreground" />
             <span className="font-medium">
               {profile?.username || t("nav.user")}
             </span>
           </div>
+
           <Button
             variant="outline"
             size="sm"
