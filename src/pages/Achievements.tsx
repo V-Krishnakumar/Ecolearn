@@ -24,8 +24,7 @@ import { AchievementStats } from "@/components/AchievementStats";
 import { AchievementNotification } from "@/components/AchievementNotification";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUser } from "@/contexts/UserContext";
-import StudentNavigation from "@/components/student/StudentNavigation";
-import TeacherNavigation from "@/components/teacher/TeacherNavigation";
+import { Navigation } from "@/components/Navigation";
 
 export default function Achievements() {
   const {
@@ -101,7 +100,7 @@ export default function Achievements() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
-        {user?.role === 'teacher' ? <TeacherNavigation /> : <StudentNavigation />}
+        <Navigation />
         <div className="container mx-auto p-6">
           <div className="flex items-center justify-center h-64">
             <div className="text-center">
@@ -116,7 +115,7 @@ export default function Achievements() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
-      {user?.role === 'teacher' ? <TeacherNavigation /> : <StudentNavigation />}
+      <Navigation />
       <div className="container mx-auto p-6 space-y-6">
       {/* Header */}
       <div className="mb-8 text-center">

@@ -9,7 +9,12 @@ import {
   LogOut,
   User,
   MessageCircle,
-  Languages
+  Languages,
+  Home,
+  Camera,
+  GraduationCap,
+  FileText,
+  Award
 } from "lucide-react";
 import { useUser } from "@/contexts/UserContext";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -19,22 +24,32 @@ const navigationItems = [
   {
     name: 'Dashboard',
     href: '/student/dashboard',
-    icon: LayoutDashboard
+    icon: Home
   },
   {
-    name: 'Lessons',
-    href: '/student/lessons',
-    icon: BookOpen
-  },
-  {
-    name: 'Tasks',
+    name: 'Real Time Tasks',
     href: '/student/tasks',
-    icon: Target
+    icon: Camera
+  },
+  {
+    name: 'Scoreboard',
+    href: '/scoreboard',
+    icon: Trophy
   },
   {
     name: 'Achievements',
-    href: '/student/achievements',
-    icon: Trophy
+    href: '/achievements',
+    icon: Award
+  },
+  {
+    name: 'Advanced Modules',
+    href: '/advanced-modules',
+    icon: GraduationCap
+  },
+  {
+    name: 'Certificate',
+    href: '/certificate',
+    icon: FileText
   }
 ];
 
@@ -56,13 +71,12 @@ export default function StudentNavigation() {
           <div className="flex justify-between items-center h-16">
             {/* Logo and Brand */}
             <div className="flex items-center space-x-4">
-              <Link to="/student/dashboard" className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-blue-600 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">🌱</span>
-                </div>
-                <span className="text-xl font-bold text-gray-900">EcoLearn</span>
-              </Link>
-              <span className="text-sm text-gray-500 bg-green-100 px-2 py-1 rounded">Student Portal</span>
+              <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-blue-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm">🌱</span>
+              </div>
+              <span className="text-xl font-bold text-gray-900">EcoLearn</span>
+            </div>
             </div>
 
             {/* Navigation Links */}
@@ -113,7 +127,7 @@ export default function StudentNavigation() {
                 className="flex items-center space-x-2"
               >
                 <LogOut className="h-4 w-4" />
-                <span className="hidden sm:inline">{t('teacher.nav.sign.out')}</span>
+                <span className="hidden sm:inline">Logout</span>
               </Button>
             </div>
           </div>

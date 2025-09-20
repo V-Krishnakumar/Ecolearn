@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
-import { PlayCircle, Clock, Trophy, Star, FileText } from "lucide-react";
+import { PlayCircle, Clock, Trophy, Star, FileText, GraduationCap, Thermometer, TreePine, ArrowRight, Award, BookOpen, Target } from "lucide-react";
 import Chatbot from "@/components/Chatbot";
 import NewsFacts from "@/components/NewsFacts";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -222,6 +222,159 @@ export default function Dashboard() {
           </h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <AchievementStats stats={stats} />
+          </div>
+        </div>
+
+        {/* Advanced Modules Section */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center space-x-2">
+            <GraduationCap className="w-6 h-6 text-purple-500" />
+            <span>Advanced Modules</span>
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <Card className="shadow-card hover:shadow-glow transition-all duration-300 group cursor-pointer transform hover:-translate-y-1"
+                  onClick={() => navigate("/lesson/environmental-policy")}>
+              <CardHeader>
+                <div className="flex items-start justify-between mb-4">
+                  <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+                    <FileText className="w-6 h-6 text-white" />
+                  </div>
+                  <Badge variant="secondary" className="text-xs">
+                    {t('advanced.common.advanced')}
+                  </Badge>
+                </div>
+                <CardTitle className="text-xl mb-2">{t('advanced.environmental.title')}</CardTitle>
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  {t('advanced.environmental.description')}
+                </p>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-1 text-sm text-muted-foreground">
+                    <Clock className="w-4 h-4" />
+                    <span>20 {t('advanced.common.seconds')}</span>
+                  </div>
+                </div>
+                <Button className="w-full bg-blue-50 text-blue-800 hover:opacity-90">
+                  {t('advanced.common.start.learning')}
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="shadow-card hover:shadow-glow transition-all duration-300 group cursor-pointer transform hover:-translate-y-1"
+                  onClick={() => navigate("/lesson/climate-change")}>
+              <CardHeader>
+                <div className="flex items-start justify-between mb-4">
+                  <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-600 rounded-lg flex items-center justify-center">
+                    <Thermometer className="w-6 h-6 text-white" />
+                  </div>
+                  <Badge variant="secondary" className="text-xs">
+                    {t('advanced.common.advanced')}
+                  </Badge>
+                </div>
+                <CardTitle className="text-xl mb-2">{t('advanced.climate.title')}</CardTitle>
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  {t('advanced.climate.description')}
+                </p>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-1 text-sm text-muted-foreground">
+                    <Clock className="w-4 h-4" />
+                    <span>20 {t('advanced.common.seconds')}</span>
+                  </div>
+                </div>
+                <Button className="w-full bg-orange-50 text-orange-800 hover:opacity-90">
+                  {t('advanced.common.start.learning')}
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="shadow-card hover:shadow-glow transition-all duration-300 group cursor-pointer transform hover:-translate-y-1"
+                  onClick={() => navigate("/lesson/biodiversity")}>
+              <CardHeader>
+                <div className="flex items-start justify-between mb-4">
+                  <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg flex items-center justify-center">
+                    <TreePine className="w-6 h-6 text-white" />
+                  </div>
+                  <Badge variant="secondary" className="text-xs">
+                    {t('advanced.common.advanced')}
+                  </Badge>
+                </div>
+                <CardTitle className="text-xl mb-2">{t('advanced.biodiversity.title')}</CardTitle>
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  {t('advanced.biodiversity.description')}
+                </p>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-1 text-sm text-muted-foreground">
+                    <Clock className="w-4 h-4" />
+                    <span>20 {t('advanced.common.seconds')}</span>
+                  </div>
+                </div>
+                <Button className="w-full bg-green-50 text-green-800 hover:opacity-90">
+                  {t('advanced.common.start.learning')}
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+          
+          <div className="text-center mt-6">
+            <Button onClick={() => navigate("/advanced-modules")} variant="outline">
+              View All Advanced Modules
+            </Button>
+          </div>
+        </div>
+
+        {/* Scoreboard Section */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center space-x-2">
+            <Trophy className="w-6 h-6 text-yellow-500" />
+            <span>Scoreboard & Achievements</span>
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+            <Card className="shadow-card text-center bg-gradient-nature text-white">
+              <CardContent className="p-6">
+                <div className="text-3xl font-bold mb-2">{stats.totalPoints || 225}</div>
+                <p className="text-white/90">Total Points</p>
+                <Star className="w-6 h-6 mx-auto mt-2 animate-bounce-gentle" />
+              </CardContent>
+            </Card>
+            
+            <Card className="shadow-card text-center">
+              <CardContent className="p-6">
+                <div className="text-3xl font-bold text-primary mb-2">{stats.unlockedAchievements || 3}</div>
+                <p className="text-muted-foreground">Badges Earned</p>
+                <Award className="w-6 h-6 mx-auto mt-2 text-primary" />
+              </CardContent>
+            </Card>
+            
+            <Card className="shadow-card text-center">
+              <CardContent className="p-6">
+                <div className="text-3xl font-bold text-success mb-2">{completedLessons}</div>
+                <p className="text-muted-foreground">Lessons Completed</p>
+                <BookOpen className="w-6 h-6 mx-auto mt-2 text-success" />
+              </CardContent>
+            </Card>
+            
+            <Card className="shadow-card text-center">
+              <CardContent className="p-6">
+                <div className="text-3xl font-bold text-secondary mb-2">{Math.round((stats.unlockedAchievements || 3) / 6 * 100)}%</div>
+                <p className="text-muted-foreground">Achievement Rate</p>
+                <Target className="w-6 h-6 mx-auto mt-2 text-secondary" />
+              </CardContent>
+            </Card>
+          </div>
+          
+          <div className="text-center">
+            <Button onClick={() => navigate("/scoreboard")} variant="outline" size="lg">
+              <Trophy className="w-5 h-5 mr-2" />
+              View Full Scoreboard
+            </Button>
           </div>
         </div>
 

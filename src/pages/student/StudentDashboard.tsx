@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
-import { PlayCircle, Clock, Trophy, Star, FileText } from "lucide-react";
+import { PlayCircle, Clock, Trophy, Star, FileText, GraduationCap, Thermometer, TreePine, Award, BookOpen, Target } from "lucide-react";
 import NewsFacts from "@/components/NewsFacts";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUser } from "@/contexts/UserContext";
@@ -278,6 +278,140 @@ export default function StudentDashboard() {
                   </Card>
                 );
               })}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Advanced Modules Section */}
+        <Card className="bg-white shadow-lg border-0 mb-8">
+          <CardHeader>
+            <CardTitle className="text-2xl font-bold text-gray-900 flex items-center space-x-2">
+              <GraduationCap className="w-6 h-6 text-purple-500" />
+              <span>Advanced Modules</span>
+            </CardTitle>
+            <CardDescription>
+              Explore advanced environmental topics and deepen your knowledge
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+                    onClick={() => navigate("/lesson/environmental-policy")}>
+                <div className="p-4">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+                      <FileText className="w-6 h-6 text-white" />
+                    </div>
+                    <Badge variant="secondary" className="text-xs">Advanced</Badge>
+                  </div>
+                  <h3 className="font-semibold text-lg text-gray-900 mb-2">Environmental Policy</h3>
+                  <p className="text-sm text-gray-600 mb-4">Learn about environmental governance and policy frameworks</p>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-1 text-sm text-gray-500">
+                      <Clock className="h-4 w-4" />
+                      <span>20 min</span>
+                    </div>
+                    <Button size="sm" className="bg-blue-50 text-blue-800 hover:opacity-90">
+                      Start Learning
+                    </Button>
+                  </div>
+                </div>
+              </Card>
+
+              <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+                    onClick={() => navigate("/lesson/climate-change")}>
+                <div className="p-4">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-600 rounded-lg flex items-center justify-center">
+                      <Thermometer className="w-6 h-6 text-white" />
+                    </div>
+                    <Badge variant="secondary" className="text-xs">Advanced</Badge>
+                  </div>
+                  <h3 className="font-semibold text-lg text-gray-900 mb-2">Climate Change</h3>
+                  <p className="text-sm text-gray-600 mb-4">Understand climate modeling and mitigation strategies</p>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-1 text-sm text-gray-500">
+                      <Clock className="h-4 w-4" />
+                      <span>20 min</span>
+                    </div>
+                    <Button size="sm" className="bg-orange-50 text-orange-800 hover:opacity-90">
+                      Start Learning
+                    </Button>
+                  </div>
+                </div>
+              </Card>
+
+              <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+                    onClick={() => navigate("/lesson/biodiversity")}>
+                <div className="p-4">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg flex items-center justify-center">
+                      <TreePine className="w-6 h-6 text-white" />
+                    </div>
+                    <Badge variant="secondary" className="text-xs">Advanced</Badge>
+                  </div>
+                  <h3 className="font-semibold text-lg text-gray-900 mb-2">Biodiversity</h3>
+                  <p className="text-sm text-gray-600 mb-4">Explore conservation strategies and ecosystem services</p>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-1 text-sm text-gray-500">
+                      <Clock className="h-4 w-4" />
+                      <span>20 min</span>
+                    </div>
+                    <Button size="sm" className="bg-green-50 text-green-800 hover:opacity-90">
+                      Start Learning
+                    </Button>
+                  </div>
+                </div>
+              </Card>
+            </div>
+            
+            <div className="text-center mt-6">
+              <Button onClick={() => navigate("/advanced-modules")} variant="outline">
+                View All Advanced Modules
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Scoreboard Section */}
+        <Card className="bg-white shadow-lg border-0 mb-8">
+          <CardHeader>
+            <CardTitle className="text-2xl font-bold text-gray-900 flex items-center space-x-2">
+              <Trophy className="w-6 h-6 text-yellow-500" />
+              <span>Scoreboard & Achievements</span>
+            </CardTitle>
+            <CardDescription>
+              Track your progress and unlock achievements
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+              <div className="text-center p-4 bg-gradient-to-r from-green-500 to-blue-600 rounded-lg text-white">
+                <div className="text-2xl font-bold mb-1">{stats.totalPoints || 225}</div>
+                <p className="text-sm opacity-90">Total Points</p>
+              </div>
+              
+              <div className="text-center p-4 bg-blue-50 rounded-lg">
+                <div className="text-2xl font-bold text-blue-600 mb-1">{stats.unlockedAchievements || 3}</div>
+                <p className="text-sm text-gray-600">Badges Earned</p>
+              </div>
+              
+              <div className="text-center p-4 bg-green-50 rounded-lg">
+                <div className="text-2xl font-bold text-green-600 mb-1">{completedLessons}</div>
+                <p className="text-sm text-gray-600">Lessons Done</p>
+              </div>
+              
+              <div className="text-center p-4 bg-purple-50 rounded-lg">
+                <div className="text-2xl font-bold text-purple-600 mb-1">{Math.round((stats.unlockedAchievements || 3) / 6 * 100)}%</div>
+                <p className="text-sm text-gray-600">Achievement Rate</p>
+              </div>
+            </div>
+            
+            <div className="text-center">
+              <Button onClick={() => navigate("/scoreboard")} variant="outline" size="lg">
+                <Trophy className="w-5 h-5 mr-2" />
+                View Full Scoreboard
+              </Button>
             </div>
           </CardContent>
         </Card>
