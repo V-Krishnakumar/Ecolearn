@@ -105,7 +105,7 @@ export default function Achievements() {
           <div className="flex items-center justify-center h-64">
             <div className="text-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-              <p className="text-muted-foreground">Loading achievements...</p>
+              <p className="text-muted-foreground">{t('achievements.loading')}</p>
             </div>
           </div>
         </div>
@@ -144,7 +144,7 @@ export default function Achievements() {
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center space-x-2">
                 <Target className="w-5 h-5 text-blue-500" />
-                <span>Quick Stats</span>
+                <span>{t('achievements.quick.stats')}</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
@@ -165,7 +165,7 @@ export default function Achievements() {
               </div>
               
               <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">Total Points</span>
+                <span className="text-sm text-muted-foreground">{t('achievements.stats.total.points')}</span>
                 <div className="flex items-center space-x-2">
                   <Star className="w-4 h-4 text-yellow-500" />
                   <span className="font-bold">{stats.totalPoints}</span>
@@ -257,7 +257,7 @@ export default function Achievements() {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-bold">
-            {filteredAchievements.length} Achievement{filteredAchievements.length !== 1 ? 's' : ''}
+            {filteredAchievements.length} {t('achievements.count')}
           </h2>
           <Badge variant="outline" className="text-sm">
             {selectedCategory !== 'all' && `${selectedCategory} • `}

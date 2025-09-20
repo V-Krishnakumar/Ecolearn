@@ -6,55 +6,59 @@
 
 @layer base {
   :root {
-    /* Nature-inspired color palette */
-    --background: 120 20% 98%;
-    --foreground: 158 64% 12%;
+    /* Kid-friendly vibrant color palette */
+    --background: 200 100% 97%;
+    --foreground: 220 25% 15%;
 
     --card: 0 0% 100%;
-    --card-foreground: 158 64% 12%;
+    --card-foreground: 220 25% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 158 64% 12%;
+    --popover-foreground: 220 25% 15%;
 
-    /* Vibrant nature greens */
-    --primary: 158 64% 52%;
+    /* Bright emerald green */
+    --primary: 142 76% 55%;
     --primary-foreground: 0 0% 100%;
-    --primary-light: 158 64% 72%;
+    --primary-light: 142 76% 75%;
 
-    /* Ocean blues */
-    --secondary: 199 89% 48%;
+    /* Vibrant sky blue */
+    --secondary: 200 100% 60%;
     --secondary-foreground: 0 0% 100%;
 
-    /* Soft earth tones */
-    --muted: 120 20% 96%;
-    --muted-foreground: 158 20% 45%;
+    /* Soft pastel background */
+    --muted: 200 50% 95%;
+    --muted-foreground: 220 15% 40%;
 
-    /* Sunny accent */
-    --accent: 43 96% 56%;
+    /* Sunny yellow accent */
+    --accent: 45 100% 65%;
     --accent-foreground: 25 95% 15%;
 
     /* Success green */
-    --success: 158 76% 36%;
+    --success: 142 76% 45%;
     --success-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 60.2%;
+    /* Coral pink for warnings */
+    --destructive: 0 75% 65%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 158 20% 88%;
-    --input: 158 20% 94%;
-    --ring: 158 64% 52%;
+    --border: 200 30% 85%;
+    --input: 200 30% 90%;
+    --ring: 142 76% 55%;
 
-    /* Custom gradients */
-    --gradient-nature: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 100%);
-    --gradient-earth: linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(var(--primary)) 100%);
-    --gradient-ocean: linear-gradient(135deg, hsl(var(--secondary)) 0%, hsl(199 89% 68%) 100%);
+    /* Kid-friendly gradients */
+    --gradient-nature: linear-gradient(135deg, #4ade80 0%, #22d3ee 100%);
+    --gradient-earth: linear-gradient(135deg, #fbbf24 0%, #4ade80 100%);
+    --gradient-ocean: linear-gradient(135deg, #22d3ee 0%, #3b82f6 100%);
+    --gradient-sunset: linear-gradient(135deg, #fbbf24 0%, #f97316 100%);
+    --gradient-rainbow: linear-gradient(135deg, #ef4444 0%, #f97316 25%, #fbbf24 50%, #4ade80 75%, #22d3ee 100%);
     
-    /* Shadows */
-    --shadow-soft: 0 4px 20px -4px hsl(var(--primary) / 0.15);
-    --shadow-glow: 0 0 30px hsl(var(--primary) / 0.2);
-    --shadow-card: 0 8px 32px -8px hsl(158 64% 12% / 0.1);
+    /* Playful shadows */
+    --shadow-soft: 0 6px 25px -5px hsl(var(--primary) / 0.2);
+    --shadow-glow: 0 0 40px hsl(var(--primary) / 0.3);
+    --shadow-card: 0 10px 40px -10px hsl(220 25% 15% / 0.15);
+    --shadow-playful: 0 8px 30px -8px hsl(var(--accent) / 0.25);
 
-    --radius: 0.5rem;
+    --radius: 1rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -216,9 +220,18 @@
 
 /* Apply theme styles to body */
 body {
-  background: var(--theme-bg);
+  background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 25%, #ecfdf5 50%, #fef3c7 75%, #fce7f3 100%);
+  background-size: 400% 400%;
+  animation: gradient-shift 15s ease infinite;
   color: var(--theme-text);
   transition: background 0.6s ease, color 0.6s ease;
+  min-height: 100vh;
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 /* Theme-aware component styles */
@@ -293,6 +306,110 @@ body {
   transform: translateY(0) scale(0.98);
 }
 
+/* Kid-friendly utility classes */
+.kid-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border: 3px solid transparent;
+  background-clip: padding-box;
+  border-radius: 1.5rem;
+  box-shadow: 0 15px 50px -15px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.kid-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.3);
+}
+
+.kid-button {
+  border-radius: 1rem;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.75rem 1.5rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px -5px rgba(0, 0, 0, 0.1);
+}
+
+.kid-button:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 25px -8px rgba(0, 0, 0, 0.2);
+}
+
+.kid-button:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.kid-badge {
+  border-radius: 2rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  box-shadow: 0 2px 10px -2px rgba(0, 0, 0, 0.1);
+}
+
+.kid-title {
+  font-weight: 800;
+  font-size: 2rem;
+  background: linear-gradient(135deg, #4ade80, #22d3ee, #fbbf24);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.kid-subtitle {
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #374151;
+}
+
+.decorative-border {
+  position: relative;
+}
+
+.decorative-border::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  background: linear-gradient(45deg, #4ade80, #22d3ee, #fbbf24, #f97316);
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0.3;
+}
+
+.floating-elements {
+  position: relative;
+  overflow: hidden;
+}
+
+.floating-elements::before,
+.floating-elements::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(45deg, #4ade80, #22d3ee);
+  border-radius: 50%;
+  opacity: 0.1;
+  animation: float-cloud 8s ease-in-out infinite;
+}
+
+.floating-elements::before {
+  top: 20%;
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.floating-elements::after {
+  top: 60%;
+  right: 15%;
+  animation-delay: 4s;
+}
+
 /* Accessibility improvements */
 @media (prefers-reduced-motion: reduce) {
   .theme-transition,
@@ -300,9 +417,18 @@ body {
   .theme-sun,
   .theme-moon,
   .env-decoration,
-  .theme-button {
+  .theme-button,
+  .kid-card,
+  .kid-button,
+  .floating-elements::before,
+  .floating-elements::after {
     transition: none !important;
     animation: none !important;
+  }
+  
+  body {
+    background: #f0f9ff;
+    animation: none;
   }
 }
 

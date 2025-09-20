@@ -37,6 +37,9 @@ export function GameWrapper({
       setShowCelebration(true);
       const timer = setTimeout(() => setShowCelebration(false), 3000);
       return () => clearTimeout(timer);
+    } else if (!isCompleted && showCelebration) {
+      // Hide celebration immediately when game is restarted
+      setShowCelebration(false);
     }
   }, [isCompleted, showCelebration]);
 

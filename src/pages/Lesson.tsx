@@ -12,7 +12,6 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useProgress } from "@/lib/localProgress";
 import { useAchievements } from "@/hooks/useAchievements";
 import VideoPlayer from "@/components/VideoPlayer";
-import NewsFacts from "@/components/NewsFacts";
 import { AchievementNotification } from "@/components/AchievementNotification";
 
 // Import games
@@ -306,9 +305,9 @@ export default function Lesson() {
       <Navigation />
 
       <main className="container mx-auto px-4 py-8">
-        <div className="flex gap-8">
+        <div className="flex justify-center">
           {/* Main Content */}
-          <div className="flex-1 max-w-4xl">
+          <div className="w-full max-w-6xl">
         {/* Header */}
         <div className="mb-8 animate-slide-up">
           <Badge variant="secondary" className="mb-4">
@@ -341,8 +340,8 @@ export default function Lesson() {
 
           {/* Video Tab */}
           <TabsContent value="video" className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              <div className="lg:col-span-2">
+            <div className="flex justify-center">
+              <div className="w-full max-w-4xl">
                 <Card className="shadow-card mb-6">
                   <CardHeader>
                     <CardTitle className="flex items-center space-x-2">
@@ -358,11 +357,11 @@ export default function Lesson() {
                       description={lesson.videoDescription}
                       onProgress={handleVideoProgress}
                       onComplete={handleVideoComplete}
+                      className="w-full"
                     />
                   </CardContent>
                 </Card>
               </div>
-              <div className="space-y-6">{/* optional sidebar */}</div>
             </div>
           </TabsContent>
 
@@ -426,8 +425,8 @@ export default function Lesson() {
           </TabsContent>
         </Tabs>
 
-        {/* Sidebar */}
-        <div className="space-y-6">
+        {/* Progress and Quiz Section */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
           <Card className="shadow-card">
             <CardHeader>
               <CardTitle className="text-lg">{t('lesson.your.progress')}</CardTitle>
@@ -531,13 +530,6 @@ export default function Lesson() {
             </CardContent>
           </Card>
         </div>
-          </div>
-
-          {/* News & Facts Sidebar */}
-          <div className="hidden lg:block w-72 flex-shrink-0">
-            <div className="sticky top-8">
-              <NewsFacts />
-            </div>
           </div>
         </div>
       </main>

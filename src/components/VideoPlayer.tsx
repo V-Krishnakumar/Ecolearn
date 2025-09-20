@@ -27,6 +27,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [progress, setProgress] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [showOverlay, setShowOverlay] = useState(true);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -48,11 +49,22 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
     const handleEnded = () => {
       setIsPlaying(false);
+      setShowOverlay(true); // Show overlay when video ends
       onComplete?.();
     };
 
-    const handlePlay = () => setIsPlaying(true);
-    const handlePause = () => setIsPlaying(false);
+    const handlePlay = () => {
+      setIsPlaying(true);
+      // Hide overlay after 2 seconds when video starts playing
+      setTimeout(() => {
+        setShowOverlay(false);
+      }, 2000);
+    };
+    const handlePause = () => {
+      setIsPlaying(false);
+      // Show overlay when video is paused
+      setShowOverlay(true);
+    };
 
     video.addEventListener('loadedmetadata', handleLoadedMetadata);
     video.addEventListener('timeupdate', handleTimeUpdate);
@@ -115,7 +127,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   };
 
   return (
-    <div className={`relative bg-black rounded-lg overflow-hidden aspect-video ${className}`}>
+    <div className={`relative bg-black rounded-lg overflow-hidden aspect-video mx-auto ${className}`}>
       <video
         ref={videoRef}
         src={src}
@@ -133,27 +145,24 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
         </div>
       )}
 
-      <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-        <div className="text-center">
-          <Button
-            size="lg"
-            onClick={handlePlayPause}
-            className="mb-4 bg-white/20 hover:bg-white/30 text-white backdrop-blur-sm border-white/30"
-            disabled={isLoading}
-          >
-            {isPlaying ? (
-              <Pause className="w-8 h-8" />
-            ) : (
-              <Play className="w-8 h-8" />
-            )}
-          </Button>
-          {description && (
-            <p className="text-white text-sm opacity-80 max-w-md">
-              {description}
-            </p>
-          )}
+      {showOverlay && (
+        <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+          <div className="text-center">
+            <Button
+              size="lg"
+              onClick={handlePlayPause}
+              className="mb-4 bg-white/20 hover:bg-white/30 text-white backdrop-blur-sm border-white/30"
+              disabled={isLoading}
+            >
+              {isPlaying ? (
+                <Pause className="w-8 h-8" />
+              ) : (
+                <Play className="w-8 h-8" />
+              )}
+            </Button>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Video Controls */}
       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">

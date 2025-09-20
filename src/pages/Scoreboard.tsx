@@ -70,20 +70,21 @@ const getAchievements = (t: (key: string) => string) => [
   }
 ];
 
-const weeklyProgress = [
-  { day: "Mon", progress: 75, lessons: 2 },
-  { day: "Tue", progress: 50, lessons: 1 },
-  { day: "Wed", progress: 100, lessons: 3 },
-  { day: "Thu", progress: 25, lessons: 1 },
-  { day: "Fri", progress: 80, lessons: 2 },
-  { day: "Sat", progress: 90, lessons: 2 },
-  { day: "Sun", progress: 60, lessons: 1 }
+const getWeeklyProgress = (t: (key: string) => string) => [
+  { day: t('day.mon'), progress: 75, lessons: 2 },
+  { day: t('day.tue'), progress: 50, lessons: 1 },
+  { day: t('day.wed'), progress: 100, lessons: 3 },
+  { day: t('day.thu'), progress: 25, lessons: 1 },
+  { day: t('day.fri'), progress: 80, lessons: 2 },
+  { day: t('day.sat'), progress: 90, lessons: 2 },
+  { day: t('day.sun'), progress: 60, lessons: 1 }
 ];
 
 export default function Scoreboard() {
   const navigate = useNavigate();
   const { t } = useLanguage();
   const achievements = getAchievements(t);
+  const weeklyProgress = getWeeklyProgress(t);
   
   const totalPoints = achievements.filter(a => a.earned).reduce((sum, a) => sum + a.points, 0);
   const earnedAchievements = achievements.filter(a => a.earned).length;

@@ -1,11 +1,11 @@
 import { Achievement } from '@/types/achievements';
 
-export const ACHIEVEMENTS: Achievement[] = [
+export const getAchievements = (t: (key: string) => string): Achievement[] => [
   // Learning Achievements
   {
     id: 'first_lesson',
-    title: '🌱 First Steps',
-    description: 'Complete your first lesson',
+    title: t('achievement.first.steps.title'),
+    description: t('achievement.first.steps.desc'),
     icon: '🌱',
     category: 'learning',
     rarity: 'common',
@@ -21,8 +21,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'video_watcher',
-    title: '📺 Video Learner',
-    description: 'Watch 5 educational videos',
+    title: t('achievement.video.learner.title'),
+    description: t('achievement.video.learner.desc'),
     icon: '📺',
     category: 'learning',
     rarity: 'common',
@@ -38,8 +38,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'quiz_master',
-    title: '🧠 Quiz Master',
-    description: 'Get perfect scores on 5 quizzes',
+    title: t('achievement.quiz.master.title'),
+    description: t('achievement.quiz.master.desc'),
     icon: '🧠',
     category: 'learning',
     rarity: 'rare',
@@ -55,8 +55,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'knowledge_seeker',
-    title: '📚 Knowledge Seeker',
-    description: 'Complete 10 lessons',
+    title: t('achievement.knowledge.seeker.title'),
+    description: t('achievement.knowledge.seeker.desc'),
     icon: '📚',
     category: 'learning',
     rarity: 'rare',
@@ -74,8 +74,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   // Environmental Achievements
   {
     id: 'tree_warrior',
-    title: '🌳 Tree Warrior',
-    description: 'Complete 5 afforestation activities',
+    title: t('achievement.tree.warrior.title'),
+    description: t('achievement.tree.warrior.desc'),
     icon: '🌳',
     category: 'environmental',
     rarity: 'epic',
@@ -91,8 +91,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'water_guardian',
-    title: '💧 Water Guardian',
-    description: 'Master water treatment and conservation',
+    title: t('achievement.water.guardian.title'),
+    description: t('achievement.water.guardian.desc'),
     icon: '💧',
     category: 'environmental',
     rarity: 'epic',
@@ -108,8 +108,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'climate_champion',
-    title: '🌍 Climate Champion',
-    description: 'Complete all climate change modules',
+    title: t('achievement.climate.champion.title'),
+    description: t('achievement.climate.champion.desc'),
     icon: '🌍',
     category: 'environmental',
     rarity: 'legendary',
@@ -125,8 +125,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'waste_manager',
-    title: '♻️ Waste Manager',
-    description: 'Master waste management techniques',
+    title: t('achievement.waste.manager.title'),
+    description: t('achievement.waste.manager.desc'),
     icon: '♻️',
     category: 'environmental',
     rarity: 'rare',
@@ -144,8 +144,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   // Game Achievements
   {
     id: 'game_master',
-    title: '🎮 Game Master',
-    description: 'Win 10 educational games',
+    title: t('achievement.game.master.title'),
+    description: t('achievement.game.master.desc'),
     icon: '🎮',
     category: 'games',
     rarity: 'rare',
@@ -161,8 +161,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'perfect_gamer',
-    title: '⭐ Perfect Gamer',
-    description: 'Get perfect scores in 3 games',
+    title: t('achievement.perfect.gamer.title'),
+    description: t('achievement.perfect.gamer.desc'),
     icon: '⭐',
     category: 'games',
     rarity: 'epic',
@@ -180,8 +180,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   // Streak Achievements
   {
     id: 'daily_learner',
-    title: '📅 Daily Learner',
-    description: 'Learn for 3 consecutive days',
+    title: t('achievement.daily.learner.title'),
+    description: t('achievement.daily.learner.desc'),
     icon: '📅',
     category: 'streak',
     rarity: 'common',
@@ -197,8 +197,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'dedicated_learner',
-    title: '🔥 Dedicated Learner',
-    description: 'Learn for 7 consecutive days',
+    title: t('achievement.dedicated.learner.title'),
+    description: t('achievement.dedicated.learner.desc'),
     icon: '🔥',
     category: 'streak',
     rarity: 'rare',
@@ -214,8 +214,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'unstoppable_learner',
-    title: '⚡ Unstoppable Learner',
-    description: 'Learn for 30 consecutive days',
+    title: t('achievement.unstoppable.learner.title'),
+    description: t('achievement.unstoppable.learner.desc'),
     icon: '⚡',
     category: 'streak',
     rarity: 'legendary',
@@ -233,8 +233,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   // Special Achievements
   {
     id: 'certificate_earner',
-    title: '🏆 Certificate Earner',
-    description: 'Earn your first certificate',
+    title: t('achievement.certificate.earner.title'),
+    description: t('achievement.certificate.earner.desc'),
     icon: '🏆',
     category: 'special',
     rarity: 'epic',
@@ -250,8 +250,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'eco_warrior',
-    title: '🛡️ Eco Warrior',
-    description: 'Complete all environmental modules',
+    title: t('achievement.eco.warrior.title'),
+    description: t('achievement.eco.warrior.desc'),
     icon: '🛡️',
     category: 'special',
     rarity: 'legendary',
@@ -267,8 +267,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'point_collector',
-    title: '💎 Point Collector',
-    description: 'Earn 1000 points',
+    title: t('achievement.point.collector.title'),
+    description: t('achievement.point.collector.desc'),
     icon: '💎',
     category: 'special',
     rarity: 'epic',
@@ -284,12 +284,12 @@ export const ACHIEVEMENTS: Achievement[] = [
   }
 ];
 
-export const getAchievementsByCategory = (category: string) => {
-  return ACHIEVEMENTS.filter(achievement => achievement.category === category);
+export const getAchievementsByCategory = (category: string, t: (key: string) => string) => {
+  return getAchievements(t).filter(achievement => achievement.category === category);
 };
 
-export const getAchievementsByRarity = (rarity: string) => {
-  return ACHIEVEMENTS.filter(achievement => achievement.rarity === rarity);
+export const getAchievementsByRarity = (rarity: string, t: (key: string) => string) => {
+  return getAchievements(t).filter(achievement => achievement.rarity === rarity);
 };
 
 export const getTotalPoints = (achievements: Achievement[]) => {

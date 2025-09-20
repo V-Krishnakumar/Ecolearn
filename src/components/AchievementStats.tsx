@@ -3,6 +3,7 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Trophy, Star, Target, Award } from "lucide-react";
 import { AchievementStats } from "@/types/achievements";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface AchievementStatsProps {
   stats: AchievementStats;
@@ -10,6 +11,7 @@ interface AchievementStatsProps {
 }
 
 export function AchievementStats({ stats, className = "" }: AchievementStatsProps) {
+  const { t } = useLanguage();
   const completionPercentage = stats.totalAchievements > 0 
     ? (stats.unlockedAchievements / stats.totalAchievements) * 100 
     : 0;
@@ -43,7 +45,7 @@ export function AchievementStats({ stats, className = "" }: AchievementStatsProp
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center space-x-2">
             <Trophy className="w-5 h-5 text-yellow-500" />
-            <span>Achievement Progress</span>
+            <span>{t('achievements.progress.title')}</span>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -52,21 +54,21 @@ export function AchievementStats({ stats, className = "" }: AchievementStatsProp
               {stats.unlockedAchievements}/{stats.totalAchievements}
             </div>
             <p className="text-sm text-muted-foreground mb-3">
-              Achievements Unlocked
+              {t('achievements.progress.unlocked')}
             </p>
             <Progress 
               value={completionPercentage} 
               className="h-3 mb-2"
             />
             <p className="text-xs text-muted-foreground">
-              {Math.round(completionPercentage)}% Complete
+              {Math.round(completionPercentage)}% {t('achievements.progress.complete')}
             </p>
           </div>
           
           <div className="flex justify-between items-center pt-2 border-t">
             <div className="flex items-center space-x-2">
               <Star className="w-4 h-4 text-yellow-500" />
-              <span className="text-sm font-medium">Total Points</span>
+              <span className="text-sm font-medium">{t('achievements.stats.total.points')}</span>
             </div>
             <span className="text-lg font-bold text-primary">
               {stats.totalPoints}
@@ -80,7 +82,7 @@ export function AchievementStats({ stats, className = "" }: AchievementStatsProp
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center space-x-2">
             <Target className="w-5 h-5 text-blue-500" />
-            <span>By Category</span>
+            <span>{t('achievements.by.category')}</span>
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -90,7 +92,7 @@ export function AchievementStats({ stats, className = "" }: AchievementStatsProp
                 <div className="flex items-center space-x-2">
                   <span className="text-lg">{getCategoryIcon(category)}</span>
                   <span className="text-sm font-medium capitalize">
-                    {category}
+                    {t(`achievements.categories.${category}`)}
                   </span>
                 </div>
                 <Badge className={getCategoryColor(category)}>
@@ -101,7 +103,7 @@ export function AchievementStats({ stats, className = "" }: AchievementStatsProp
             
             {Object.keys(stats.achievementsByCategory).length === 0 && (
               <p className="text-sm text-muted-foreground text-center py-4">
-                Complete some achievements to see your progress!
+                {t('achievements.progress.empty')}
               </p>
             )}
           </div>
@@ -114,7 +116,7 @@ export function AchievementStats({ stats, className = "" }: AchievementStatsProp
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center space-x-2">
               <Award className="w-5 h-5 text-green-500" />
-              <span>Recent Achievements</span>
+              <span>{t('achievements.recent.title')}</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -127,7 +129,7 @@ export function AchievementStats({ stats, className = "" }: AchievementStatsProp
                       {achievement.title}
                     </p>
                     <p className="text-xs text-green-600">
-                      +{achievement.points} points
+                      +{achievement.points} {t('achievements.points')}
                     </p>
                   </div>
                 </div>

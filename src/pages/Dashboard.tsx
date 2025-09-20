@@ -12,6 +12,7 @@ import { useProgress } from "@/lib/localProgress";
 import { useAchievements } from "@/hooks/useAchievements";
 import { AchievementStats } from "@/components/AchievementStats";
 import { AchievementNotification } from "@/components/AchievementNotification";
+import { DecorativeDivider, EcoBackground } from "@/components/DecorativeElements";
 import { useEffect, useState } from "react";
 
 // Import lesson images
@@ -120,7 +121,7 @@ export default function Dashboard() {
   const totalTime = dashboardData?.totalTime || 0;
 
   return (
-    <div className="min-h-screen bg-background">
+    <EcoBackground className="min-h-screen">
       <Navigation />
       
       <main className="container mx-auto px-4 py-8">
@@ -129,63 +130,81 @@ export default function Dashboard() {
           <div className="flex-1">
             {/* Header Section */}
             <div className="mb-8 text-center animate-slide-up">
-              <h1 className="text-4xl font-bold text-foreground mb-4">
-                {profile?.username ? `Welcome, ${profile.username}! 🌍` : t('dashboard.welcome')}
-              </h1>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                {t('dashboard.subtitle')}
-              </p>
+              <div className="kid-card p-8 mb-6 decorative-border">
+                <h1 className="kid-title mb-4">
+                  {profile?.username ? `Welcome, ${profile.username}! 🌍` : t('dashboard.welcome')}
+                </h1>
+                <p className="text-xl text-gray-700 font-semibold max-w-2xl mx-auto">
+                  {t('dashboard.subtitle')}
+                </p>
+                <div className="flex justify-center mt-6 space-x-4">
+                  <span className="text-3xl animate-bounce-playful">🌿</span>
+                  <span className="text-3xl animate-bounce-playful" style={{animationDelay: '0.5s'}}>🌺</span>
+                  <span className="text-3xl animate-bounce-playful" style={{animationDelay: '1s'}}>🦋</span>
+                  <span className="text-3xl animate-bounce-playful" style={{animationDelay: '1.5s'}}>🌻</span>
+                  <span className="text-3xl animate-bounce-playful" style={{animationDelay: '2s'}}>🌱</span>
+                </div>
+              </div>
             </div>
 
         {/* Progress Overview */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <Card className="shadow-card hover:shadow-glow transition-all duration-300">
+          <Card className="kid-card hover:shadow-glow transition-all duration-300 bg-gradient-to-br from-emerald-50 to-green-100 border-emerald-200">
             <CardHeader className="pb-3">
-              <CardTitle className="text-lg flex items-center space-x-2">
-                <Trophy className="w-5 h-5 text-accent" />
-                <span>{t('dashboard.progress')}</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span>{t('dashboard.overall.progress')}</span>
-                  <span className="font-medium">{Math.round(totalProgress)}{t('common.percent')}</span>
+              <CardTitle className="text-xl flex items-center space-x-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl flex items-center justify-center">
+                  <Trophy className="w-6 h-6 text-white" />
                 </div>
-                <Progress value={totalProgress} className="h-3" />
+                <span className="kid-subtitle text-emerald-800">{t('dashboard.progress')}</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex justify-between text-sm font-semibold">
+                  <span className="text-emerald-700">{t('dashboard.overall.progress')}</span>
+                  <span className="text-emerald-800 font-bold text-lg">{Math.round(totalProgress)}{t('common.percent')}</span>
+                </div>
+                <Progress value={totalProgress} className="h-4 bg-emerald-100" />
               </div>
             </CardContent>
           </Card>
 
-          <Card className="shadow-card hover:shadow-glow transition-all duration-300">
+          <Card className="kid-card hover:shadow-glow transition-all duration-300 bg-gradient-to-br from-blue-50 to-cyan-100 border-blue-200">
             <CardHeader className="pb-3">
-              <CardTitle className="text-lg flex items-center space-x-2">
-                <Star className="w-5 h-5 text-success" />
-                <span>{t('dashboard.completed')}</span>
+              <CardTitle className="text-xl flex items-center space-x-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center">
+                  <Star className="w-6 h-6 text-white" />
+                </div>
+                <span className="kid-subtitle text-blue-800">{t('dashboard.completed')}</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-success">
+              <div className="text-4xl font-black text-blue-600 mb-2">
                 {completedLessons}
-                <span className="text-lg font-normal text-muted-foreground">/{lessons.length}</span>
+                <span className="text-xl font-bold text-blue-500">/{lessons.length}</span>
               </div>
-              <p className="text-sm text-muted-foreground">{t('dashboard.lessons.completed')}</p>
+              <p className="text-sm font-semibold text-blue-700">{t('dashboard.lessons.completed')}</p>
             </CardContent>
           </Card>
 
-          <Card className="shadow-card hover:shadow-glow transition-all duration-300">
+          <Card className="kid-card hover:shadow-glow transition-all duration-300 bg-gradient-to-br from-yellow-50 to-orange-100 border-yellow-200">
             <CardHeader className="pb-3">
-              <CardTitle className="text-lg flex items-center space-x-2">
-                <Clock className="w-5 h-5 text-secondary" />
-                <span>{t('dashboard.total.time')}</span>
+              <CardTitle className="text-xl flex items-center space-x-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-xl flex items-center justify-center">
+                  <Clock className="w-6 h-6 text-white" />
+                </div>
+                <span className="kid-subtitle text-yellow-800">{t('dashboard.total.time')}</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-secondary">{totalTime.toFixed(1)}</div>
-              <p className="text-sm text-muted-foreground">{t('dashboard.hours.learning')}</p>
+              <div className="text-4xl font-black text-yellow-600 mb-2">{totalTime.toFixed(1)}</div>
+              <p className="text-sm font-semibold text-yellow-700">{t('dashboard.hours.learning')}</p>
             </CardContent>
           </Card>
         </div>
+
+        {/* Decorative Divider */}
+        <DecorativeDivider type="hills" className="my-12" />
 
         {/* Certificate Section */}
         <div className="mb-8">
@@ -377,75 +396,89 @@ export default function Dashboard() {
           </div>
         </div>
 
+        {/* Decorative Divider */}
+        <DecorativeDivider type="waves" className="my-12" />
+
         {/* Lessons Grid */}
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center space-x-2">
-            <span>🌱</span>
-            <span>{t('dashboard.environmental.lessons')}</span>
-          </h2>
+          <div className="text-center mb-8">
+            <h2 className="kid-title mb-4 flex items-center justify-center space-x-3">
+              <span className="text-4xl animate-bounce-playful">🌱</span>
+              <span>{t('dashboard.environmental.lessons')}</span>
+              <span className="text-4xl animate-bounce-playful" style={{animationDelay: '0.5s'}}>🌿</span>
+            </h2>
+            <p className="text-lg text-gray-600 font-semibold">Choose your next eco-adventure!</p>
+          </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {lessons.map((lesson, index) => (
               <Card
                 key={lesson.id}
-                className={`shadow-card hover:shadow-glow transition-all duration-300 group cursor-pointer transform hover:-translate-y-1 animate-slide-up`}
-                style={{ animationDelay: `${index * 100}ms` }}
+                className={`kid-card hover:shadow-glow transition-all duration-300 group cursor-pointer transform hover:-translate-y-2 hover:scale-105 animate-slide-up decorative-border`}
+                style={{ animationDelay: `${index * 150}ms` }}
                 onClick={() => navigate(`/lesson/${lesson.id}`)}
               >
-                <div className="relative overflow-hidden rounded-t-lg">
+                <div className="relative overflow-hidden rounded-t-2xl">
                   <img
                     src={lesson.image}
                     alt={lesson.title}
-                    className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="w-full h-52 object-cover group-hover:scale-110 transition-transform duration-500"
                   />
                   <div className="absolute top-4 right-4">
                     {lesson.completed ? (
-                      <Badge className="bg-success text-success-foreground">
-                        {t('lesson.completed')}
+                      <Badge className="kid-badge bg-gradient-to-r from-emerald-500 to-green-600 text-white shadow-lg">
+                        ✅ {t('lesson.completed')}
                       </Badge>
                     ) : lesson.progress > 0 ? (
-                      <Badge variant="secondary">
-                        {lesson.progress}{t('common.percent')} {t('lesson.complete')}
+                      <Badge className="kid-badge bg-gradient-to-r from-blue-500 to-cyan-600 text-white shadow-lg">
+                        🔄 {lesson.progress}{t('common.percent')} {t('lesson.complete')}
                       </Badge>
                     ) : (
-                      <Badge variant="outline" className="bg-white/90">
-                        {t('lesson.not.started')}
+                      <Badge className="kid-badge bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-lg">
+                        🚀 {t('lesson.not.started')}
                       </Badge>
                     )}
                   </div>
                   <div className="absolute bottom-4 left-4">
-                    <Badge variant="secondary" className="bg-white/90 text-foreground">
+                    <Badge className="kid-badge bg-white/95 text-gray-800 shadow-lg font-bold">
                       {lesson.difficulty}
                     </Badge>
                   </div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>
                 
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-xl group-hover:text-primary transition-colors">
+                <CardHeader className="pb-4">
+                  <CardTitle className="text-xl group-hover:text-emerald-600 transition-colors font-bold text-gray-800">
                     {lesson.title}
                   </CardTitle>
-                  <CardDescription className="text-sm leading-relaxed">
+                  <CardDescription className="text-sm leading-relaxed text-gray-600 font-medium">
                     {lesson.description}
                   </CardDescription>
                 </CardHeader>
                 
                 <CardContent className="pt-0">
                   <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-                      <Clock className="w-4 h-4" />
+                    <div className="flex items-center space-x-2 text-sm text-gray-600 font-semibold">
+                      <Clock className="w-5 h-5 text-blue-500" />
                       <span>{lesson.duration}</span>
                     </div>
                     <Button
-                      size="sm"
-                      className="bg-gradient-nature hover:opacity-90 transition-all duration-200"
+                      size="lg"
+                      className="kid-button bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-bold shadow-lg"
                     >
-                      <PlayCircle className="w-4 h-4 mr-2" />
+                      <PlayCircle className="w-5 h-5 mr-2" />
                       {lesson.completed ? t('lesson.review') : lesson.progress > 0 ? t('lesson.continue') : t('lesson.start')}
                     </Button>
                   </div>
                   
                   {lesson.progress > 0 && (
-                    <Progress value={lesson.progress} className="h-2" />
+                    <div className="space-y-2">
+                      <div className="flex justify-between text-sm font-semibold text-gray-600">
+                        <span>Progress</span>
+                        <span>{lesson.progress}%</span>
+                      </div>
+                      <Progress value={lesson.progress} className="h-3 bg-gray-200" />
+                    </div>
                   )}
                 </CardContent>
               </Card>
@@ -454,21 +487,28 @@ export default function Dashboard() {
         </div>
 
             {/* Motivational Section */}
-            <Card className="bg-gradient-nature text-white shadow-glow">
+            <Card className="kid-card bg-gradient-to-r from-purple-400 via-pink-400 to-red-400 text-white shadow-glow decorative-border">
               <CardContent className="p-8 text-center">
-                <h3 className="text-2xl font-bold mb-4">{t('dashboard.keep.going')}</h3>
-                <p className="text-lg mb-6 opacity-90">
+                <div className="flex justify-center mb-4">
+                  <span className="text-6xl animate-bounce-playful">🎉</span>
+                </div>
+                <h3 className="text-3xl font-black mb-4">{t('dashboard.keep.going')}</h3>
+                <p className="text-xl mb-6 font-semibold opacity-95">
                   {t('dashboard.motivation')}
                 </p>
                 <Button
-                  variant="secondary"
                   size="lg"
                   onClick={() => navigate("/scoreboard")}
-                  className="bg-white text-primary hover:bg-white/90"
+                  className="kid-button bg-white text-purple-600 hover:bg-yellow-100 font-bold text-lg shadow-xl"
                 >
-                  <Trophy className="w-5 h-5 mr-2" />
+                  <Trophy className="w-6 h-6 mr-3" />
                   {t('dashboard.view.achievements')}
                 </Button>
+                <div className="flex justify-center mt-4 space-x-2">
+                  <span className="text-2xl animate-bounce-playful">🏆</span>
+                  <span className="text-2xl animate-bounce-playful" style={{animationDelay: '0.3s'}}>⭐</span>
+                  <span className="text-2xl animate-bounce-playful" style={{animationDelay: '0.6s'}}>🌟</span>
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -491,6 +531,6 @@ export default function Dashboard() {
         />
       ))}
       
-    </div>
+    </EcoBackground>
   );
 }

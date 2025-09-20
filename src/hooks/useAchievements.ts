@@ -2,9 +2,11 @@ import { useState, useEffect, useCallback } from 'react';
 import { AchievementManager } from '@/lib/achievements';
 import { Achievement, AchievementStats } from '@/types/achievements';
 import { useUser } from '@/contexts/UserContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export function useAchievements() {
   const { user } = useUser();
+  const { t } = useLanguage();
   const [achievements, setAchievements] = useState<Achievement[]>([]);
   const [newAchievements, setNewAchievements] = useState<Achievement[]>([]);
   const [stats, setStats] = useState<AchievementStats>({
@@ -32,8 +34,8 @@ export function useAchievements() {
     }
 
     try {
-      const userAchievements = AchievementManager.getUserAchievements(user.id);
-      const achievementStats = AchievementManager.getAchievementStats(user.id);
+      const userAchievements = AchievementManager.getUserAchievements(user.id, t);
+      const achievementStats = AchievementManager.getAchievementStats(user.id, t);
       
       setAchievements(userAchievements);
       setStats(achievementStats);
@@ -42,22 +44,22 @@ export function useAchievements() {
       console.error('Error loading achievements:', error);
       setLoading(false);
     }
-  }, [user]);
+  }, [user, t]);
 
   // Update achievement progress
   const updateProgress = useCallback((type: string, increment: number = 1) => {
     if (!user) return;
     
     try {
-      const updatedAchievements = AchievementManager.updateAchievementProgress(user.id, type, increment);
+      const updatedAchievements = AchievementManager.updateAchievementProgress(user.id, type, increment, t);
       setAchievements(updatedAchievements);
       
       // Update stats
-      const newStats = AchievementManager.getAchievementStats(user.id);
+      const newStats = AchievementManager.getAchievementStats(user.id, t);
       setStats(newStats);
       
       // Check for new achievements
-      const newUnlocked = AchievementManager.checkNewAchievements(user.id);
+      const newUnlocked = AchievementManager.checkNewAchievements(user.id, t);
       if (newUnlocked.length > 0) {
         setNewAchievements(prev => [...prev, ...newUnlocked]);
       }
@@ -79,16 +81,17 @@ export function useAchievements() {
         user.id, 
         achievementId, 
         requirementType, 
-        increment
+        increment,
+        t
       );
       setAchievements(updatedAchievements);
       
       // Update stats
-      const newStats = AchievementManager.getAchievementStats(user.id);
+      const newStats = AchievementManager.getAchievementStats(user.id, t);
       setStats(newStats);
       
       // Check for new achievements
-      const newUnlocked = AchievementManager.checkNewAchievements(user.id);
+      const newUnlocked = AchievementManager.checkNewAchievements(user.id, t);
       if (newUnlocked.length > 0) {
         setNewAchievements(prev => [...prev, ...newUnlocked]);
       }
@@ -144,10 +147,10 @@ export function useAchievements() {
     }
   }, [user, loadAchievements]);
 
-  // Load achievements on mount and when user changes
+  // Load achievements on mount and when user or language changes
   useEffect(() => {
     loadAchievements();
-  }, [loadAchievements]);
+  }, [loadAchievements, t]);
 
   return {
     achievements,

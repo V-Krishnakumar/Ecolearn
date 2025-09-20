@@ -1,4 +1,4 @@
-import { ACHIEVEMENTS } from '@/data/achievements';
+import { getAchievements } from '@/data/achievements';
 import { Achievement, AchievementStats, UserAchievement } from '@/types/achievements';
 
 export class AchievementManager {
@@ -7,17 +7,22 @@ export class AchievementManager {
   /**
    * Get user's achievements
    */
-  static getUserAchievements(userId: string): Achievement[] {
+  static getUserAchievements(userId: string, t: (key: string) => string): Achievement[] {
     try {
       const stored = localStorage.getItem(this.STORAGE_KEY);
       if (stored) {
         const userAchievements: Record<string, Achievement[]> = JSON.parse(stored);
-        return userAchievements[userId] || this.initializeAchievements();
+        const storedAchievements = userAchievements[userId];
+        if (storedAchievements) {
+          // Apply translations to stored achievements
+          return this.applyTranslationsToStoredAchievements(storedAchievements, t);
+        }
+        return this.initializeAchievements(t);
       }
-      return this.initializeAchievements();
+      return this.initializeAchievements(t);
     } catch (error) {
       console.error('Error getting achievements:', error);
-      return this.initializeAchievements();
+      return this.initializeAchievements(t);
     }
   }
 
@@ -27,9 +32,10 @@ export class AchievementManager {
   static updateAchievementProgress(
     userId: string, 
     type: string, 
-    increment: number = 1
+    increment: number = 1,
+    t: (key: string) => string
   ): Achievement[] {
-    const achievements = this.getUserAchievements(userId);
+    const achievements = this.getUserAchievements(userId, t);
     const updatedAchievements = achievements.map(achievement => {
       const requirement = achievement.requirements.find(req => req.type === type);
       if (requirement) {
@@ -52,8 +58,8 @@ export class AchievementManager {
   /**
    * Check for newly unlocked achievements
    */
-  static checkNewAchievements(userId: string): Achievement[] {
-    const achievements = this.getUserAchievements(userId);
+  static checkNewAchievements(userId: string, t: (key: string) => string): Achievement[] {
+    const achievements = this.getUserAchievements(userId, t);
     const now = Date.now();
     
     return achievements.filter(achievement => 
@@ -65,8 +71,8 @@ export class AchievementManager {
   /**
    * Get achievement statistics
    */
-  static getAchievementStats(userId: string): AchievementStats {
-    const achievements = this.getUserAchievements(userId);
+  static getAchievementStats(userId: string, t: (key: string) => string): AchievementStats {
+    const achievements = this.getUserAchievements(userId, t);
     const unlockedAchievements = achievements.filter(a => a.unlockedAt);
     
     const achievementsByCategory = achievements.reduce((acc, achievement) => {
@@ -108,40 +114,67 @@ export class AchievementManager {
   /**
    * Get achievements by category
    */
-  static getAchievementsByCategory(userId: string, category: string): Achievement[] {
-    const achievements = this.getUserAchievements(userId);
+  static getAchievementsByCategory(userId: string, category: string, t: (key: string) => string): Achievement[] {
+    const achievements = this.getUserAchievements(userId, t);
     return achievements.filter(achievement => achievement.category === category);
   }
 
   /**
    * Get achievements by rarity
    */
-  static getAchievementsByRarity(userId: string, rarity: string): Achievement[] {
-    const achievements = this.getUserAchievements(userId);
+  static getAchievementsByRarity(userId: string, rarity: string, t: (key: string) => string): Achievement[] {
+    const achievements = this.getUserAchievements(userId, t);
     return achievements.filter(achievement => achievement.rarity === rarity);
   }
 
   /**
    * Get unlocked achievements
    */
-  static getUnlockedAchievements(userId: string): Achievement[] {
-    const achievements = this.getUserAchievements(userId);
+  static getUnlockedAchievements(userId: string, t: (key: string) => string): Achievement[] {
+    const achievements = this.getUserAchievements(userId, t);
     return achievements.filter(achievement => achievement.unlockedAt);
   }
 
   /**
    * Get locked achievements
    */
-  static getLockedAchievements(userId: string): Achievement[] {
-    const achievements = this.getUserAchievements(userId);
+  static getLockedAchievements(userId: string, t: (key: string) => string): Achievement[] {
+    const achievements = this.getUserAchievements(userId, t);
     return achievements.filter(achievement => !achievement.unlockedAt);
+  }
+
+  /**
+   * Apply translations to stored achievements
+   */
+  private static applyTranslationsToStoredAchievements(storedAchievements: Achievement[], t: (key: string) => string): Achievement[] {
+    const freshAchievements = getAchievements(t);
+    
+    return storedAchievements.map(storedAchievement => {
+      // Find the corresponding fresh achievement with translations
+      const freshAchievement = freshAchievements.find(fresh => fresh.id === storedAchievement.id);
+      
+      if (freshAchievement) {
+        // Keep the stored progress and status, but use fresh translations
+        return {
+          ...storedAchievement,
+          title: freshAchievement.title,
+          description: freshAchievement.description,
+          requirements: storedAchievement.requirements.map(req => ({
+            ...req,
+            description: freshAchievement.requirements.find(freshReq => freshReq.type === req.type)?.description || req.description
+          }))
+        };
+      }
+      
+      return storedAchievement;
+    });
   }
 
   /**
    * Initialize achievements for a new user
    */
-  private static initializeAchievements(): Achievement[] {
-    return ACHIEVEMENTS.map(achievement => ({ 
+  private static initializeAchievements(t: (key: string) => string): Achievement[] {
+    return getAchievements(t).map(achievement => ({ 
       ...achievement,
       requirements: achievement.requirements.map(req => ({ ...req }))
     }));
@@ -168,9 +201,10 @@ export class AchievementManager {
     userId: string, 
     achievementId: string, 
     requirementType: string, 
-    increment: number = 1
+    increment: number = 1,
+    t: (key: string) => string
   ): Achievement[] {
-    const achievements = this.getUserAchievements(userId);
+    const achievements = this.getUserAchievements(userId, t);
     const updatedAchievements = achievements.map(achievement => {
       if (achievement.id === achievementId) {
         const requirement = achievement.requirements.find(req => req.type === requirementType);

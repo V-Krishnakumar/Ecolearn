@@ -101,3 +101,4 @@ The chatbot and theme toggle buttons were disappearing when scrolling up and dow
 - **Lower CPU usage**: No scroll tracking
 
 The floating buttons now stay exactly where they should be - fixed in the bottom-right corner, always visible, and always accessible regardless of scroll position. This provides a much more predictable and user-friendly experience!
+

@@ -91,7 +91,7 @@ export function Navigation() {
               }
             >
               <Award className="h-4 w-4" />
-              <span>Achievements</span>
+              <span>{t("nav.achievements")}</span>
             </NavLink>
 
             <NavLink
@@ -105,7 +105,7 @@ export function Navigation() {
               }
             >
               <GraduationCap className="h-4 w-4" />
-              <span>Advanced Modules</span>
+              <span>{t("nav.advanced.modules")}</span>
             </NavLink>
 
             <NavLink
@@ -119,7 +119,7 @@ export function Navigation() {
               }
             >
               <FileText className="h-4 w-4" />
-              <span>Certificate</span>
+              <span>{t("nav.certificate")}</span>
             </NavLink>
           </div>
 
@@ -209,7 +209,7 @@ export function Navigation() {
               }
             >
               <Award className="h-3 w-3" />
-              <span>Achievements</span>
+              <span>{t("nav.achievements")}</span>
             </NavLink>
 
             <NavLink
@@ -223,7 +223,7 @@ export function Navigation() {
               }
             >
               <GraduationCap className="h-3 w-3" />
-              <span>Advanced Modules</span>
+              <span>{t("nav.advanced.modules")}</span>
             </NavLink>
 
             <NavLink
@@ -237,7 +237,7 @@ export function Navigation() {
               }
             >
               <FileText className="h-3 w-3" />
-              <span>Certificate</span>
+              <span>{t("nav.certificate")}</span>
             </NavLink>
           </div>
         </div>
