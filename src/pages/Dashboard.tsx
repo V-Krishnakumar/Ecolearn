@@ -5,7 +5,6 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 import { PlayCircle, Clock, Trophy, Star, FileText, GraduationCap, Thermometer, TreePine, ArrowRight, Award, BookOpen, Target } from "lucide-react";
-import Chatbot from "@/components/Chatbot";
 import NewsFacts from "@/components/NewsFacts";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUser } from "@/contexts/UserContext";
@@ -482,7 +481,6 @@ export default function Dashboard() {
           </div>
         </div>
       </main>
-      <Chatbot />
 
       {/* Achievement Notifications */}
       {newAchievements.map((achievement) => (
@@ -492,6 +490,7 @@ export default function Dashboard() {
           onClose={() => dismissNotification(achievement.id)}
         />
       ))}
+      
     </div>
   );
 }

@@ -225,17 +225,11 @@ const LandingPage: React.FC = () => {
 
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="max-w-7xl mx-auto text-center relative">
+      <section className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-7xl mx-auto text-center relative w-full">
           {/* Background overlay for better text readability */}
           <div className="absolute inset-0 bg-black/10 rounded-3xl -m-8"></div>
           <div className="animate-fade-in relative z-10">
-            <div className="mb-8">
-              <div className="inline-flex items-center bg-gradient-to-r from-green-100/90 to-blue-100/90 backdrop-blur-sm px-6 py-3 rounded-full mb-6 shadow-lg">
-                <Leaf className="h-5 w-5 text-green-600 mr-2" />
-                <span className="text-green-700 font-semibold">🌱 Sustainable Education Platform</span>
-              </div>
-            </div>
             <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
               <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent drop-shadow-2xl" style={{ textShadow: '0 0 20px rgba(34, 211, 238, 0.5)' }}>
                 EcoLearn
@@ -266,7 +260,7 @@ const LandingPage: React.FC = () => {
                 </span>
               </span>
             </div>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mx-auto">
               <button
                 onClick={handleExplore}
                 className="bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl inline-flex items-center border-2 border-cyan-300/50"
@@ -286,6 +280,9 @@ const LandingPage: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* Spacer Section */}
+      <section className="h-32 relative z-10"></section>
 
       {/* SDG Goals Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 relative z-10">

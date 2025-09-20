@@ -172,3 +172,137 @@
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeSpeed;
 }
+
+/* Dynamic Theme Switching Styles */
+
+/* Smooth theme transitions */
+.theme-transition {
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.theme-transition * {
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Day/Night Theme Variables */
+.theme-day {
+  --theme-bg: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  --theme-text: #1e293b;
+  --theme-accent: #fbbf24;
+  --theme-shadow: rgba(59, 130, 246, 0.15);
+}
+
+.theme-night {
+  --theme-bg: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+  --theme-text: #f1f5f9;
+  --theme-accent: #fbbf24;
+  --theme-shadow: rgba(147, 51, 234, 0.25);
+}
+
+/* Rainforest/Savannah Environment Variables */
+.theme-rainforest {
+  --env-bg: linear-gradient(135deg, #064e3b 0%, #065f46 50%, #047857 100%);
+  --env-accent: #10b981;
+  --env-secondary: #34d399;
+  --env-pattern: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2310b981' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+.theme-savannah {
+  --env-bg: linear-gradient(135deg, #92400e 0%, #d97706 50%, #f59e0b 100%);
+  --env-accent: #f59e0b;
+  --env-secondary: #fbbf24;
+  --env-pattern: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f59e0b' fill-opacity='0.1'%3E%3Cpolygon points='30,10 40,40 10,40'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Apply theme styles to body */
+body {
+  background: var(--theme-bg);
+  color: var(--theme-text);
+  transition: background 0.6s ease, color 0.6s ease;
+}
+
+/* Theme-aware component styles */
+.theme-card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px var(--theme-shadow);
+  transition: all 0.6s ease;
+}
+
+.theme-night .theme-card {
+  background: rgba(30, 27, 75, 0.9);
+  border: 1px solid rgba(147, 51, 234, 0.2);
+}
+
+/* Animated background elements */
+@keyframes floatGently {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(2deg); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.theme-sun {
+  background: linear-gradient(45deg, #fbbf24, #f59e0b, #d97706, #fbbf24);
+  background-size: 200% 200%;
+  animation: shimmer 3s ease-in-out infinite;
+  border-radius: 50%;
+  box-shadow: 0 0 30px rgba(251, 191, 36, 0.5);
+}
+
+.theme-moon {
+  background: linear-gradient(45deg, #e5e7eb, #d1d5db, #9ca3af, #e5e7eb);
+  background-size: 200% 200%;
+  animation: shimmer 4s ease-in-out infinite;
+  border-radius: 50%;
+  box-shadow: 0 0 30px rgba(147, 51, 234, 0.5);
+}
+
+/* Environmental decorations */
+.env-decoration {
+  position: absolute;
+  opacity: 0.1;
+  pointer-events: none;
+  animation: floatGently 8s ease-in-out infinite;
+}
+
+.theme-rainforest .env-decoration {
+  background: var(--env-pattern);
+}
+
+.theme-savannah .env-decoration {
+  background: var(--env-pattern);
+}
+
+/* Button theme transitions */
+.theme-button {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateZ(0);
+}
+
+.theme-button:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 10px 25px var(--theme-shadow);
+}
+
+.theme-button:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .theme-transition,
+  .theme-transition *,
+  .theme-sun,
+  .theme-moon,
+  .env-decoration,
+  .theme-button {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+

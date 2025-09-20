@@ -224,7 +224,7 @@ export default function StudentDashboard() {
                 const progress = getLessonProgress(lesson.id);
                 
                 return (
-                  <Card key={lesson.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+                  <Card key={lesson.id} className="overflow-hidden bg-white">
                     <div className="relative">
                       <img
                         src={lesson.image}
@@ -295,7 +295,7 @@ export default function StudentDashboard() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+              <Card className="overflow-hidden card-hover cursor-pointer bg-white/95 backdrop-blur-sm"
                     onClick={() => navigate("/lesson/environmental-policy")}>
                 <div className="p-4">
                   <div className="flex items-start justify-between mb-4">
@@ -318,7 +318,7 @@ export default function StudentDashboard() {
                 </div>
               </Card>
 
-              <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+              <Card className="overflow-hidden card-hover cursor-pointer bg-white/95 backdrop-blur-sm"
                     onClick={() => navigate("/lesson/climate-change")}>
                 <div className="p-4">
                   <div className="flex items-start justify-between mb-4">
@@ -341,7 +341,7 @@ export default function StudentDashboard() {
                 </div>
               </Card>
 
-              <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+              <Card className="overflow-hidden card-hover cursor-pointer bg-white/95 backdrop-blur-sm"
                     onClick={() => navigate("/lesson/biodiversity")}>
                 <div className="p-4">
                   <div className="flex items-start justify-between mb-4">
@@ -431,6 +431,7 @@ export default function StudentDashboard() {
           />
         ))}
       </div>
+      
     </div>
   );
 }

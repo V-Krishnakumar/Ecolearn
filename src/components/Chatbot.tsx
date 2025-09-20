@@ -32,7 +32,7 @@ export default function Chatbot() {
   return (
     <div className="fixed right-4 bottom-4 z-50">
       {isOpen ? (
-        <div className="w-80 sm:w-96 h-96 bg-white rounded-xl shadow-2xl border border-border flex flex-col overflow-hidden">
+        <div className="w-80 sm:w-96 h-96 bg-white rounded-xl shadow-2xl border border-border flex flex-col overflow-hidden absolute bottom-16 right-0">
           <div className="px-4 py-2 bg-gradient-to-r from-green-500 to-blue-500 text-white flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <MessageCircle className="w-4 h-4" />
@@ -82,7 +82,7 @@ export default function Chatbot() {
         <div className="flex flex-col items-center gap-2">
           <button
             onClick={() => setIsOpen(true)}
-            className="rounded-full w-16 h-16 flex items-center justify-center bg-gradient-to-br from-green-500 to-blue-500 text-white shadow-xl ring-4 ring-green-400/30 hover:opacity-95 animate-[pulse_2.5s_ease-in-out_infinite]"
+            className="rounded-full w-16 h-16 flex items-center justify-center bg-gradient-to-br from-green-500 to-blue-500 text-white shadow-xl ring-4 ring-green-400/30 hover:opacity-95 animate-[pulse_2.5s_ease-in-out_infinite] floating-button"
             aria-label="Open EcoLearn Assistant"
           >
             <MessageCircle className="w-7 h-7" />
@@ -93,5 +93,3 @@ export default function Chatbot() {
     </div>
   );
 }
-
-

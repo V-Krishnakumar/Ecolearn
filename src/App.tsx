@@ -35,6 +35,7 @@ import TeacherAssignments from "./pages/teacher/TeacherAssignments";
 import TeacherReports from "./pages/teacher/TeacherReports";
 import TeacherAchievements from "./pages/teacher/TeacherAchievements";
 
+
 const queryClient = new QueryClient();
 
 // Role-based route wrapper
@@ -67,9 +68,9 @@ const App = () => (
     <UserProvider>
       <LanguageProvider>
         <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
             <Routes>
               <Route path="/" element={<LandingPage />} />
               <Route path="/auth" element={<Auth />} />
@@ -137,10 +138,10 @@ const App = () => (
               <Route path="/lesson/climate-change" element={<ClimateChange />} />
               <Route path="/lesson/biodiversity" element={<Biodiversity />} />
               <Route path="/advanced-modules" element={<AdvancedModules />} />
-              <Route path="/certificate" element={<CertificatePage />} />
-              
-              {/* Catch-all route */}
-              <Route path="*" element={<NotFound />} />
+                  <Route path="/certificate" element={<CertificatePage />} />
+                  
+                  {/* Catch-all route */}
+                  <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
         </TooltipProvider>
