@@ -10,13 +10,13 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useUser } from "@/contexts/UserContext";
 import { useProgress } from "@/lib/localProgress";
 
-// Import lesson images
-import wasteManagementImg from "@/assets/lesson-waste-management.jpg";
-import waterTreatmentImg from "@/assets/lesson-water-treatment.jpg";
-import pollutionFreeImg from "@/assets/lesson-pollution-free.jpg";
-import afforestationImg from "@/assets/lesson-afforestation.jpg";
-import deforestationImg from "@/assets/lesson-deforestation.jpg";
-import renewableEnergyImg from "@/assets/lesson-renewable-energy.jpg";
+// Lesson images from public directory
+const wasteManagementImg = "/images/lesson-waste-management.jpg";
+const waterTreatmentImg = "/images/lesson-water-treatment.jpg";
+const pollutionFreeImg = "/images/lesson-pollution-free.jpg";
+const afforestationImg = "/images/lesson-afforestation.jpg";
+const deforestationImg = "/images/lesson-deforestation.jpg";
+const renewableEnergyImg = "/images/lesson-renewable-energy.jpg";
 
 const getLessonsTemplate = (t: (key: string) => string) => [
   {

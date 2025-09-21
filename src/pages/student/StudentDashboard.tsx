@@ -19,13 +19,13 @@ import { AchievementNotification } from "@/components/AchievementNotification";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { useEffect, useState } from "react";
 
-// Import lesson images
-import wasteManagementImg from "@/assets/lesson-waste-management.jpg";
-import waterTreatmentImg from "@/assets/lesson-water-treatment.jpg";
-import pollutionFreeImg from "@/assets/lesson-pollution-free.jpg";
-import afforestationImg from "@/assets/lesson-afforestation.jpg";
-import deforestationImg from "@/assets/lesson-deforestation.jpg";
-import renewableEnergyImg from "@/assets/lesson-renewable-energy.jpg";
+// Lesson images from public directory
+const wasteManagementImg = "/images/lesson-waste-management.jpg";
+const waterTreatmentImg = "/images/lesson-water-treatment.jpg";
+const pollutionFreeImg = "/images/lesson-pollution-free.jpg";
+const afforestationImg = "/images/lesson-afforestation.jpg";
+const deforestationImg = "/images/lesson-deforestation.jpg";
+const renewableEnergyImg = "/images/lesson-renewable-energy.jpg";
 
 const getLessonsTemplate = (t: (key: string) => string) => [
   {
@@ -78,8 +78,9 @@ const getLessonsTemplate = (t: (key: string) => string) => [
   }
 ];
 
-// Helper function to get lesson image based on category
-const getLessonImage = (category: string) => {
+// Helper function to get lesson image based on category or title
+const getLessonImage = (category: string, title: string) => {
+  // First try to match by category
   switch (category.toLowerCase()) {
     case 'waste management':
       return wasteManagementImg;
@@ -93,8 +94,33 @@ const getLessonImage = (category: string) => {
       return deforestationImg;
     case 'renewable energy':
       return renewableEnergyImg;
+    case 'environment':
+      // If category is "Environment", try to match by title
+      return getLessonImageByTitle(title);
     default:
-      return wasteManagementImg; // Default fallback
+      // Try to match by title as fallback
+      return getLessonImageByTitle(title);
+  }
+};
+
+// Helper function to get lesson image by title
+const getLessonImageByTitle = (title: string) => {
+  const titleLower = title.toLowerCase();
+  
+  if (titleLower.includes('waste')) {
+    return wasteManagementImg;
+  } else if (titleLower.includes('water')) {
+    return waterTreatmentImg;
+  } else if (titleLower.includes('pollution')) {
+    return pollutionFreeImg;
+  } else if (titleLower.includes('afforestation')) {
+    return afforestationImg;
+  } else if (titleLower.includes('deforestation')) {
+    return deforestationImg;
+  } else if (titleLower.includes('renewable') || titleLower.includes('energy')) {
+    return renewableEnergyImg;
+  } else {
+    return wasteManagementImg; // Default fallback
   }
 };
 
@@ -146,13 +172,18 @@ export default function StudentDashboard() {
             id: lesson.id,
             title: lesson.title,
             description: lesson.description || '',
-            image: getLessonImage(lesson.category),
+            image: getLessonImage(lesson.category, lesson.title),
             duration: lesson.duration_minutes,
             difficulty: lesson.difficulty,
             points: lesson.points,
             category: lesson.category
           })) || [];
-          setLessons(transformedLessons);
+          
+          if (transformedLessons.length === 0) {
+            setLessons(getLessonsTemplate(t));
+          } else {
+            setLessons(transformedLessons);
+          }
         }
 
         // Load user progress
@@ -308,6 +339,7 @@ export default function StudentDashboard() {
           </p>
         </div>
 
+
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <Card className="bg-white shadow-lg border-0">
@@ -380,11 +412,17 @@ export default function StudentDashboard() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {lessons.map((lesson) => {
-                const status = getLessonStatus(lesson.id);
-                const progress = getLessonProgress(lesson.id);
-                
-                return (
+              {lessons.length === 0 ? (
+                <div className="col-span-full text-center p-8">
+                  <p className="text-gray-500">No lessons available</p>
+                </div>
+              ) : (
+                lessons.map((lesson) => {
+                  const status = getLessonStatus(lesson.id);
+                  const progress = getLessonProgress(lesson.id);
+                  
+                  
+                  return (
                   <Card key={lesson.id} className="overflow-hidden bg-white">
                     <div className="relative">
                       <img
@@ -437,8 +475,9 @@ export default function StudentDashboard() {
                       </div>
                     </CardContent>
                   </Card>
-                );
-              })}
+                  );
+                })
+              )}
             </div>
           </CardContent>
         </Card>

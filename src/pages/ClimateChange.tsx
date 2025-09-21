@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Play, Pause, RotateCcw, ArrowRight, Clock, BookOpen, Thermometer, Zap, Globe } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ClimateChangeGame } from "@/components/games/ClimateChangeGame";
-import climateChangeImg from "@/assets/lesson-climate-change.jpg";
+const climateChangeImg = "/images/lesson-climate-change.jpg";
 
 export default function ClimateChange() {
   const navigate = useNavigate();

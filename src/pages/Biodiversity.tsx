@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Play, Pause, RotateCcw, ArrowRight, Clock, BookOpen, TreePine, Bug, Globe } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { BiodiversityGame } from "@/components/games/BiodiversityGame";
-import biodiversityImg from "@/assets/lesson-biodiversity.jpg";
+const biodiversityImg = "/images/lesson-biodiversity.jpg";
 
 export default function Biodiversity() {
   const navigate = useNavigate();
