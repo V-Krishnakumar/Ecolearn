@@ -20,34 +20,34 @@ import { useUser } from "@/contexts/UserContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import Chatbot from "@/components/Chatbot";
 
-const navigationItems = [
+const getNavigationItems = (t: (key: string) => string) => [
   {
-    name: 'Dashboard',
+    name: t('nav.dashboard'),
     href: '/student/dashboard',
     icon: Home
   },
   {
-    name: 'Real Time Tasks',
+    name: t('nav.realtime.tasks'),
     href: '/student/tasks',
     icon: Camera
   },
   {
-    name: 'Scoreboard',
+    name: t('nav.scoreboard'),
     href: '/scoreboard',
     icon: Trophy
   },
   {
-    name: 'Achievements',
+    name: t('nav.achievements'),
     href: '/achievements',
     icon: Award
   },
   {
-    name: 'Advanced Modules',
+    name: t('nav.advanced.modules'),
     href: '/advanced-modules',
     icon: GraduationCap
   },
   {
-    name: 'Certificate',
+    name: t('nav.certificate'),
     href: '/certificate',
     icon: FileText
   }
@@ -58,6 +58,8 @@ export default function StudentNavigation() {
   const navigate = useNavigate();
   const { user, signOut } = useUser();
   const { t, language, toggleLanguage } = useLanguage();
+
+  const navigationItems = getNavigationItems(t);
 
   const handleSignOut = () => {
     signOut();
@@ -127,7 +129,7 @@ export default function StudentNavigation() {
                 className="flex items-center space-x-2"
               >
                 <LogOut className="h-4 w-4" />
-                <span className="hidden sm:inline">Logout</span>
+                <span className="hidden sm:inline">{t('nav.logout')}</span>
               </Button>
             </div>
           </div>

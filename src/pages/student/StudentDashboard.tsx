@@ -448,7 +448,7 @@ export default function StudentDashboard() {
           <CardHeader>
             <CardTitle className="text-2xl font-bold text-gray-900 flex items-center space-x-2">
               <GraduationCap className="w-6 h-6 text-purple-500" />
-              <span>Advanced Modules</span>
+              <span>{t('nav.advanced.modules')}</span>
             </CardTitle>
             <CardDescription>
               Explore advanced environmental topics and deepen your knowledge
@@ -528,7 +528,7 @@ export default function StudentDashboard() {
             
             <div className="text-center mt-6">
               <Button onClick={() => navigate("/advanced-modules")} variant="outline">
-                View All Advanced Modules
+{t('student.dashboard.view.all.advanced.modules')}
               </Button>
             </div>
           </CardContent>
@@ -539,7 +539,7 @@ export default function StudentDashboard() {
           <CardHeader>
             <CardTitle className="text-2xl font-bold text-gray-900 flex items-center space-x-2">
               <Trophy className="w-6 h-6 text-yellow-500" />
-              <span>Scoreboard & Achievements</span>
+              <span>{t('student.dashboard.scoreboard.achievements')}</span>
             </CardTitle>
             <CardDescription>
               Track your progress and unlock achievements
@@ -592,7 +592,7 @@ export default function StudentDashboard() {
                 disabled={scoreboardLoading}
               >
                 <Trophy className="w-5 h-5 mr-2" />
-                {scoreboardLoading ? 'Loading...' : 'View Full Scoreboard'}
+{scoreboardLoading ? t('common.loading') : t('student.dashboard.view.full.scoreboard')}
               </Button>
             </div>
           </CardContent>

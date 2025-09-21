@@ -181,27 +181,27 @@ export default function Achievements() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">{t('achievements.stats.unlocked')}</span>
+              <div className="flex justify-between items-center py-2">
+                <span className="text-sm font-medium text-gray-700">{t('achievements.stats.unlocked')}</span>
                 <div className="flex items-center space-x-2">
                   <CheckCircle className="w-4 h-4 text-green-500" />
-                  <span className="font-bold">{stats.unlockedAchievements}</span>
+                  <span className="font-bold text-green-600">{stats.unlockedAchievements}</span>
                 </div>
               </div>
               
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">{t('achievements.stats.locked')}</span>
+              <div className="flex justify-between items-center py-2">
+                <span className="text-sm font-medium text-gray-700">{t('achievements.stats.locked')}</span>
                 <div className="flex items-center space-x-2">
                   <Lock className="w-4 h-4 text-gray-400" />
-                  <span className="font-bold">{stats.totalAchievements - stats.unlockedAchievements}</span>
+                  <span className="font-bold text-gray-600">{stats.totalAchievements - stats.unlockedAchievements}</span>
                 </div>
               </div>
               
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">{t('achievements.stats.total.points')}</span>
+              <div className="flex justify-between items-center py-2 border-t pt-3">
+                <span className="text-sm font-medium text-gray-700">{t('achievements.stats.total.points')}</span>
                 <div className="flex items-center space-x-2">
                   <Star className="w-4 h-4 text-yellow-500" />
-                  <span className="font-bold">{stats.totalPoints}</span>
+                  <span className="font-bold text-yellow-600">{stats.totalPoints}</span>
                 </div>
               </div>
             </CardContent>
@@ -230,8 +230,8 @@ export default function Achievements() {
           </div>
 
           {/* Category Filters */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium">{t('achievements.category')}</label>
+          <div className="space-y-3">
+            <label className="text-sm font-semibold text-gray-700">{t('achievements.category')}</label>
             <div className="flex flex-wrap gap-2">
               {categories.map((category) => (
                 <Button
@@ -239,22 +239,22 @@ export default function Achievements() {
                   variant={selectedCategory === category.id ? "default" : "outline"}
                   size="sm"
                   onClick={() => setSelectedCategory(category.id)}
-                  className={`flex items-center space-x-2 ${
+                  className={`flex items-center space-x-2 transition-all duration-200 hover:scale-105 ${
                     selectedCategory === category.id 
                       ? '' 
                       : getCategoryColor(category.id)
                   }`}
                 >
                   {category.icon}
-                  <span>{category.name}</span>
+                  <span className="text-xs">{category.name}</span>
                 </Button>
               ))}
             </div>
           </div>
 
           {/* Rarity Filters */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium">{t('achievements.rarity')}</label>
+          <div className="space-y-3">
+            <label className="text-sm font-semibold text-gray-700">{t('achievements.rarity')}</label>
             <div className="flex flex-wrap gap-2">
               {rarities.map((rarity) => (
                 <Button
@@ -262,9 +262,9 @@ export default function Achievements() {
                   variant={selectedRarity === rarity.id ? "default" : "outline"}
                   size="sm"
                   onClick={() => setSelectedRarity(rarity.id)}
-                  className={selectedRarity === rarity.id ? '' : rarity.color}
+                  className={`transition-all duration-200 hover:scale-105 ${selectedRarity === rarity.id ? '' : rarity.color}`}
                 >
-                  {rarity.name}
+                  <span className="text-xs">{rarity.name}</span>
                 </Button>
               ))}
             </div>

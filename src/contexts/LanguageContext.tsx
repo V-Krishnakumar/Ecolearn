@@ -50,6 +50,10 @@ const translations = {
     'student.dashboard.achievements': 'Achievements',
     'student.dashboard.progress': 'Progress',
     'student.dashboard.continue.learning': 'Continue your environmental learning journey',
+    'student.dashboard.view.all.advanced.modules': 'View All Advanced Modules',
+    'student.dashboard.scoreboard.achievements': 'Scoreboard & Achievements',
+    'student.dashboard.view.full.scoreboard': 'View Full Scoreboard',
+    'common.loading': 'Loading...',
     
     // Teacher Dashboard specific
     'teacher.dashboard.welcome': 'Welcome back, {username}! 👩‍🏫',
@@ -206,6 +210,17 @@ const translations = {
     'achievements.filters': 'Filters',
     'achievements.category': 'Category',
     'achievements.rarity': 'Rarity',
+    'achievements.progress.title': 'Achievement Progress',
+    'achievements.progress.unlocked': 'Achievements Unlocked',
+    'achievements.progress.complete': 'Complete',
+    'achievements.by.category': 'By Category',
+    'achievements.by.rarity': 'By Rarity',
+    'achievements.rarity.common': 'Common',
+    'achievements.rarity.rare': 'Rare',
+    'achievements.rarity.epic': 'Epic',
+    'achievements.rarity.legendary': 'Legendary',
+    'achievements.quick.stats': 'Quick Stats',
+    'achievements.stats.total.points': 'Total Points',
     
     // Student Lessons
     'student.lessons.title': 'Environmental Lessons',
@@ -1046,6 +1061,10 @@ const translations = {
     'student.dashboard.achievements': 'उपलब्धियां',
     'student.dashboard.progress': 'प्रगति',
     'student.dashboard.continue.learning': 'अपनी पर्यावरणीय शिक्षा यात्रा जारी रखें',
+    'student.dashboard.view.all.advanced.modules': 'सभी उन्नत मॉड्यूल देखें',
+    'student.dashboard.scoreboard.achievements': 'स्कोरबोर्ड और उपलब्धियां',
+    'student.dashboard.view.full.scoreboard': 'पूरा स्कोरबोर्ड देखें',
+    'common.loading': 'लोड हो रहा है...',
     
     // Teacher Dashboard specific
     'teacher.dashboard.welcome': 'वापस स्वागत है, {username}! 👩‍🏫',

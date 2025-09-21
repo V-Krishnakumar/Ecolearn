@@ -74,7 +74,7 @@ export function AchievementStats({ stats, className = "" }: AchievementStatsProp
               value={completionPercentage} 
               className="h-3 mb-2"
             />
-            <p className="text-xs text-muted-foreground">
+            <p className="text-sm font-medium text-muted-foreground">
               {Math.round(completionPercentage)}% {t('achievements.progress.complete')}
             </p>
           </div>
@@ -82,9 +82,9 @@ export function AchievementStats({ stats, className = "" }: AchievementStatsProp
           <div className="flex justify-between items-center pt-2 border-t">
             <div className="flex items-center space-x-2">
               <Star className="w-4 h-4 text-yellow-500" />
-              <span className="text-sm font-medium">{t('achievements.stats.total.points')}</span>
+              <span className="text-sm font-medium text-gray-700">{t('achievements.stats.total.points')}</span>
             </div>
-            <span className="text-lg font-bold text-primary">
+            <span className="text-xl font-bold text-primary">
               {stats.totalPoints}
             </span>
           </div>
@@ -116,8 +116,12 @@ export function AchievementStats({ stats, className = "" }: AchievementStatsProp
               </div>
             ))
             ) : (
-              <div className="text-center py-4 text-muted-foreground">
-                <p>No achievements by category data available</p>
+              <div className="text-center py-6 text-muted-foreground">
+                <div className="flex flex-col items-center space-y-2">
+                  <Target className="w-8 h-8 text-gray-300" />
+                  <p className="text-sm">No achievements by category data available</p>
+                  <p className="text-xs text-gray-400">Complete some achievements to see category breakdown</p>
+                </div>
               </div>
             )}
           </div>
@@ -165,14 +169,14 @@ export function AchievementStats({ stats, className = "" }: AchievementStatsProp
           <CardContent>
             <div className="space-y-3">
               {Object.entries(achievementsByRarity).map(([rarity, count]) => (
-                <div key={rarity} className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-lg">{getRarityIcon(rarity)}</span>
-                    <span className="text-sm font-medium capitalize">
+                <div key={rarity} className="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors">
+                  <div className="flex items-center space-x-3">
+                    <span className="text-xl">{getRarityIcon(rarity)}</span>
+                    <span className="text-sm font-medium text-gray-700 capitalize">
                       {t(`achievements.rarity.${rarity}`)}
                     </span>
                   </div>
-                  <Badge variant="secondary" className="text-xs">
+                  <Badge variant="secondary" className="text-xs font-semibold px-2 py-1">
                     {count}
                   </Badge>
                 </div>
