@@ -302,7 +302,7 @@ export default function StudentDashboard() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
         <StudentNavigation />
-        <div className="container mx-auto px-4 py-8">
+        <div className="w-full px-8 py-8">
           <div className="flex items-center justify-center min-h-[400px]">
             <div className="text-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
@@ -318,7 +318,7 @@ export default function StudentDashboard() {
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
       <StudentNavigation />
       
-      <div className="container mx-auto px-4 py-8">
+      <div className="w-full px-8 py-8">
         {/* Welcome Section */}
         <div className="mb-8 text-center">
           <div className="flex items-center justify-center space-x-3 mb-4">
@@ -334,9 +334,10 @@ export default function StudentDashboard() {
               </Badge>
             )}
           </div>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            {t('dashboard.subtitle')}
-          </p>
+          <div className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="mb-2">Explore interactive lessons about environmental protection and sustainability.</p>
+            <p>Each lesson includes videos, quizzes, and hands-on activities to help you become an eco-hero!</p>
+          </div>
         </div>
 
 
@@ -400,270 +401,100 @@ export default function StudentDashboard() {
           </Card>
         </div>
 
-        {/* Lessons Section */}
-        <Card className="bg-white shadow-lg border-0 mb-8">
-          <CardHeader>
-            <CardTitle className="text-2xl font-bold text-gray-900">
-              {t('dashboard.environmental.lessons')}
-            </CardTitle>
-            <CardDescription>
-              {t('student.dashboard.continue.learning')}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {lessons.length === 0 ? (
-                <div className="col-span-full text-center p-8">
-                  <p className="text-gray-500">No lessons available</p>
-                </div>
-              ) : (
-                lessons.map((lesson) => {
-                  const status = getLessonStatus(lesson.id);
-                  const progress = getLessonProgress(lesson.id);
-                  
-                  
-                  return (
-                  <Card key={lesson.id} className="overflow-hidden bg-white">
-                    <div className="relative">
-                      <img
-                        src={lesson.image}
-                        alt={lesson.title}
-                        className="w-full h-48 object-cover"
-                      />
-                      <div className="absolute top-4 right-4">
-                        <Badge 
-                          variant={status === 'completed' ? 'default' : status === 'in-progress' ? 'secondary' : 'outline'}
-                          className="bg-white/90 text-gray-900"
-                        >
-                          {status === 'completed' ? t('lesson.completed') : 
-                           status === 'in-progress' ? 'In Progress' : t('lesson.not.started')}
-                        </Badge>
-                      </div>
+        {/* Main Content and News Sidebar */}
+        <div className="grid grid-cols-1 lg:grid-cols-10 gap-8">
+          {/* Main Content - Lessons Section */}
+          <div className="lg:col-span-8">
+            <Card className="bg-white shadow-lg border-0 mb-8">
+              <CardHeader>
+                <CardTitle className="text-2xl font-bold text-gray-900">
+                  {t('dashboard.environmental.lessons')}
+                </CardTitle>
+                <CardDescription>
+                  {t('student.dashboard.continue.learning')}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {lessons.length === 0 ? (
+                    <div className="col-span-full text-center p-8">
+                      <p className="text-gray-500">No lessons available</p>
                     </div>
-                    <CardContent className="p-4">
-                      <div className="space-y-3">
-                        <div>
-                          <h3 className="font-semibold text-lg text-gray-900">{lesson.title}</h3>
-                          <p className="text-sm text-gray-600 mt-1">{lesson.description}</p>
-                        </div>
-                        
-                        <div className="flex items-center justify-between text-sm text-gray-500">
-                          <div className="flex items-center space-x-1">
-                            <Clock className="h-4 w-4" />
-                            <span>{lesson.duration}</span>
+                  ) : (
+                    lessons.map((lesson) => {
+                      const status = getLessonStatus(lesson.id);
+                      const progress = getLessonProgress(lesson.id);
+                      
+                      
+                      return (
+                      <Card key={lesson.id} className="overflow-hidden bg-white">
+                        <div className="relative">
+                          <img
+                            src={lesson.image}
+                            alt={lesson.title}
+                            className="w-full h-48 object-cover"
+                          />
+                          <div className="absolute top-4 right-4">
+                            <Badge 
+                              variant={status === 'completed' ? 'default' : status === 'in-progress' ? 'secondary' : 'outline'}
+                              className="bg-white/90 text-gray-900"
+                            >
+                              {status === 'completed' ? t('lesson.completed') : 
+                               status === 'in-progress' ? 'In Progress' : t('lesson.not.started')}
+                            </Badge>
                           </div>
-                          <Badge variant="outline">{lesson.difficulty}</Badge>
                         </div>
-
-                        {status === 'in-progress' && (
-                          <div className="space-y-2">
-                            <div className="flex justify-between text-sm">
-                              <span>{t('student.dashboard.progress')}</span>
-                              <span>{Math.round(progress)}%</span>
+                        <CardContent className="p-4">
+                          <div className="space-y-3">
+                            <div>
+                              <h3 className="font-semibold text-lg text-gray-900">{lesson.title}</h3>
+                              <p className="text-sm text-gray-600 mt-1">{lesson.description}</p>
                             </div>
-                            <Progress value={progress} />
+                            
+                            <div className="flex items-center justify-between text-sm text-gray-500">
+                              <div className="flex items-center space-x-1">
+                                <Clock className="h-4 w-4" />
+                                <span>{lesson.duration}</span>
+                              </div>
+                              <Badge variant="outline">{lesson.difficulty}</Badge>
+                            </div>
+
+                            {status === 'in-progress' && (
+                              <div className="space-y-2">
+                                <div className="flex justify-between text-sm">
+                                  <span>{t('student.dashboard.progress')}</span>
+                                  <span>{Math.round(progress)}%</span>
+                                </div>
+                                <Progress value={progress} />
+                              </div>
+                            )}
+
+                            <Button
+                              onClick={() => navigate(`/lesson/${lesson.id}`)}
+                              className="w-full bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white"
+                            >
+                              <PlayCircle className="h-4 w-4 mr-2" />
+                              {status === 'completed' ? t('lesson.review') : status === 'in-progress' ? t('lesson.continue') : t('lesson.start')}
+                            </Button>
                           </div>
-                        )}
+                        </CardContent>
+                      </Card>
+                      );
+                    })
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
 
-                        <Button
-                          onClick={() => navigate(`/lesson/${lesson.id}`)}
-                          className="w-full bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white"
-                        >
-                          <PlayCircle className="h-4 w-4 mr-2" />
-                          {status === 'completed' ? t('lesson.review') : status === 'in-progress' ? t('lesson.continue') : t('lesson.start')}
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                  );
-                })
-              )}
+          {/* News Sidebar */}
+          <div className="lg:col-span-2">
+            <div className="sticky top-8">
+              <NewsFacts />
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Advanced Modules Section */}
-        <Card className="bg-white shadow-lg border-0 mb-8">
-          <CardHeader>
-            <CardTitle className="text-2xl font-bold text-gray-900 flex items-center space-x-2">
-              <GraduationCap className="w-6 h-6 text-purple-500" />
-              <span>{t('nav.advanced.modules')}</span>
-            </CardTitle>
-            <CardDescription>
-              Explore advanced environmental topics and deepen your knowledge
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Card className="overflow-hidden card-hover cursor-pointer bg-white/95 backdrop-blur-sm"
-                    onClick={() => navigate("/lesson/environmental-policy")}>
-                <div className="p-4">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
-                      <FileText className="w-6 h-6 text-white" />
-                    </div>
-                    <Badge variant="secondary" className="text-xs">Advanced</Badge>
-                  </div>
-                  <h3 className="font-semibold text-lg text-gray-900 mb-2">Environmental Policy</h3>
-                  <p className="text-sm text-gray-600 mb-4">Learn about environmental governance and policy frameworks</p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-1 text-sm text-gray-500">
-                      <Clock className="h-4 w-4" />
-                      <span>20 min</span>
-                    </div>
-                    <Button size="sm" className="bg-blue-50 text-blue-800 hover:opacity-90">
-                      Start Learning
-                    </Button>
-                  </div>
-                </div>
-              </Card>
-
-              <Card className="overflow-hidden card-hover cursor-pointer bg-white/95 backdrop-blur-sm"
-                    onClick={() => navigate("/lesson/climate-change")}>
-                <div className="p-4">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-600 rounded-lg flex items-center justify-center">
-                      <Thermometer className="w-6 h-6 text-white" />
-                    </div>
-                    <Badge variant="secondary" className="text-xs">Advanced</Badge>
-                  </div>
-                  <h3 className="font-semibold text-lg text-gray-900 mb-2">Climate Change</h3>
-                  <p className="text-sm text-gray-600 mb-4">Understand climate modeling and mitigation strategies</p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-1 text-sm text-gray-500">
-                      <Clock className="h-4 w-4" />
-                      <span>20 min</span>
-                    </div>
-                    <Button size="sm" className="bg-orange-50 text-orange-800 hover:opacity-90">
-                      Start Learning
-                    </Button>
-                  </div>
-                </div>
-              </Card>
-
-              <Card className="overflow-hidden card-hover cursor-pointer bg-white/95 backdrop-blur-sm"
-                    onClick={() => navigate("/lesson/biodiversity")}>
-                <div className="p-4">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg flex items-center justify-center">
-                      <TreePine className="w-6 h-6 text-white" />
-                    </div>
-                    <Badge variant="secondary" className="text-xs">Advanced</Badge>
-                  </div>
-                  <h3 className="font-semibold text-lg text-gray-900 mb-2">Biodiversity</h3>
-                  <p className="text-sm text-gray-600 mb-4">Explore conservation strategies and ecosystem services</p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-1 text-sm text-gray-500">
-                      <Clock className="h-4 w-4" />
-                      <span>20 min</span>
-                    </div>
-                    <Button size="sm" className="bg-green-50 text-green-800 hover:opacity-90">
-                      Start Learning
-                    </Button>
-                  </div>
-                </div>
-              </Card>
-            </div>
-            
-            <div className="text-center mt-6">
-              <Button onClick={() => navigate("/advanced-modules")} variant="outline">
-{t('student.dashboard.view.all.advanced.modules')}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Scoreboard Section */}
-        <Card className="bg-white shadow-lg border-0 mb-8">
-          <CardHeader>
-            <CardTitle className="text-2xl font-bold text-gray-900 flex items-center space-x-2">
-              <Trophy className="w-6 h-6 text-yellow-500" />
-              <span>{t('student.dashboard.scoreboard.achievements')}</span>
-            </CardTitle>
-            <CardDescription>
-              Track your progress and unlock achievements
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {scoreboardLoading ? (
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                {[...Array(4)].map((_, i) => (
-                  <div key={i} className="h-20 bg-gray-200 rounded-lg animate-pulse"></div>
-                ))}
-              </div>
-            ) : (
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                <div className="text-center p-4 bg-gradient-to-r from-green-500 to-blue-600 rounded-lg text-white">
-                  <div className="text-2xl font-bold mb-1">
-                    {userStats?.total_points || userStatistics?.totalPoints || 0}
-                  </div>
-                  <p className="text-sm opacity-90">Total Points</p>
-                </div>
-                
-                <div className="text-center p-4 bg-blue-50 rounded-lg">
-                  <div className="text-2xl font-bold text-blue-600 mb-1">
-                    {safeStats.unlockedAchievements || 0}
-                  </div>
-                  <p className="text-sm text-gray-600">Badges Earned</p>
-                </div>
-                
-                <div className="text-center p-4 bg-green-50 rounded-lg">
-                  <div className="text-2xl font-bold text-green-600 mb-1">
-                    {completedLessons}
-                  </div>
-                  <p className="text-sm text-gray-600">Lessons Done</p>
-                </div>
-                
-                <div className="text-center p-4 bg-purple-50 rounded-lg">
-                  <div className="text-2xl font-bold text-purple-600 mb-1">
-                    {Math.round((safeStats.unlockedAchievements || 0) / (safeStats.totalAchievements || 6) * 100)}%
-                  </div>
-                  <p className="text-sm text-gray-600">Achievement Rate</p>
-                </div>
-              </div>
-            )}
-            
-            <div className="text-center">
-              <Button 
-                onClick={() => navigate("/scoreboard")} 
-                variant="outline" 
-                size="lg"
-                disabled={scoreboardLoading}
-              >
-                <Trophy className="w-5 h-5 mr-2" />
-{scoreboardLoading ? t('common.loading') : t('student.dashboard.view.full.scoreboard')}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Achievement Stats */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <ErrorBoundary>
-            <AchievementStats stats={safeStats} />
-          </ErrorBoundary>
-          <NewsFacts />
+          </div>
         </div>
 
-        {/* Achievement Notification */}
-        {showAchievementNotification && achievements.length > 0 && achievements.slice(0, 3).map((achievement) => (
-          <AchievementNotification
-            key={achievement.id}
-            achievement={{
-              id: achievement.id.toString(),
-              title: achievement.name,
-              description: achievement.description,
-              icon: achievement.icon || '🏆',
-              category: achievement.category || 'special',
-              rarity: achievement.rarity,
-              points: achievement.points,
-              requirements: [],
-              progress: 100,
-              color: 'text-green-600'
-            }}
-            onClose={handleAchievementClose}
-          />
-        ))}
       </div>
       
     </div>
