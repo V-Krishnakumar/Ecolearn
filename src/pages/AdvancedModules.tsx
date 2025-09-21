@@ -8,7 +8,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function AdvancedModules() {
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   const advancedModules = [
     {
@@ -50,7 +50,7 @@ export default function AdvancedModules() {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div key={language} className="min-h-screen bg-background">
       <Navigation />
 
       <main className="container mx-auto px-4 py-8 max-w-6xl">

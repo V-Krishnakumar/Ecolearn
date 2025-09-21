@@ -172,10 +172,6 @@ const translations = {
     'student.tasks.energy.efficiency.audit': 'Energy Efficiency Audit',
     'student.tasks.energy.efficiency.audit.desc': 'Audit your home for energy efficiency and implement improvements.',
     'student.tasks.category.energy.conservation': 'Energy Conservation',
-    'student.tasks.status.available.now': 'Available Now',
-    'student.tasks.status.coming.soon': 'Coming Soon',
-    'student.tasks.status.completed': 'Completed',
-    'student.tasks.status.unknown': 'Unknown',
     'student.tasks.real.time.tasks': 'Real-Time Tasks',
     'student.tasks.real.time.tasks.desc': 'Take action for the environment and earn eco points by completing real-world tasks',
     'student.tasks.active.tasks': 'Active Tasks',
@@ -184,10 +180,6 @@ const translations = {
     'student.tasks.total.participants': 'Total Participants',
     'student.tasks.completion.rate': 'Completion Rate',
     'student.tasks.eco.points.earned': 'Eco Points Earned',
-    'student.tasks.available.now': 'Available Now',
-    'student.tasks.completion.rate': 'Completion Rate',
-    'student.tasks.participants': 'participants',
-    'student.tasks.points': 'points',
     
     // Achievements
     'achievements.title': 'Achievements',
@@ -851,74 +843,7 @@ const translations = {
     'day.sat': 'Sat',
     'day.sun': 'Sun',
     
-    // Achievements
-    'achievements.title': 'Achievements',
-    'achievements.subtitle': 'Track your progress and unlock new achievements',
-    'achievements.categories.all': 'All',
-    'achievements.categories.learning': 'Learning',
-    'achievements.categories.environmental': 'Environmental',
-    'achievements.categories.games': 'Games',
-    'achievements.categories.streak': 'Streak',
-    'achievements.categories.special': 'Special',
-    'achievements.rarities.all': 'All',
-    'achievements.rarities.common': 'Common',
-    'achievements.rarities.rare': 'Rare',
-    'achievements.rarities.epic': 'Epic',
-    'achievements.rarities.legendary': 'Legendary',
-    'achievements.filters': 'Filters',
-    'achievements.search.placeholder': 'Search achievements...',
-    'achievements.category': 'Category',
-    'achievements.rarity': 'Rarity',
-    'achievements.filter.unlocked.only': 'Show unlocked only',
-    'achievements.stats.unlocked': 'Unlocked',
-    'achievements.stats.locked': 'Locked',
-    'achievements.stats.total.points': 'Total Points',
-    'achievements.quick.stats': 'Quick Stats',
-    'achievements.loading': 'Loading achievements...',
-    'achievements.count': 'Achievements',
-    'achievements.progress.title': 'Achievement Progress',
-    'achievements.progress.unlocked': 'Achievements Unlocked',
-    'achievements.progress.complete': 'Complete',
-    'achievements.progress.empty': 'Complete some achievements to see your progress!',
-    'achievements.by.category': 'By Category',
-    'achievements.recent.title': 'Recent Achievements',
-    'achievements.points': 'points',
-    'achievements.no.achievements': 'No achievements found',
-    'achievements.try.different.filters': 'Try adjusting your filters to see more achievements',
     
-    // Achievement Titles and Descriptions
-    'achievement.first.steps.title': '🌱 First Steps',
-    'achievement.first.steps.desc': 'Complete your first lesson',
-    'achievement.video.learner.title': '📺 Video Learner',
-    'achievement.video.learner.desc': 'Watch 5 educational videos',
-    'achievement.quiz.master.title': '🧠 Quiz Master',
-    'achievement.quiz.master.desc': 'Get perfect scores on 5 quizzes',
-    'achievement.knowledge.seeker.title': '📚 Knowledge Seeker',
-    'achievement.knowledge.seeker.desc': 'Complete 10 lessons',
-    'achievement.tree.warrior.title': '🌳 Tree Warrior',
-    'achievement.tree.warrior.desc': 'Complete 5 afforestation activities',
-    'achievement.water.guardian.title': '💧 Water Guardian',
-    'achievement.water.guardian.desc': 'Master water treatment and conservation',
-    'achievement.climate.champion.title': '🌍 Climate Champion',
-    'achievement.climate.champion.desc': 'Complete all climate change modules',
-    'achievement.waste.manager.title': '♻️ Waste Manager',
-    'achievement.waste.manager.desc': 'Master waste management techniques',
-    'achievement.game.master.title': '🎮 Game Master',
-    'achievement.game.master.desc': 'Win 10 educational games',
-    'achievement.perfect.gamer.title': '⭐ Perfect Gamer',
-    'achievement.perfect.gamer.desc': 'Get perfect scores in 3 games',
-    'achievement.daily.learner.title': '📅 Daily Learner',
-    'achievement.daily.learner.desc': 'Learn for 3 consecutive days',
-    'achievement.dedicated.learner.title': '🔥 Dedicated Learner',
-    'achievement.dedicated.learner.desc': 'Learn for 7 consecutive days',
-    'achievement.unstoppable.learner.title': '⚡ Unstoppable Learner',
-    'achievement.unstoppable.learner.desc': 'Learn for 30 consecutive days',
-    'achievement.certificate.earner.title': '🏆 Certificate Earner',
-    'achievement.certificate.earner.desc': 'Earn your first certificate',
-    'achievement.eco.warrior.title': '🛡️ Eco Warrior',
-    'achievement.eco.warrior.desc': 'Complete all environmental modules',
-    'achievement.point.collector.title': '💎 Point Collector',
-    'achievement.point.collector.desc': 'Earn 1000 points',
     
     // SDG Content
     'sdg.title.waste': '♻ Waste Management - Sustainable Development Goals',
@@ -1227,10 +1152,6 @@ const translations = {
     'student.tasks.energy.efficiency.audit': 'ऊर्जा दक्षता ऑडिट',
     'student.tasks.energy.efficiency.audit.desc': 'ऊर्जा दक्षता के लिए अपने घर का ऑडिट करें और सुधार लागू करें।',
     'student.tasks.category.energy.conservation': 'ऊर्जा संरक्षण',
-    'student.tasks.status.available.now': 'अभी उपलब्ध',
-    'student.tasks.status.coming.soon': 'जल्द आ रहा',
-    'student.tasks.status.completed': 'पूर्ण',
-    'student.tasks.status.unknown': 'अज्ञात',
     'student.tasks.real.time.tasks': 'रियल-टाइम कार्य',
     'student.tasks.real.time.tasks.desc': 'पर्यावरण के लिए कार्रवाई करें और वास्तविक दुनिया के कार्यों को पूरा करके इको पॉइंट्स कमाएं',
     'student.tasks.active.tasks': 'सक्रिय कार्य',
@@ -1239,36 +1160,7 @@ const translations = {
     'student.tasks.total.participants': 'कुल प्रतिभागी',
     'student.tasks.completion.rate': 'पूर्णता दर',
     'student.tasks.eco.points.earned': 'इको पॉइंट्स अर्जित',
-    'student.tasks.available.now': 'अभी उपलब्ध',
-    'student.tasks.completion.rate': 'पूर्णता दर',
-    'student.tasks.participants': 'प्रतिभागी',
-    'student.tasks.points': 'अंक',
     
-    // Achievements
-    'achievements.title': 'उपलब्धियां',
-    'achievements.subtitle': 'अपनी प्रगति को ट्रैक करें और नई उपलब्धियां अनलॉक करें',
-    'achievements.search.placeholder': 'उपलब्धियां खोजें...',
-    'achievements.filter.unlocked.only': 'केवल अनलॉक दिखाएं',
-    'achievements.categories.all': 'सभी',
-    'achievements.categories.learning': 'सीखना',
-    'achievements.categories.environmental': 'पर्यावरणीय',
-    'achievements.categories.games': 'खेल',
-    'achievements.categories.streak': 'लगातार',
-    'achievements.categories.special': 'विशेष',
-    'achievements.rarities.all': 'सभी',
-    'achievements.rarities.common': 'सामान्य',
-    'achievements.rarities.rare': 'दुर्लभ',
-    'achievements.rarities.epic': 'महाकाव्य',
-    'achievements.rarities.legendary': 'पौराणिक',
-    'achievements.stats.total': 'कुल उपलब्धियां',
-    'achievements.stats.unlocked': 'अनलॉक',
-    'achievements.stats.locked': 'लॉक',
-    'achievements.stats.completion.rate': 'पूर्णता दर',
-    'achievements.no.achievements': 'कोई उपलब्धि नहीं मिली',
-    'achievements.try.different.filters': 'अपनी खोज या फिल्टर को समायोजित करने का प्रयास करें',
-    'achievements.filters': 'फिल्टर',
-    'achievements.category': 'श्रेणी',
-    'achievements.rarity': 'दुर्लभता',
     
     // Student Lessons
     'student.lessons.title': 'पर्यावरणीय पाठ',
@@ -1941,39 +1833,6 @@ const translations = {
     'achievements.no.achievements': 'कोई उपलब्धि नहीं मिली',
     'achievements.try.different.filters': 'अधिक उपलब्धियां देखने के लिए अपने फिल्टर को समायोजित करें',
     
-    // Achievement Titles and Descriptions
-    'achievement.first.steps.title': '🌱 पहले कदम',
-    'achievement.first.steps.desc': 'अपना पहला पाठ पूरा करें',
-    'achievement.video.learner.title': '📺 वीडियो सीखने वाला',
-    'achievement.video.learner.desc': '5 शैक्षिक वीडियो देखें',
-    'achievement.quiz.master.title': '🧠 क्विज़ मास्टर',
-    'achievement.quiz.master.desc': '5 क्विज़ में पूर्ण अंक प्राप्त करें',
-    'achievement.knowledge.seeker.title': '📚 ज्ञान खोजकर्ता',
-    'achievement.knowledge.seeker.desc': '10 पाठ पूरे करें',
-    'achievement.tree.warrior.title': '🌳 वृक्ष योद्धा',
-    'achievement.tree.warrior.desc': '5 वनीकरण गतिविधियां पूरी करें',
-    'achievement.water.guardian.title': '💧 जल रक्षक',
-    'achievement.water.guardian.desc': 'जल उपचार और संरक्षण में महारत हासिल करें',
-    'achievement.climate.champion.title': '🌍 जलवायु चैंपियन',
-    'achievement.climate.champion.desc': 'सभी जलवायु परिवर्तन मॉड्यूल पूरे करें',
-    'achievement.waste.manager.title': '♻️ अपशिष्ट प्रबंधक',
-    'achievement.waste.manager.desc': 'अपशिष्ट प्रबंधन तकनीकों में महारत हासिल करें',
-    'achievement.game.master.title': '🎮 गेम मास्टर',
-    'achievement.game.master.desc': '10 शैक्षिक गेम जीतें',
-    'achievement.perfect.gamer.title': '⭐ परफेक्ट गेमर',
-    'achievement.perfect.gamer.desc': '3 गेम में पूर्ण अंक प्राप्त करें',
-    'achievement.daily.learner.title': '📅 दैनिक सीखने वाला',
-    'achievement.daily.learner.desc': '3 लगातार दिनों तक सीखें',
-    'achievement.dedicated.learner.title': '🔥 समर्पित सीखने वाला',
-    'achievement.dedicated.learner.desc': '7 लगातार दिनों तक सीखें',
-    'achievement.unstoppable.learner.title': '⚡ अदम्य सीखने वाला',
-    'achievement.unstoppable.learner.desc': '30 लगातार दिनों तक सीखें',
-    'achievement.certificate.earner.title': '🏆 प्रमाणपत्र अर्जक',
-    'achievement.certificate.earner.desc': 'अपना पहला प्रमाणपत्र अर्जित करें',
-    'achievement.eco.warrior.title': '🛡️ पर्यावरण योद्धा',
-    'achievement.eco.warrior.desc': 'सभी पर्यावरणीय मॉड्यूल पूरे करें',
-    'achievement.point.collector.title': '💎 अंक संग्राहक',
-    'achievement.point.collector.desc': '1000 अंक अर्जित करें',
     
     // SDG Content
     'sdg.title.waste': '♻ अपशिष्ट प्रबंधन - सतत विकास लक्ष्य',
@@ -2125,14 +1984,30 @@ const translations = {
 };
 
 export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [language, setLanguage] = useState<Language>('en');
+  const [language, setLanguage] = useState<Language>(() => {
+    const savedLanguage = localStorage.getItem('language') as Language;
+    return savedLanguage || 'en';
+  });
 
   const toggleLanguage = () => {
-    setLanguage(prev => prev === 'en' ? 'hi' : 'en');
+    setLanguage(prev => {
+      const newLanguage = prev === 'en' ? 'hi' : 'en';
+      console.log('🔄 Language toggle: From', prev, 'to', newLanguage);
+      localStorage.setItem('language', newLanguage);
+      return newLanguage;
+    });
   };
 
   const t = (key: string): string => {
-    return translations[language][key as keyof typeof translations[typeof language]] || key;
+    try {
+      const translation = translations[language][key];
+      // Debug: Log all translation attempts
+      console.log(`🔍 Translation: Language=${language}, Key=${key}, Result=${translation || key}`);
+      return translation || key;
+    } catch (error) {
+      console.error('❌ Translation error:', error, 'Language:', language, 'Key:', key);
+      return key;
+    }
   };
 
   return (

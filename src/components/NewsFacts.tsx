@@ -84,7 +84,7 @@ const NewsFacts: React.FC = () => {
   };
 
   return (
-    <div className="w-72 bg-gradient-to-br from-green-50 via-blue-50 to-purple-50 rounded-xl shadow-xl border border-green-200 overflow-hidden relative hover:shadow-2xl transition-all duration-300">
+    <div className="w-full bg-gradient-to-br from-green-50 via-blue-50 to-purple-50 rounded-xl shadow-xl border border-green-200 overflow-hidden relative hover:shadow-2xl transition-all duration-300">
       {/* Decorative elements */}
       <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-yellow-200 to-orange-200 rounded-full -translate-y-10 translate-x-10 opacity-30"></div>
       <div className="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-pink-200 to-purple-200 rounded-full translate-y-8 -translate-x-8 opacity-30"></div>

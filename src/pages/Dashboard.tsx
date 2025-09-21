@@ -13,6 +13,7 @@ import { useAchievements } from "@/hooks/useAchievements";
 import { AchievementStats } from "@/components/AchievementStats";
 import { AchievementNotification } from "@/components/AchievementNotification";
 import { DecorativeDivider, EcoBackground } from "@/components/DecorativeElements";
+import CustomButton from "@/components/CustomButton";
 import { useEffect, useState } from "react";
 
 // Import lesson images
@@ -273,10 +274,9 @@ export default function Dashboard() {
                     <span>20 {t('advanced.common.seconds')}</span>
                   </div>
                 </div>
-                <Button className="w-full bg-blue-50 text-blue-800 hover:opacity-90">
+                <CustomButton>
                   {t('advanced.common.start.learning')}
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
+                </CustomButton>
               </CardContent>
             </Card>
 
@@ -303,10 +303,9 @@ export default function Dashboard() {
                     <span>20 {t('advanced.common.seconds')}</span>
                   </div>
                 </div>
-                <Button className="w-full bg-orange-50 text-orange-800 hover:opacity-90">
+                <CustomButton>
                   {t('advanced.common.start.learning')}
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
+                </CustomButton>
               </CardContent>
             </Card>
 
@@ -333,10 +332,9 @@ export default function Dashboard() {
                     <span>20 {t('advanced.common.seconds')}</span>
                   </div>
                 </div>
-                <Button className="w-full bg-green-50 text-green-800 hover:opacity-90">
+                <CustomButton>
                   {t('advanced.common.start.learning')}
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
+                </CustomButton>
               </CardContent>
             </Card>
           </div>
@@ -462,13 +460,9 @@ export default function Dashboard() {
                       <Clock className="w-5 h-5 text-blue-500" />
                       <span>{lesson.duration}</span>
                     </div>
-                    <Button
-                      size="lg"
-                      className="kid-button bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-bold shadow-lg"
-                    >
-                      <PlayCircle className="w-5 h-5 mr-2" />
+                    <CustomButton>
                       {lesson.completed ? t('lesson.review') : lesson.progress > 0 ? t('lesson.continue') : t('lesson.start')}
-                    </Button>
+                    </CustomButton>
                   </div>
                   
                   {lesson.progress > 0 && (
@@ -514,7 +508,7 @@ export default function Dashboard() {
           </div>
 
           {/* News & Facts Sidebar */}
-          <div className="hidden lg:block w-72 flex-shrink-0">
+          <div className="hidden lg:block w-96 flex-shrink-0">
             <div className="sticky top-8">
               <NewsFacts />
             </div>

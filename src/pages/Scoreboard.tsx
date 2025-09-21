@@ -82,7 +82,7 @@ const getWeeklyProgress = (t: (key: string) => string) => [
 
 export default function Scoreboard() {
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const achievements = getAchievements(t);
   const weeklyProgress = getWeeklyProgress(t);
   
@@ -91,7 +91,7 @@ export default function Scoreboard() {
   const completionRate = (earnedAchievements / achievements.length) * 100;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div key={language} className="min-h-screen bg-background">
       <Navigation />
       
       <main className="container mx-auto px-4 py-8">

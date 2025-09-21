@@ -12,6 +12,12 @@ export function Navigation() {
   const { language, toggleLanguage, t } = useLanguage();
   const { profile, signOut } = useUser();
 
+  // Debug: Log navigation translations
+  console.log('🚀 Navigation - Current language:', language);
+  console.log('🚀 Navigation - Dashboard translation:', t('nav.dashboard'));
+  console.log('🚀 Navigation - Real Time Tasks translation:', t('nav.realtime.tasks'));
+  console.log('🚀 Navigation - Test simple key:', t('test.key'));
+
   const handleLogout = () => {
     signOut();
     toast({
@@ -22,7 +28,7 @@ export function Navigation() {
   };
 
   return (
-    <nav className="bg-white shadow-lg border-b border-gray-200 sticky top-0 z-40">
+    <nav key={language} className="bg-white shadow-lg border-b border-gray-200 sticky top-0 z-40">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
                   {/* Logo and Brand */}
@@ -32,6 +38,8 @@ export function Navigation() {
                         <span className="text-white font-bold text-sm">🌱</span>
                       </div>
                       <span className="text-xl font-bold text-gray-900">EcoLearn</span>
+                      <span className="text-xs text-red-500 ml-2">[{language}]</span>
+                      <span className="text-xs text-blue-500 ml-1">({t('nav.dashboard')})</span>
                     </div>
                     
                   </div>
