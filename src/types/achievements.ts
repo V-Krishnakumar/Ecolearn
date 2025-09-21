@@ -29,6 +29,12 @@ export interface AchievementStats {
   totalAchievements: number;
   unlockedAchievements: number;
   totalPoints: number;
-  achievementsByCategory: Record<string, number>;
-  recentAchievements: Achievement[];
+  achievementsByCategory?: Record<string, number>;
+  achievementsByRarity?: {
+    common: number;
+    rare: number;
+    epic: number;
+    legendary: number;
+  };
+  recentAchievements?: Achievement[];
 }

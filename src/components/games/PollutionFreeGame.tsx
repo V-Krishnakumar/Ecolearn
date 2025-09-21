@@ -193,7 +193,7 @@ function PollutionGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number
     const matchedCount = gameSources.filter(s => s.matched).length;
     const progress = (matchedCount / pollutionSources.length) * 100;
     onScoreUpdate(score, progress);
-  }, []);
+  }, [gameSources, score, onScoreUpdate]);
 
   return (
     <div className="space-y-6">

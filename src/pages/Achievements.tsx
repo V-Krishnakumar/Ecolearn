@@ -18,13 +18,14 @@ import {
   BookOpen,
   Leaf
 } from "lucide-react";
-import { useAchievements } from "@/hooks/useAchievements";
+import { useSupabaseAchievements } from "@/hooks/useSupabaseAchievements";
 import { AchievementCard } from "@/components/AchievementCard";
 import { AchievementStats } from "@/components/AchievementStats";
 import { AchievementNotification } from "@/components/AchievementNotification";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUser } from "@/contexts/UserContext";
 import { Navigation } from "@/components/Navigation";
+import { runSeedAchievements } from "@/lib/supabase/seed-achievements";
 
 export default function Achievements() {
   const {
@@ -32,12 +33,10 @@ export default function Achievements() {
     newAchievements,
     stats,
     loading,
-    getAchievementsByCategory,
     getAchievementsByRarity,
     getUnlockedAchievements,
-    getLockedAchievements,
     dismissNotification
-  } = useAchievements();
+  } = useSupabaseAchievements();
   
   const { t } = useLanguage();
   const { user } = useUser();
@@ -46,11 +45,29 @@ export default function Achievements() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedRarity, setSelectedRarity] = useState("all");
   const [showOnlyUnlocked, setShowOnlyUnlocked] = useState(false);
+  const [seeding, setSeeding] = useState(false);
+
+  const handleSeedAchievements = async () => {
+    setSeeding(true);
+    try {
+      const result = await runSeedAchievements();
+      if (result.success) {
+        // Reload achievements after seeding
+        window.location.reload();
+      } else {
+        console.error('Failed to seed achievements:', result.error);
+      }
+    } catch (error) {
+      console.error('Error seeding achievements:', error);
+    } finally {
+      setSeeding(false);
+    }
+  };
 
   // Filter achievements based on search and filters
   const filteredAchievements = achievements.filter(achievement => {
-    const matchesSearch = achievement.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         achievement.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = achievement.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         achievement.description?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === "all" || achievement.category === selectedCategory;
     const matchesRarity = selectedRarity === "all" || achievement.rarity === selectedRarity;
     const matchesUnlocked = !showOnlyUnlocked || !!achievement.unlockedAt;
@@ -130,6 +147,22 @@ export default function Achievements() {
         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
           {t('achievements.subtitle')}
         </p>
+        
+        {/* Debug Info and Seed Button for Testing */}
+        <div className="mt-4 space-y-2">
+          <div className="text-sm text-gray-500">
+            Debug: {achievements.length} achievements loaded
+          </div>
+          {achievements.length === 0 && (
+            <Button 
+              onClick={handleSeedAchievements}
+              disabled={seeding}
+              className="bg-blue-600 hover:bg-blue-700"
+            >
+              {seeding ? 'Seeding...' : 'Seed Sample Achievements'}
+            </Button>
+          )}
+        </div>
       </div>
 
       {/* Stats Overview */}
@@ -278,19 +311,28 @@ export default function Achievements() {
           </Card>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredAchievements.map((achievement) => (
-              <AchievementCard
-                key={achievement.id}
-                achievement={achievement}
-                showProgress={true}
-              />
-            ))}
+            {filteredAchievements.map((achievement) => {
+              // Find if this achievement is unlocked for the current user
+              const studentAchievement = getUnlockedAchievements().find(sa => sa.achievement_id === achievement.id);
+              const isUnlocked = !!studentAchievement?.is_unlocked;
+              const progress = studentAchievement?.progress || 0;
+              
+              return (
+                <AchievementCard
+                  key={achievement.id}
+                  achievement={achievement}
+                  showProgress={true}
+                  isUnlocked={isUnlocked}
+                  progress={progress}
+                />
+              );
+            })}
           </div>
         )}
       </div>
 
       {/* Achievement Notifications */}
-      {newAchievements.map((achievement) => (
+      {newAchievements && newAchievements.map((achievement) => (
         <AchievementNotification
           key={achievement.id}
           achievement={achievement}

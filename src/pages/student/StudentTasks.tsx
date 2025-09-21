@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import StudentNavigation from "@/components/student/StudentNavigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,6 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Camera, Upload, TreePine, Users, Award, Clock, CheckCircle } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useUser } from "@/contexts/UserContext";
+import { TaskService, RealTimeTask, TaskSubmission } from "@/lib/supabase/tasks";
 
 const getTasksTemplate = (t: (key: string) => string) => [
   {
@@ -79,38 +81,140 @@ const getTasksTemplate = (t: (key: string) => string) => [
 export default function StudentTasks() {
   const navigate = useNavigate();
   const { t } = useLanguage();
-  const tasks = getTasksTemplate(t);
+  const { user } = useUser();
+  const [tasks, setTasks] = useState<RealTimeTask[]>([]);
+  const [submissions, setSubmissions] = useState<TaskSubmission[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Load tasks and submissions from Supabase
+  useEffect(() => {
+    const loadData = async () => {
+      if (user) {
+        try {
+          setLoading(true);
+          
+          // Load tasks
+          const { data: tasksData, error: tasksError } = await TaskService.getTasks();
+          if (tasksError) {
+            console.error('Error loading tasks:', tasksError);
+            setTasks(getTasksTemplate(t));
+          } else {
+            setTasks(tasksData || []);
+          }
+
+          // Load user submissions
+          const { data: submissionsData, error: submissionsError } = await TaskService.getStudentSubmissions(user.id);
+          if (submissionsError) {
+            console.error('Error loading submissions:', submissionsError);
+          } else {
+            setSubmissions(submissionsData || []);
+          }
+        } catch (error) {
+          console.error('Error loading data:', error);
+          setTasks(getTasksTemplate(t));
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        setTasks(getTasksTemplate(t));
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, [user, t]);
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case t('student.tasks.difficulty.beginner'): return 'bg-green-100 text-green-800';
-      case t('student.tasks.difficulty.intermediate'): return 'bg-yellow-100 text-yellow-800';
-      case t('student.tasks.difficulty.advanced'): return 'bg-red-100 text-red-800';
+      case 'beginner': return 'bg-green-100 text-green-800';
+      case 'intermediate': return 'bg-yellow-100 text-yellow-800';
+      case 'advanced': return 'bg-red-100 text-red-800';
       default: return 'bg-gray-100 text-gray-800';
     }
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'active': return 'bg-green-100 text-green-800';
-      case 'coming-soon': return 'bg-blue-100 text-blue-800';
-      case 'completed': return 'bg-gray-100 text-gray-800';
-      default: return 'bg-gray-100 text-gray-800';
+  const getStatusColor = (task: RealTimeTask) => {
+    const submission = submissions.find(s => s.task_id === task.id);
+    if (submission) {
+      switch (submission.status) {
+        case 'approved': return 'bg-green-100 text-green-800';
+        case 'pending': return 'bg-yellow-100 text-yellow-800';
+        case 'rejected': return 'bg-red-100 text-red-800';
+        default: return 'bg-gray-100 text-gray-800';
+      }
     }
+    
+    // Check if task is active based on dates
+    const now = new Date();
+    const startDate = task.start_date ? new Date(task.start_date) : null;
+    const endDate = task.end_date ? new Date(task.end_date) : null;
+    
+    if (startDate && now < startDate) return 'bg-blue-100 text-blue-800';
+    if (endDate && now > endDate) return 'bg-gray-100 text-gray-800';
+    return 'bg-green-100 text-green-800';
   };
 
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case 'active': return t('student.tasks.status.available.now');
-      case 'coming-soon': return t('student.tasks.status.coming.soon');
-      case 'completed': return t('student.tasks.status.completed');
-      default: return t('student.tasks.status.unknown');
+  const getStatusText = (task: RealTimeTask) => {
+    const submission = submissions.find(s => s.task_id === task.id);
+    if (submission) {
+      switch (submission.status) {
+        case 'approved': return 'Approved';
+        case 'pending': return 'Under Review';
+        case 'rejected': return 'Needs Revision';
+        default: return 'Submitted';
+      }
     }
+    
+    // Check if task is active based on dates
+    const now = new Date();
+    const startDate = task.start_date ? new Date(task.start_date) : null;
+    const endDate = task.end_date ? new Date(task.end_date) : null;
+    
+    if (startDate && now < startDate) return 'Coming Soon';
+    if (endDate && now > endDate) return 'Expired';
+    return 'Active';
   };
 
-  const activeTasks = tasks.filter(task => task.status === 'active');
-  const completedTasks = tasks.filter(task => task.status === 'completed');
-  const upcomingTasks = tasks.filter(task => task.status === 'coming-soon');
+  const getStatusIcon = (task: RealTimeTask) => {
+    const submission = submissions.find(s => s.task_id === task.id);
+    if (submission) {
+      switch (submission.status) {
+        case 'approved': return <CheckCircle className="w-4 h-4" />;
+        case 'pending': return <Clock className="w-4 h-4" />;
+        case 'rejected': return <Clock className="w-4 h-4" />;
+        default: return <Clock className="w-4 h-4" />;
+      }
+    }
+    return <Clock className="w-4 h-4" />;
+  };
+
+  const getTaskStats = (task: RealTimeTask) => {
+    const submission = submissions.find(s => s.task_id === task.id);
+    return {
+      participants: 0, // This would need to be calculated from submissions
+      completed: submission ? 1 : 0,
+      timeEstimate: `${task.time_estimate_minutes} min`
+    };
+  };
+
+  // Filter tasks based on Supabase data
+  const activeTasks = tasks.filter(task => {
+    const now = new Date();
+    const startDate = task.start_date ? new Date(task.start_date) : null;
+    const endDate = task.end_date ? new Date(task.end_date) : null;
+    return task.is_active && (!startDate || now >= startDate) && (!endDate || now <= endDate);
+  });
+  
+  const completedTasks = tasks.filter(task => {
+    const submission = submissions.find(s => s.task_id === task.id);
+    return submission && submission.status === 'approved';
+  });
+  
+  const upcomingTasks = tasks.filter(task => {
+    const now = new Date();
+    const startDate = task.start_date ? new Date(task.start_date) : null;
+    return task.is_active && startDate && now < startDate;
+  });
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
@@ -182,8 +286,10 @@ export default function StudentTasks() {
           <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('student.tasks.available.now')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {activeTasks.map((task) => {
-              const Icon = task.icon;
-              const completionRate = (task.completed / task.participants) * 100;
+              // Calculate completion rate based on submissions
+              const taskSubmissions = submissions.filter(s => s.task_id === task.id);
+              const approvedSubmissions = taskSubmissions.filter(s => s.status === 'approved').length;
+              const completionRate = task.max_participants ? (approvedSubmissions / task.max_participants) * 100 : 0;
               
               return (
                 <Card key={task.id} className="bg-white shadow-lg border-0 hover:shadow-xl transition-shadow">
@@ -192,7 +298,7 @@ export default function StudentTasks() {
                       <div className="flex items-start justify-between">
                         <div className="flex items-center space-x-3">
                           <div className="p-3 bg-green-100 rounded-full">
-                            <Icon className="h-6 w-6 text-green-600" />
+                            {task.icon && <task.icon className="h-6 w-6 text-green-600" />}
                           </div>
                           <div>
                             <h3 className="text-lg font-semibold text-gray-900">{task.title}</h3>
@@ -211,11 +317,11 @@ export default function StudentTasks() {
                           <div className="flex items-center space-x-4">
                             <div className="flex items-center space-x-1">
                               <Clock className="h-4 w-4" />
-                              <span>{task.timeEstimate}</span>
+                              <span>{task.time_estimate_minutes} min</span>
                             </div>
                             <div className="flex items-center space-x-1">
                               <Users className="h-4 w-4" />
-                              <span>{task.participants} {t('student.tasks.participants')}</span>
+                              <span>{taskSubmissions.length} {t('student.tasks.participants')}</span>
                             </div>
                           </div>
                           <div className="flex items-center space-x-1">
@@ -232,13 +338,45 @@ export default function StudentTasks() {
                           <Progress value={completionRate} className="h-2" />
                         </div>
 
-                        <Button
-                          onClick={() => navigate(`/afforestation-task`)}
-                          className="w-full bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white"
-                        >
-                          <Camera className="h-4 w-4 mr-2" />
-                          {t('student.tasks.start.task')}
-                        </Button>
+                        {(() => {
+                          const submission = submissions.find(s => s.task_id === task.id);
+                          if (submission) {
+                            return (
+                              <div className="space-y-2">
+                                <div className="flex items-center justify-between text-sm">
+                                  <span className="text-gray-600">Status:</span>
+                                  <Badge 
+                                    variant={submission.status === 'approved' ? 'default' : 'secondary'}
+                                    className={submission.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : ''}
+                                  >
+                                    {submission.status === 'pending' ? 'Under Review' : submission.status}
+                                  </Badge>
+                                </div>
+                                {submission.status === 'pending' && (
+                                  <div className="text-xs text-yellow-700 bg-yellow-50 p-2 rounded">
+                                    ⏳ Awaiting approval - points will be awarded once reviewed
+                                  </div>
+                                )}
+                                <Button
+                                  onClick={() => navigate(`/afforestation-task`)}
+                                  className="w-full bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white"
+                                >
+                                  <CheckCircle className="h-4 w-4 mr-2" />
+                                  View Submission
+                                </Button>
+                              </div>
+                            );
+                          }
+                          return (
+                            <Button
+                              onClick={() => navigate(`/afforestation-task`)}
+                              className="w-full bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white"
+                            >
+                              <Camera className="h-4 w-4 mr-2" />
+                              {t('student.tasks.start.task')}
+                            </Button>
+                          );
+                        })()}
                       </div>
                     </div>
                   </CardContent>
@@ -253,7 +391,6 @@ export default function StudentTasks() {
           <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('student.tasks.status.coming.soon')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {upcomingTasks.map((task) => {
-              const Icon = task.icon;
               
               return (
                 <Card key={task.id} className="bg-white shadow-lg border-0 opacity-75">
@@ -262,7 +399,7 @@ export default function StudentTasks() {
                       <div className="flex items-start justify-between">
                         <div className="flex items-center space-x-3">
                           <div className="p-3 bg-gray-100 rounded-full">
-                            <Icon className="h-6 w-6 text-gray-600" />
+                            {task.icon && <task.icon className="h-6 w-6 text-gray-600" />}
                           </div>
                           <div>
                             <h3 className="text-lg font-semibold text-gray-900">{task.title}</h3>
@@ -280,11 +417,11 @@ export default function StudentTasks() {
                         <div className="flex items-center space-x-4">
                           <div className="flex items-center space-x-1">
                             <Clock className="h-4 w-4" />
-                            <span>{task.timeEstimate}</span>
+                            <span>{task.time_estimate_minutes} min</span>
                           </div>
                           <div className="flex items-center space-x-1">
                             <Users className="h-4 w-4" />
-                            <span>{task.participants} interested</span>
+                            <span>{task.max_participants || 'Unlimited'} interested</span>
                           </div>
                         </div>
                         <div className="flex items-center space-x-1">

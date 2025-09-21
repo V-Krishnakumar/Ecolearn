@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
@@ -15,21 +15,60 @@ import {
   X,
   MapPin,
   Calendar,
-  Users
+  Users,
+  Trash2
 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useToast } from "@/hooks/use-toast";
+import { useUser } from "@/contexts/UserContext";
+import { TaskService } from "@/lib/supabase/tasks";
+import { StudentTaskSubmission } from "@/lib/supabase/types";
 
 export default function AfforestationTask() {
   const navigate = useNavigate();
   const { t } = useLanguage();
   const { toast } = useToast();
+  const { user } = useUser();
   const fileInputRef = useRef<HTMLInputElement>(null);
   
   const [uploadedImages, setUploadedImages] = useState<File[]>([]);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
   const [taskCompleted, setTaskCompleted] = useState(false);
+  const [existingSubmission, setExistingSubmission] = useState<StudentTaskSubmission | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  // Load existing submission on component mount
+  useEffect(() => {
+    const loadExistingSubmission = async () => {
+      if (!user) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        const { data: submission } = await TaskService.getTaskSubmission(user.id, 1); // Task ID 1 for afforestation
+        setExistingSubmission(submission);
+        
+        if (submission) {
+          setTaskCompleted(true);
+          // Load existing images if any
+          if (submission.submission_data?.file_url) {
+            // We can't load the actual file, but we can show that there's a submission
+            setUploadedImages([new File([], 'existing-submission.jpg', { type: 'image/jpeg' })]);
+          }
+        }
+      } catch (error) {
+        console.error('Error loading existing submission:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadExistingSubmission();
+  }, [user]);
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);
@@ -79,7 +118,7 @@ export default function AfforestationTask() {
     });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (uploadedImages.length === 0) {
       toast({
         title: t('upload.error.title'),
@@ -89,12 +128,122 @@ export default function AfforestationTask() {
       return;
     }
 
-    simulateUpload();
+    if (!user) {
+      toast({
+        title: t('upload.error.title'),
+        description: 'Please log in to submit a task',
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsUploading(true);
+    setUploadProgress(0);
+
+    try {
+      // Submit the first image as the task submission
+      const firstImage = uploadedImages[0];
+      const { data, error } = await TaskService.submitTask(
+        user.id,
+        1, // Task ID for afforestation task
+        'image',
+        {
+          text_content: 'Tree planting activity completed',
+          description: 'Planted a tree and documented the process'
+        },
+        firstImage
+      );
+
+      if (error) {
+        console.error('Error submitting task:', error);
+        toast({
+          title: t('upload.error.title'),
+          description: 'Failed to submit task. Please try again.',
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Simulate upload progress
+      for (let i = 0; i <= 100; i += 10) {
+        setUploadProgress(i);
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+
+      setTaskCompleted(true);
+      setExistingSubmission(data);
+      
+      toast({
+        title: t('upload.success.title'),
+        description: 'Task submitted successfully! Points awarded.',
+      });
+
+      // Dispatch points earned event
+      window.dispatchEvent(new CustomEvent('pointsEarned', { 
+        detail: { points: 50, activity: 'Task Completed' } 
+      }));
+    } catch (error) {
+      console.error('Error submitting task:', error);
+      toast({
+        title: t('upload.error.title'),
+        description: 'An error occurred while submitting the task.',
+        variant: "destructive",
+      });
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleDeleteSubmission = async () => {
+    if (!user || !existingSubmission) return;
+
+    setIsDeleting(true);
+    try {
+      const result = await TaskService.deleteSubmission(user.id, 1);
+      
+      if (result.success) {
+        setExistingSubmission(null);
+        setTaskCompleted(false);
+        setUploadedImages([]);
+        
+        toast({
+          title: "Submission Deleted",
+          description: "Your task submission has been deleted successfully.",
+        });
+      } else {
+        throw new Error(result.error?.message || 'Delete failed');
+      }
+    } catch (error) {
+      console.error('Delete error:', error);
+      toast({
+        title: "Delete Failed",
+        description: error instanceof Error ? error.message : "Failed to delete submission",
+        variant: "destructive",
+      });
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   const getImagePreview = (file: File) => {
     return URL.createObjectURL(file);
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navigation />
+        <main className="container mx-auto px-4 py-8">
+          <div className="flex items-center justify-center min-h-[400px]">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
+              <p className="text-gray-600">Loading task status...</p>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -277,9 +426,53 @@ export default function AfforestationTask() {
                   <h3 className="text-2xl font-bold text-foreground mb-2">
                     {t('task.completed.title')}
                   </h3>
-                  <p className="text-muted-foreground mb-6">
+                  <p className="text-muted-foreground mb-4">
                     {t('task.completed.description')}
                   </p>
+                  
+                  {/* Submission Details */}
+                  {existingSubmission && (
+                    <div className="bg-gray-50 rounded-lg p-4 mb-6 text-left">
+                      <h4 className="font-semibold text-gray-900 mb-2">Submission Details:</h4>
+                      <div className="space-y-2 text-sm text-gray-600">
+                        <div className="flex justify-between">
+                          <span>Status:</span>
+                          <Badge 
+                            variant={existingSubmission.status === 'approved' ? 'default' : 'secondary'}
+                            className={existingSubmission.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : ''}
+                          >
+                            {existingSubmission.status === 'pending' ? 'Under Review' : existingSubmission.status}
+                          </Badge>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Submitted:</span>
+                          <span>{new Date(existingSubmission.submitted_at).toLocaleDateString()}</span>
+                        </div>
+                        {existingSubmission.status === 'pending' && (
+                          <div className="mt-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                            <div className="flex items-start space-x-2">
+                              <div className="w-5 h-5 bg-yellow-400 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <span className="text-white text-xs">⏳</span>
+                              </div>
+                              <div>
+                                <p className="text-yellow-800 font-medium text-sm">Submission Under Review</p>
+                                <p className="text-yellow-700 text-xs mt-1">
+                                  Your submission is being reviewed by our team. You'll receive points once it's approved!
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        {existingSubmission.points_earned > 0 && (
+                          <div className="flex justify-between">
+                            <span>Points Earned:</span>
+                            <span className="font-semibold text-green-600">{existingSubmission.points_earned}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
                     <Button
                       onClick={() => navigate('/realtime-tasks')}
@@ -292,6 +485,15 @@ export default function AfforestationTask() {
                       className="bg-gradient-nature hover:opacity-90"
                     >
                       {t('task.view.achievements')}
+                    </Button>
+                    <Button
+                      onClick={handleDeleteSubmission}
+                      disabled={isDeleting}
+                      variant="destructive"
+                      className="bg-red-600 hover:bg-red-700"
+                    >
+                      <Trash2 className="w-4 h-4 mr-2" />
+                      {isDeleting ? 'Deleting...' : 'Delete Submission'}
                     </Button>
                   </div>
                 </div>

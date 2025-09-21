@@ -97,6 +97,29 @@ export class LocalProgress {
   }
 
   /**
+   * Clear lesson progress from local storage
+   */
+  static clearLessonProgress(userId: string, lessonId: number): void {
+    const progress = this.getUserProgress(userId);
+    if (progress.lessons[lessonId]) {
+      delete progress.lessons[lessonId];
+      this.saveUserProgress(userId, progress);
+    }
+  }
+
+  /**
+   * Clear all progress for a user (debug function)
+   */
+  static clearAllProgress(userId: string): void {
+    try {
+      localStorage.removeItem(`${this.STORAGE_KEY}_${userId}`);
+      console.log('Cleared all local storage for user:', userId);
+    } catch (error) {
+      console.error('Error clearing local storage:', error);
+    }
+  }
+
+  /**
    * Get overall progress percentage
    */
   static getOverallProgress(userId: string): number {
@@ -166,7 +189,7 @@ export class LocalProgress {
   /**
    * Create empty lesson progress
    */
-  private static createEmptyLessonProgress(lessonId: number): LessonProgress {
+  static createEmptyLessonProgress(lessonId: number): LessonProgress {
     return {
       lessonId,
       videoProgress: 0,

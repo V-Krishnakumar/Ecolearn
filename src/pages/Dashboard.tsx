@@ -8,8 +8,9 @@ import { PlayCircle, Clock, Trophy, Star, FileText, GraduationCap, Thermometer, 
 import NewsFacts from "@/components/NewsFacts";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUser } from "@/contexts/UserContext";
-import { useProgress } from "@/lib/localProgress";
-import { useAchievements } from "@/hooks/useAchievements";
+import { useSupabaseProgress } from "@/hooks/useSupabaseProgress";
+import { useSupabaseAchievements } from "@/hooks/useSupabaseAchievements";
+import { LessonService } from "@/lib/supabase/lessons";
 import { AchievementStats } from "@/components/AchievementStats";
 import { AchievementNotification } from "@/components/AchievementNotification";
 import { DecorativeDivider, EcoBackground } from "@/components/DecorativeElements";
@@ -79,8 +80,20 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const { t, language } = useLanguage();
   const { profile } = useUser();
-  const { getDashboardData } = useProgress();
-  const { stats, newAchievements, dismissNotification } = useAchievements();
+  // Get dashboard data from local progress
+  const getDashboardData = () => {
+    if (!profile?.id) return null;
+    // This is a simplified version - in a real app you'd want to use Supabase data
+    return {
+      overallProgress: 0,
+      completedLessons: 0,
+      totalLessons: 6,
+      totalTime: 0,
+      totalPoints: 0,
+      lessons: []
+    };
+  };
+  const { stats, newAchievements, dismissNotification } = useSupabaseAchievements();
   const [dashboardData, setDashboardData] = useState<any>(null);
   const [lessons, setLessons] = useState<any[]>([]);
 
@@ -117,9 +130,11 @@ export default function Dashboard() {
     }
   }, [t, getDashboardData]);
 
+
   const completedLessons = dashboardData?.completedLessons || 0;
   const totalProgress = dashboardData?.overallProgress || 0;
   const totalTime = dashboardData?.totalTime || 0;
+
 
   return (
     <EcoBackground key={language} className="min-h-screen">

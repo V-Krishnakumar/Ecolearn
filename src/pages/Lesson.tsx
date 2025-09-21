@@ -9,10 +9,12 @@ import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Play, Pause, RotateCcw, ArrowRight, Clock, BookOpen } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useProgress } from "@/lib/localProgress";
-import { useAchievements } from "@/hooks/useAchievements";
+import { useSupabaseProgress } from "@/hooks/useSupabaseProgress";
+import { useSupabaseAchievements } from "@/hooks/useSupabaseAchievements";
+import { useNotifications } from "@/contexts/NotificationContext";
 import VideoPlayer from "@/components/VideoPlayer";
 import { AchievementNotification } from "@/components/AchievementNotification";
+import { PointsNotification } from "@/components/PointsNotification";
 
 // Import games
 import { WasteManagementGame } from "@/components/games/WasteManagementGame";
@@ -217,10 +219,11 @@ export default function Lesson() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { t } = useLanguage();
-  const { updateLessonProgress, getLessonProgress } = useProgress();
-  const { updateProgress, newAchievements, dismissNotification } = useAchievements();
+  const { progress: lessonProgress, updateVideo, updateGame, updateQuiz, completeLesson, totalProgress } = useSupabaseProgress(parseInt(id || '0'));
+  const { newAchievements, dismissNotification } = useSupabaseAchievements();
+  const { showPointsNotification } = useNotifications();
   const [progress, setProgress] = useState(0);
-  const [lessonProgress, setLessonProgress] = useState<any>(null);
+  const [pointsNotification, setPointsNotification] = useState<{ points: number; activity: string } | null>(null);
 
   const lessonsData = getLessonsData(t);
   const lesson = id
@@ -228,38 +231,52 @@ export default function Lesson() {
     : null;
 
   useEffect(() => {
-    if (id) {
-      const progressData = getLessonProgress(parseInt(id));
-      setLessonProgress(progressData);
-      setProgress(progressData.videoProgress);
+    if (lessonProgress) {
+      setProgress(lessonProgress.video_progress || 0);
     }
-  }, [id, getLessonProgress]);
+  }, [lessonProgress]);
 
-  const handleVideoProgress = (videoProgress: number) => {
+  // Listen for points earned events
+  useEffect(() => {
+    const handlePointsEarned = (event: CustomEvent) => {
+      const { points, activity } = event.detail;
+      setPointsNotification({ points, activity });
+      showPointsNotification(points, activity);
+    };
+
+    window.addEventListener('pointsEarned', handlePointsEarned as EventListener);
+    
+    return () => {
+      window.removeEventListener('pointsEarned', handlePointsEarned as EventListener);
+    };
+  }, [showPointsNotification]);
+
+  const handleVideoProgress = async (videoProgress: number) => {
     setProgress(videoProgress);
-    if (id) {
-      updateLessonProgress(parseInt(id), { videoProgress });
-    }
+    await updateVideo(videoProgress, videoProgress >= 100);
   };
 
-  const handleVideoComplete = () => {
-    if (id) {
-      updateLessonProgress(parseInt(id), { videoProgress: 100 });
-      // Update achievement progress
-      updateProgress('video_watched', 1);
-      updateProgress('lessons_completed', 1);
-    }
+  const handleVideoComplete = async () => {
+    await updateVideo(100, true);
+    
+    // Show points notification for video completion
+    const event = new CustomEvent('pointsEarned', {
+      detail: { points: 25, activity: 'Video Watched' }
+    });
+    window.dispatchEvent(event);
   };
 
   const handleStartQuiz = () => navigate(`/quiz/${id}`);
 
-  const handleGameComplete = () => {
+  const handleGameComplete = async () => {
     console.log("Game completed! Quiz unlocked!");
-    if (id) {
-      updateLessonProgress(parseInt(id), { gameCompleted: true });
-      // Update achievement progress
-      updateProgress('games_won', 1);
-    }
+    await updateGame(true);
+    
+    // Show points notification for game completion
+    const event = new CustomEvent('pointsEarned', {
+      detail: { points: 30, activity: 'Game Completed' }
+    });
+    window.dispatchEvent(event);
   };
 
   const renderGame = () => {
@@ -542,6 +559,15 @@ export default function Lesson() {
           onClose={() => dismissNotification(achievement.id)}
         />
       ))}
+
+      {/* Points Notifications */}
+      {pointsNotification && (
+        <PointsNotification
+          points={pointsNotification.points}
+          activity={pointsNotification.activity}
+          onClose={() => setPointsNotification(null)}
+        />
+      )}
     </div>
   );
 }

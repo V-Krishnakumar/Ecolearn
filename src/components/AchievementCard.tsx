@@ -2,21 +2,23 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { CheckCircle, Lock, Star } from "lucide-react";
-import { Achievement } from "@/types/achievements";
+import { Achievement } from "@/lib/supabase/types";
 
 interface AchievementCardProps {
   achievement: Achievement;
   onClick?: () => void;
   showProgress?: boolean;
+  isUnlocked?: boolean;
+  progress?: number;
 }
 
 export function AchievementCard({ 
   achievement, 
   onClick, 
-  showProgress = true 
+  showProgress = true,
+  isUnlocked = false,
+  progress = 0
 }: AchievementCardProps) {
-  const isUnlocked = !!achievement.unlockedAt;
-  const progress = achievement.progress;
 
   const getRarityColor = (rarity: string) => {
     switch (rarity) {
@@ -52,7 +54,7 @@ export function AchievementCard({
             </div>
             <div className="flex-1">
               <CardTitle className={`text-lg ${isUnlocked ? 'text-green-800' : 'text-gray-700'}`}>
-                {achievement.title}
+                {achievement.name}
               </CardTitle>
               <p className={`text-sm ${isUnlocked ? 'text-green-600' : 'text-gray-500'}`}>
                 {achievement.description}

@@ -278,7 +278,7 @@ function RenewableGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number
     updateBuildingPower(totalEnergy);
     const progress = (totalEnergy / totalNeeded) * 100;
     onScoreUpdate(score, Math.min(100, progress));
-  }, []);
+  }, [totalEnergy, score, onScoreUpdate]);
 
   return (
     <div className="space-y-6">

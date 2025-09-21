@@ -8,8 +8,8 @@ import { Badge } from "@/components/ui/badge";
 import { CheckCircle, XCircle, ArrowRight, RotateCcw, Trophy } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useProgress } from "@/lib/localProgress";
-import { useAchievements } from "@/hooks/useAchievements";
+import { useSupabaseProgress } from "@/hooks/useSupabaseProgress";
+import { useSupabaseAchievements } from "@/hooks/useSupabaseAchievements";
 import { AchievementNotification } from "@/components/AchievementNotification";
 
 const getQuizData = (t: (key: string) => string) => ({
@@ -248,8 +248,8 @@ export default function Quiz() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { t } = useLanguage();
-  const { updateLessonProgress } = useProgress();
-  const { updateProgress, newAchievements, dismissNotification } = useAchievements();
+  const { updateQuiz, completeLesson } = useSupabaseProgress(parseInt(id || '0'));
+  const { newAchievements, dismissNotification } = useSupabaseAchievements();
   
   const quizData = getQuizData(t);
   const quiz = id ? quizData[parseInt(id) as keyof typeof quizData] : null;
@@ -299,7 +299,7 @@ export default function Quiz() {
     });
   };
 
-  const handleNextQuestion = () => {
+  const handleNextQuestion = async () => {
     if (currentQuestion < quiz.questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
       setSelectedAnswer(null);
@@ -307,18 +307,20 @@ export default function Quiz() {
     } else {
       // Quiz completed
       setShowResult(true);
-      // Save quiz completion to progress
+      // Save quiz completion to progress and complete the lesson
       if (id) {
         const percentage = (score / quiz.questions.length) * 100;
-        updateLessonProgress(parseInt(id), { 
-          quizCompleted: true, 
-          quizScore: Math.round(percentage) 
-        });
+        await updateQuiz(true, Math.round(percentage));
+        // Complete the entire lesson to award points and mark as completed
+        const result = await completeLesson(Math.round(percentage));
         
-        // Update achievement progress
-        updateProgress('lessons_completed', 1);
-        if (percentage === 100) {
-          updateProgress('quiz_perfect', 1);
+        // Show points notification with the actual points earned
+        if (result) {
+          const pointsEarned = 50 + Math.round(percentage / 10); // Base 50 points + bonus for score
+          const event = new CustomEvent('pointsEarned', {
+            detail: { points: pointsEarned, activity: 'Quiz Completed' }
+          });
+          window.dispatchEvent(event);
         }
       }
     }

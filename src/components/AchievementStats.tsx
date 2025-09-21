@@ -16,6 +16,10 @@ export function AchievementStats({ stats, className = "" }: AchievementStatsProp
     ? (stats.unlockedAchievements / stats.totalAchievements) * 100 
     : 0;
 
+  // Handle both old and new data structures
+  const achievementsByCategory = stats.achievementsByCategory || {};
+  const achievementsByRarity = (stats as any).achievementsByRarity || {};
+
   const getCategoryIcon = (category: string) => {
     switch (category) {
       case 'learning': return '📚';
@@ -35,6 +39,16 @@ export function AchievementStats({ stats, className = "" }: AchievementStatsProp
       case 'streak': return 'bg-orange-100 text-orange-800';
       case 'special': return 'bg-yellow-100 text-yellow-800';
       default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getRarityIcon = (rarity: string) => {
+    switch (rarity) {
+      case 'common': return '🥉';
+      case 'rare': return '🥈';
+      case 'epic': return '🥇';
+      case 'legendary': return '💎';
+      default: return '🏆';
     }
   };
 
@@ -87,7 +101,8 @@ export function AchievementStats({ stats, className = "" }: AchievementStatsProp
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {Object.entries(stats.achievementsByCategory).map(([category, count]) => (
+            {Object.keys(achievementsByCategory).length > 0 ? (
+              Object.entries(achievementsByCategory).map(([category, count]) => (
               <div key={category} className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <span className="text-lg">{getCategoryIcon(category)}</span>
@@ -99,19 +114,18 @@ export function AchievementStats({ stats, className = "" }: AchievementStatsProp
                   {count}
                 </Badge>
               </div>
-            ))}
-            
-            {Object.keys(stats.achievementsByCategory).length === 0 && (
-              <p className="text-sm text-muted-foreground text-center py-4">
-                {t('achievements.progress.empty')}
-              </p>
+            ))
+            ) : (
+              <div className="text-center py-4 text-muted-foreground">
+                <p>No achievements by category data available</p>
+              </div>
             )}
           </div>
         </CardContent>
       </Card>
 
       {/* Recent Achievements */}
-      {stats.recentAchievements.length > 0 && (
+      {stats.recentAchievements && Array.isArray(stats.recentAchievements) && stats.recentAchievements.length > 0 && (
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center space-x-2">
@@ -132,6 +146,35 @@ export function AchievementStats({ stats, className = "" }: AchievementStatsProp
                       +{achievement.points} {t('achievements.points')}
                     </p>
                   </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Achievements by Rarity */}
+      {Object.keys(achievementsByRarity).length > 0 && (
+        <Card className="shadow-card">
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <Star className="w-5 h-5 text-yellow-500" />
+              <span>{t('achievements.by.rarity')}</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {Object.entries(achievementsByRarity).map(([rarity, count]) => (
+                <div key={rarity} className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-lg">{getRarityIcon(rarity)}</span>
+                    <span className="text-sm font-medium capitalize">
+                      {t(`achievements.rarity.${rarity}`)}
+                    </span>
+                  </div>
+                  <Badge variant="secondary" className="text-xs">
+                    {count}
+                  </Badge>
                 </div>
               ))}
             </div>

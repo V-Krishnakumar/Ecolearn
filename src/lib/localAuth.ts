@@ -1,8 +1,7 @@
 // src/lib/localAuth.ts
 import { supabase } from './supabase';
 import { createUserProfile, fetchUserProfile, updateUserProfile, UserProfile } from './profile';
-
-export type UserRole = 'student' | 'teacher';
+import { UserRole } from './supabase/types';
 
 export interface LocalUser {
   id: string;
@@ -10,6 +9,10 @@ export interface LocalUser {
   email: string;
   role: UserRole;
   created_at: string;
+  total_points?: number;
+  level?: number;
+  avatar_url?: string;
+  bio?: string;
 }
 
 export interface LoginCredentials {

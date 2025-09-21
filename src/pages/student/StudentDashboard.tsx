@@ -8,10 +8,15 @@ import { PlayCircle, Clock, Trophy, Star, FileText, GraduationCap, Thermometer, 
 import NewsFacts from "@/components/NewsFacts";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUser } from "@/contexts/UserContext";
-import { useProgress } from "@/lib/localProgress";
-import { useAchievements } from "@/hooks/useAchievements";
+import { useSupabaseProgress } from "@/hooks/useSupabaseProgress";
+import { useSupabaseAchievements } from "@/hooks/useSupabaseAchievements";
+import { useStudentProgress } from "@/hooks/useSupabaseProgress";
+import { StatisticsService } from "@/lib/supabase/statistics";
+import { LessonService } from "@/lib/supabase/lessons";
+import { LeaderboardService } from "@/lib/supabase/leaderboard";
 import { AchievementStats } from "@/components/AchievementStats";
 import { AchievementNotification } from "@/components/AchievementNotification";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { useEffect, useState } from "react";
 
 // Import lesson images
@@ -73,54 +78,210 @@ const getLessonsTemplate = (t: (key: string) => string) => [
   }
 ];
 
+// Helper function to get lesson image based on category
+const getLessonImage = (category: string) => {
+  switch (category.toLowerCase()) {
+    case 'waste management':
+      return wasteManagementImg;
+    case 'water treatment':
+      return waterTreatmentImg;
+    case 'pollution free zones':
+      return pollutionFreeImg;
+    case 'afforestation':
+      return afforestationImg;
+    case 'deforestation':
+      return deforestationImg;
+    case 'renewable energy':
+      return renewableEnergyImg;
+    default:
+      return wasteManagementImg; // Default fallback
+  }
+};
+
 export default function StudentDashboard() {
   const navigate = useNavigate();
   const { t } = useLanguage();
   const { user } = useUser();
-  const { getUserProgress, updateLessonProgress } = useProgress();
-  const { achievements, stats, newAchievements, markAchievementAsSeen } = useAchievements();
+  const { achievements, stats, loading: achievementsLoading, checkForNewAchievements } = useSupabaseAchievements();
+  const { getCompletedLessons, getTotalPoints, getAverageScore } = useStudentProgress();
+  const [userProgress, setUserProgress] = useState<any[]>([]);
+  const [progressLoading, setProgressLoading] = useState(true);
+  const [userStatistics, setUserStatistics] = useState<any>(null);
+  const [userStats, setUserStats] = useState<any>(null);
+  const [scoreboardLoading, setScoreboardLoading] = useState(false);
+  
+  // Provide default stats to prevent errors
+  const safeStats = stats || {
+    totalAchievements: 0,
+    unlockedAchievements: 0,
+    achievementsByCategory: {},
+    achievementsByRarity: {
+      common: 0,
+      rare: 0,
+      epic: 0,
+      legendary: 0
+    }
+  };
+  const [lessons, setLessons] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [showAchievementNotification, setShowAchievementNotification] = useState(false);
 
+  // Load lessons and progress from Supabase
+  useEffect(() => {
+    const loadData = async () => {
+      if (!user) return;
+      
+      try {
+        setLoading(true);
+        setProgressLoading(true);
+        
+        // Load lessons
+        const { data: lessonsData, error: lessonsError } = await LessonService.getLessons();
+        if (lessonsError) {
+          console.error('Error loading lessons:', lessonsError);
+          setLessons(getLessonsTemplate(t));
+        } else {
+          // Transform Supabase lessons to match template format
+          const transformedLessons = lessonsData?.map(lesson => ({
+            id: lesson.id,
+            title: lesson.title,
+            description: lesson.description || '',
+            image: getLessonImage(lesson.category),
+            duration: lesson.duration_minutes,
+            difficulty: lesson.difficulty,
+            points: lesson.points,
+            category: lesson.category
+          })) || [];
+          setLessons(transformedLessons);
+        }
 
-  const userProgress = user ? getUserProgress(user.id) : null;
-  const lessons = getLessonsTemplate(t);
+        // Load user progress
+        const { data: progressData, error: progressError } = await LessonService.getStudentProgress(user.id);
+        if (progressError) {
+          console.error('Error loading progress:', progressError);
+          setUserProgress([]);
+        } else {
+          setUserProgress(progressData || []);
+        }
+
+        // Load user statistics
+        const { data: statsData, error: statsError } = await StatisticsService.getUserStats(user.id);
+        if (statsError) {
+          console.error('Error loading user statistics:', statsError);
+        } else {
+          setUserStatistics(statsData);
+        }
+
+        // Load scoreboard data
+        await loadScoreboardData();
+      } catch (error) {
+        console.error('Error loading data:', error);
+        setLessons(getLessonsTemplate(t));
+        setUserProgress([]);
+      } finally {
+        setLoading(false);
+        setProgressLoading(false);
+      }
+    };
+
+    loadData();
+  }, [user, t]);
+
+  // Listen for points earned events to refresh data
+  useEffect(() => {
+    const handlePointsEarned = () => {
+      // Refresh data when points are earned
+      if (user) {
+        loadData();
+        loadScoreboardData();
+      }
+    };
+
+    window.addEventListener('pointsEarned', handlePointsEarned);
+    
+    return () => {
+      window.removeEventListener('pointsEarned', handlePointsEarned);
+    };
+  }, [user]);
 
   // Calculate overall progress
-  const completedLessons = userProgress ? Object.values(userProgress.lessons).filter((lesson: any) => lesson.completed).length : 0;
+  const completedLessons = getCompletedLessons().length;
   const totalLessons = lessons.length;
   const overallProgress = totalLessons > 0 ? (completedLessons / totalLessons) * 100 : 0;
 
   // Calculate total time spent
-  const totalTimeSpent = userProgress ? Object.values(userProgress.lessons).reduce((total: number, lesson: any) => {
-    return total + (lesson.videoProgress / 100) * 15; // Assuming 15 minutes per lesson
+  const totalTimeSpent = Array.isArray(userProgress) ? userProgress.reduce((total: number, lesson: any) => {
+    return total + (lesson.time_spent_minutes || 0);
   }, 0) : 0;
 
-  useEffect(() => {
-    if (newAchievements.length > 0) {
-      setShowAchievementNotification(true);
+  const averageScore = userStatistics?.averageQuizScore || getAverageScore() || 0;
+
+  // Load scoreboard data
+  const loadScoreboardData = async () => {
+    if (!user) return;
+    
+    try {
+      setScoreboardLoading(true);
+      const scoreboardData = await LeaderboardService.getLeaderboardStats(user.id);
+      setUserStats(scoreboardData);
+    } catch (error) {
+      console.error('Error loading scoreboard data:', error);
+    } finally {
+      setScoreboardLoading(false);
     }
-  }, [newAchievements]);
+  };
+
+  useEffect(() => {
+    // Check for new achievements periodically
+    const checkAchievements = async () => {
+      if (user && checkForNewAchievements) {
+        try {
+          const newAchievements = await checkForNewAchievements();
+          if (newAchievements.length > 0) {
+            setShowAchievementNotification(true);
+          }
+        } catch (error) {
+          console.error('Error checking achievements:', error);
+        }
+      }
+    };
+
+    checkAchievements();
+  }, [user, checkForNewAchievements]);
 
   const handleAchievementClose = () => {
     setShowAchievementNotification(false);
-    newAchievements.forEach(achievement => {
-      markAchievementAsSeen(achievement.id);
-    });
   };
 
   const getLessonStatus = (lessonId: number) => {
-    if (!userProgress) return 'not-started';
-    const lesson = userProgress.lessons[lessonId] as any;
+    if (!Array.isArray(userProgress)) return 'not-started';
+    const lesson = userProgress.find(l => l.lesson_id === lessonId);
     if (!lesson) return 'not-started';
-    return lesson.completed ? 'completed' : 'in-progress';
+    return lesson.is_completed ? 'completed' : 'in-progress';
   };
 
   const getLessonProgress = (lessonId: number) => {
-    if (!userProgress) return 0;
-    const lesson = userProgress.lessons[lessonId] as any;
+    if (!Array.isArray(userProgress)) return 0;
+    const lesson = userProgress.find(l => l.lesson_id === lessonId);
     if (!lesson) return 0;
-    return lesson.videoProgress;
+    return lesson.video_progress;
   };
+
+  if (loading || progressLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
+        <StudentNavigation />
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex items-center justify-center min-h-[400px]">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+              <p className="text-muted-foreground">Loading dashboard...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
@@ -385,32 +546,53 @@ export default function StudentDashboard() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-              <div className="text-center p-4 bg-gradient-to-r from-green-500 to-blue-600 rounded-lg text-white">
-                <div className="text-2xl font-bold mb-1">{stats.totalPoints || 225}</div>
-                <p className="text-sm opacity-90">Total Points</p>
+            {scoreboardLoading ? (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="h-20 bg-gray-200 rounded-lg animate-pulse"></div>
+                ))}
               </div>
-              
-              <div className="text-center p-4 bg-blue-50 rounded-lg">
-                <div className="text-2xl font-bold text-blue-600 mb-1">{stats.unlockedAchievements || 3}</div>
-                <p className="text-sm text-gray-600">Badges Earned</p>
+            ) : (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div className="text-center p-4 bg-gradient-to-r from-green-500 to-blue-600 rounded-lg text-white">
+                  <div className="text-2xl font-bold mb-1">
+                    {userStats?.total_points || userStatistics?.totalPoints || 0}
+                  </div>
+                  <p className="text-sm opacity-90">Total Points</p>
+                </div>
+                
+                <div className="text-center p-4 bg-blue-50 rounded-lg">
+                  <div className="text-2xl font-bold text-blue-600 mb-1">
+                    {safeStats.unlockedAchievements || 0}
+                  </div>
+                  <p className="text-sm text-gray-600">Badges Earned</p>
+                </div>
+                
+                <div className="text-center p-4 bg-green-50 rounded-lg">
+                  <div className="text-2xl font-bold text-green-600 mb-1">
+                    {completedLessons}
+                  </div>
+                  <p className="text-sm text-gray-600">Lessons Done</p>
+                </div>
+                
+                <div className="text-center p-4 bg-purple-50 rounded-lg">
+                  <div className="text-2xl font-bold text-purple-600 mb-1">
+                    {Math.round((safeStats.unlockedAchievements || 0) / (safeStats.totalAchievements || 6) * 100)}%
+                  </div>
+                  <p className="text-sm text-gray-600">Achievement Rate</p>
+                </div>
               </div>
-              
-              <div className="text-center p-4 bg-green-50 rounded-lg">
-                <div className="text-2xl font-bold text-green-600 mb-1">{completedLessons}</div>
-                <p className="text-sm text-gray-600">Lessons Done</p>
-              </div>
-              
-              <div className="text-center p-4 bg-purple-50 rounded-lg">
-                <div className="text-2xl font-bold text-purple-600 mb-1">{Math.round((stats.unlockedAchievements || 3) / 6 * 100)}%</div>
-                <p className="text-sm text-gray-600">Achievement Rate</p>
-              </div>
-            </div>
+            )}
             
             <div className="text-center">
-              <Button onClick={() => navigate("/scoreboard")} variant="outline" size="lg">
+              <Button 
+                onClick={() => navigate("/scoreboard")} 
+                variant="outline" 
+                size="lg"
+                disabled={scoreboardLoading}
+              >
                 <Trophy className="w-5 h-5 mr-2" />
-                View Full Scoreboard
+                {scoreboardLoading ? 'Loading...' : 'View Full Scoreboard'}
               </Button>
             </div>
           </CardContent>
@@ -418,15 +600,28 @@ export default function StudentDashboard() {
 
         {/* Achievement Stats */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <AchievementStats stats={stats} />
+          <ErrorBoundary>
+            <AchievementStats stats={safeStats} />
+          </ErrorBoundary>
           <NewsFacts />
         </div>
 
         {/* Achievement Notification */}
-        {showAchievementNotification && newAchievements.length > 0 && newAchievements.map((achievement) => (
+        {showAchievementNotification && achievements.length > 0 && achievements.slice(0, 3).map((achievement) => (
           <AchievementNotification
             key={achievement.id}
-            achievement={achievement}
+            achievement={{
+              id: achievement.id.toString(),
+              title: achievement.name,
+              description: achievement.description,
+              icon: achievement.icon || '🏆',
+              category: achievement.category || 'special',
+              rarity: achievement.rarity,
+              points: achievement.points,
+              requirements: [],
+              progress: 100,
+              color: 'text-green-600'
+            }}
             onClose={handleAchievementClose}
           />
         ))}

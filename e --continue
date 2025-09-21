@@ -1,6 +1,0 @@
-warning: in the working copy of 'src/App.tsx', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'src/components/Navigation.tsx', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'src/lib/profile.ts', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'src/pages/Lesson.tsx', LF will be replaced by CRLF the next time Git touches it
-src/App.tsx
-src/components/Navigation.tsx

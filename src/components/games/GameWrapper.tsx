@@ -36,12 +36,18 @@ export function GameWrapper({
     if (isCompleted && !showCelebration) {
       setShowCelebration(true);
       const timer = setTimeout(() => setShowCelebration(false), 3000);
+      
+      // Automatically call onComplete when game is completed
+      if (onComplete) {
+        onComplete();
+      }
+      
       return () => clearTimeout(timer);
     } else if (!isCompleted && showCelebration) {
       // Hide celebration immediately when game is restarted
       setShowCelebration(false);
     }
-  }, [isCompleted, showCelebration]);
+  }, [isCompleted, showCelebration, onComplete]);
 
   const getScoreColor = () => {
     const percentage = (score / maxScore) * 100;

@@ -1,28 +1,21 @@
 // src/lib/profile.ts
 import { supabase } from './supabase';
+import { LeaderboardService } from './supabase/leaderboard';
+import { 
+  Profile, 
+  Activity, 
+  QueryResult, 
+  QueryResultArray,
+  UserRole
+} from './supabase/types';
 
-export type UserRole = 'student' | 'teacher';
-
-export interface UserProfile {
-  id: string;
-  username: string;
-  email: string;
-  role: UserRole;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface Activity {
-  id: number;
-  user_id: string;
-  type: string;
-  points: number;
-  created_at: string;
-}
+// Re-export types for backward compatibility
+export type { UserRole };
+export type UserProfile = Profile;
 
 export interface LeaderboardEntry {
   id: string;
-  user_id: string;
+  student_id: string;
   points: number;
   profiles?: {
     username: string;
@@ -37,7 +30,7 @@ export async function createUserProfile(
   username: string,
   email: string,
   role: UserRole = 'student'
-): Promise<{ success: boolean; profile?: UserProfile; error?: string }> {
+): Promise<{ success: boolean; profile?: Profile; error?: string }> {
   try {
     const profileData = {
       id: userId,
@@ -77,7 +70,7 @@ export async function createUserProfile(
  */
 export async function fetchUserProfile(
   userId: string
-): Promise<{ success: boolean; profile?: UserProfile; error?: string }> {
+): Promise<{ success: boolean; profile?: Profile; error?: string }> {
   try {
     const { data, error } = await supabase
       .from('profiles')
@@ -109,7 +102,7 @@ export async function fetchUserProfile(
 export async function updateUserProfile(
   userId: string, 
   updates: { username?: string; email?: string; role?: string }
-): Promise<{ success: boolean; profile?: UserProfile; error?: string }> {
+): Promise<{ success: boolean; profile?: Profile; error?: string }> {
   try {
     const updateData = {
       ...updates,
@@ -155,7 +148,7 @@ export async function ensureUserProfile(
   userId: string, 
   username?: string, 
   email?: string
-): Promise<{ success: boolean; profile?: UserProfile; error?: string }> {
+): Promise<{ success: boolean; profile?: Profile; error?: string }> {
   try {
     // First try to fetch existing profile
     const fetchResult = await fetchUserProfile(userId);
@@ -191,7 +184,7 @@ export async function fetchLeaderboard(limit: number = 10): Promise<LeaderboardE
       .from('leaderboard')
       .select(`
         id,
-        user_id,
+        student_id,
         points,
         profiles:user_id (
           username
@@ -205,7 +198,20 @@ export async function fetchLeaderboard(limit: number = 10): Promise<LeaderboardE
       return [];
     }
 
-    return data || [];
+    // Ensure profiles is an object, not an array, for each entry
+    if (Array.isArray(data)) {
+      return data.map(entry => {
+        let username = "";
+        if (Array.isArray(entry.profiles) && entry.profiles.length > 0) {
+          username = String(entry.profiles[0]?.username ?? "");
+        }
+        return {
+          ...entry,
+          profiles: { username }
+        };
+      });
+    }
+    return [];
   } catch (error) {
     console.error('Leaderboard fetch error:', error);
     return [];
@@ -216,7 +222,7 @@ export async function fetchLeaderboard(limit: number = 10): Promise<LeaderboardE
  * Create an activity entry
  */
 export async function createActivity(
-  userId: string, 
+  studentId: string, 
   type: string, 
   points: number
 ): Promise<{ success: boolean; error?: string }> {
@@ -224,7 +230,7 @@ export async function createActivity(
     const { error } = await supabase
       .from('activities')
       .insert([{
-        user_id: userId,
+        student_id: studentId,
         type: type.trim(),
         points: points,
         created_at: new Date().toISOString()
@@ -252,60 +258,18 @@ export async function createActivity(
  * Update leaderboard for a user
  */
 export async function updateLeaderboard(
-  userId: string, 
+  studentId: string, 
   points: number
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    // First, try to get existing leaderboard entry
-    const { data: existingEntry, error: fetchError } = await supabase
-      .from('leaderboard')
-      .select('*')
-      .eq('user_id', userId)
-      .single();
-
-    if (fetchError && fetchError.code !== 'PGRST116') { // PGRST116 = no rows returned
-      console.error('Error fetching leaderboard entry:', fetchError);
+    const { error } = await LeaderboardService.updateLeaderboard(studentId, points);
+    
+    if (error) {
+      console.error('Error updating leaderboard:', error);
       return { 
         success: false, 
-        error: fetchError.message || 'Failed to fetch leaderboard entry' 
+        error: error.message || 'Failed to update leaderboard' 
       };
-    }
-
-    if (existingEntry) {
-      // Update existing entry
-      const { error: updateError } = await supabase
-        .from('leaderboard')
-        .update({ 
-          points: existingEntry.points + points,
-          updated_at: new Date().toISOString()
-        })
-        .eq('user_id', userId);
-
-      if (updateError) {
-        console.error('Error updating leaderboard:', updateError);
-        return { 
-          success: false, 
-          error: updateError.message || 'Failed to update leaderboard' 
-        };
-      }
-    } else {
-      // Create new entry
-      const { error: insertError } = await supabase
-        .from('leaderboard')
-        .insert([{
-          user_id: userId,
-          points: points,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        }]);
-
-      if (insertError) {
-        console.error('Error creating leaderboard entry:', insertError);
-        return { 
-          success: false, 
-          error: insertError.message || 'Failed to create leaderboard entry' 
-        };
-      }
     }
 
     return { success: true };

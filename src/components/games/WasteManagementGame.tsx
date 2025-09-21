@@ -160,7 +160,7 @@ function WasteGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number, pr
 
   useEffect(() => {
     onScoreUpdate(score, ((wasteItems.length - items.filter(item => !item.placed).length) / wasteItems.length) * 100);
-  }, []);
+  }, [items, score, onScoreUpdate]);
 
   return (
     <div className="space-y-6">

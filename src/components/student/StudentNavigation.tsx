@@ -95,7 +95,7 @@ export default function StudentNavigation() {
                         : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                     }`}
                   >
-                    <Icon className="h-4 w-4" />
+                    <item.icon className="h-4 w-4" />
                     <span>{item.name}</span>
                   </Link>
                 );
@@ -149,7 +149,7 @@ export default function StudentNavigation() {
                         : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                     }`}
                   >
-                    <Icon className="h-3 w-3" />
+                    <item.icon className="h-3 w-3" />
                     <span>{item.name}</span>
                   </Link>
                 );

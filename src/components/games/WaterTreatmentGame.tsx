@@ -196,7 +196,7 @@ function WaterGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number, pr
     const solvedCount = gameScenarios.filter(s => s.solved).length;
     const progress = (solvedCount / scenarios.length) * 100;
     onScoreUpdate(score, progress);
-  }, []);
+  }, [gameScenarios, score, onScoreUpdate]);
 
   return (
     <div className="space-y-6">
