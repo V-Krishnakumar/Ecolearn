@@ -77,7 +77,7 @@ const getLessonsTemplate = (t: (key: string) => string) => [
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { profile } = useUser();
   const { getDashboardData } = useProgress();
   const { stats, newAchievements, dismissNotification } = useAchievements();
@@ -122,7 +122,7 @@ export default function Dashboard() {
   const totalTime = dashboardData?.totalTime || 0;
 
   return (
-    <EcoBackground className="min-h-screen">
+    <EcoBackground key={language} className="min-h-screen">
       <Navigation />
       
       <main className="container mx-auto px-4 py-8">
@@ -217,8 +217,8 @@ export default function Dashboard() {
                     <FileText className="w-6 h-6 text-green-600" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-gray-800">Get Your Certificate</h3>
-                    <p className="text-gray-600">Download your personalized Eco Warrior certificate</p>
+                    <h3 className="text-xl font-bold text-gray-800">{t('dashboard.get.certificate.title')}</h3>
+                    <p className="text-gray-600">{t('dashboard.get.certificate.desc')}</p>
                   </div>
                 </div>
                 <Button
@@ -226,7 +226,7 @@ export default function Dashboard() {
                   className="bg-green-600 hover:bg-green-700 text-white px-6 py-2"
                 >
                   <FileText className="w-4 h-4 mr-2" />
-                  View Certificate
+                  {t('dashboard.view.certificate')}
                 </Button>
               </div>
             </CardContent>
@@ -237,7 +237,7 @@ export default function Dashboard() {
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center space-x-2">
             <Trophy className="w-6 h-6 text-yellow-500" />
-            <span>Achievements</span>
+            <span>{t('dashboard.achievements.title')}</span>
           </h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <AchievementStats stats={stats} />
@@ -248,8 +248,9 @@ export default function Dashboard() {
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center space-x-2">
             <GraduationCap className="w-6 h-6 text-purple-500" />
-            <span>Advanced Modules</span>
+            <span>{t('dashboard.advanced.modules.title')}</span>
           </h2>
+          <p className="text-lg text-gray-600 mb-6">{t('dashboard.advanced.modules.subtitle')}</p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Card className="shadow-card hover:shadow-glow transition-all duration-300 group cursor-pointer transform hover:-translate-y-1"
                   onClick={() => navigate("/lesson/environmental-policy")}>
@@ -341,7 +342,7 @@ export default function Dashboard() {
           
           <div className="text-center mt-6">
             <Button onClick={() => navigate("/advanced-modules")} variant="outline">
-              View All Advanced Modules
+              {t('dashboard.view.all.advanced')}
             </Button>
           </div>
         </div>
@@ -350,13 +351,14 @@ export default function Dashboard() {
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center space-x-2">
             <Trophy className="w-6 h-6 text-yellow-500" />
-            <span>Scoreboard & Achievements</span>
+            <span>{t('dashboard.scoreboard.title')}</span>
           </h2>
+          <p className="text-lg text-gray-600 mb-6">{t('dashboard.scoreboard.subtitle')}</p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
             <Card className="shadow-card text-center bg-gradient-nature text-white">
               <CardContent className="p-6">
                 <div className="text-3xl font-bold mb-2">{stats.totalPoints || 225}</div>
-                <p className="text-white/90">Total Points</p>
+                <p className="text-white/90">{t('dashboard.total.points')}</p>
                 <Star className="w-6 h-6 mx-auto mt-2 animate-bounce-gentle" />
               </CardContent>
             </Card>
@@ -364,7 +366,7 @@ export default function Dashboard() {
             <Card className="shadow-card text-center">
               <CardContent className="p-6">
                 <div className="text-3xl font-bold text-primary mb-2">{stats.unlockedAchievements || 3}</div>
-                <p className="text-muted-foreground">Badges Earned</p>
+                <p className="text-muted-foreground">{t('dashboard.badges.earned')}</p>
                 <Award className="w-6 h-6 mx-auto mt-2 text-primary" />
               </CardContent>
             </Card>
@@ -372,7 +374,7 @@ export default function Dashboard() {
             <Card className="shadow-card text-center">
               <CardContent className="p-6">
                 <div className="text-3xl font-bold text-success mb-2">{completedLessons}</div>
-                <p className="text-muted-foreground">Lessons Completed</p>
+                <p className="text-muted-foreground">{t('dashboard.lessons.completed')}</p>
                 <BookOpen className="w-6 h-6 mx-auto mt-2 text-success" />
               </CardContent>
             </Card>
@@ -380,7 +382,7 @@ export default function Dashboard() {
             <Card className="shadow-card text-center">
               <CardContent className="p-6">
                 <div className="text-3xl font-bold text-secondary mb-2">{Math.round((stats.unlockedAchievements || 3) / 6 * 100)}%</div>
-                <p className="text-muted-foreground">Achievement Rate</p>
+                <p className="text-muted-foreground">{t('dashboard.achievement.rate')}</p>
                 <Target className="w-6 h-6 mx-auto mt-2 text-secondary" />
               </CardContent>
             </Card>
@@ -389,7 +391,7 @@ export default function Dashboard() {
           <div className="text-center">
             <Button onClick={() => navigate("/scoreboard")} variant="outline" size="lg">
               <Trophy className="w-5 h-5 mr-2" />
-              View Full Scoreboard
+              {t('dashboard.view.full.scoreboard')}
             </Button>
           </div>
         </div>

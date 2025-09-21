@@ -991,6 +991,22 @@ const translations = {
     'advanced.common.advanced': 'Advanced',
     'advanced.common.module': 'Module',
     'advanced.common.seconds': 'sec',
+    
+    // Dashboard specific translations
+    'dashboard.advanced.modules.title': 'Advanced Modules',
+    'dashboard.advanced.modules.subtitle': 'Explore advanced environmental topics and deepen your knowledge.',
+    'dashboard.scoreboard.title': 'Scoreboard & Achievements',
+    'dashboard.scoreboard.subtitle': 'Track your progress and unlock achievements.',
+    'dashboard.view.all.advanced': 'View All Advanced Modules',
+    'dashboard.view.full.scoreboard': 'View Full Scoreboard',
+    'dashboard.total.points': 'Total Points',
+    'dashboard.badges.earned': 'Badges Earned',
+    'dashboard.lessons.completed': 'Lessons Completed',
+    'dashboard.achievement.rate': 'Achievement Rate',
+    'dashboard.get.certificate.title': 'Get Your Certificate',
+    'dashboard.get.certificate.desc': 'Download your personalized Eco Warrior certificate',
+    'dashboard.view.certificate': 'View Certificate',
+    'dashboard.achievements.title': 'Achievements',
   },
   hi: {
     // Navigation
@@ -1980,6 +1996,22 @@ const translations = {
     'advanced.common.advanced': 'उन्नत',
     'advanced.common.module': 'मॉड्यूल',
     'advanced.common.seconds': 'सेकंड',
+    
+    // Dashboard specific translations
+    'dashboard.advanced.modules.title': 'उन्नत मॉड्यूल',
+    'dashboard.advanced.modules.subtitle': 'उन्नत पर्यावरणीय विषयों का अन्वेषण करें और अपने ज्ञान को गहरा करें।',
+    'dashboard.scoreboard.title': 'स्कोरबोर्ड और उपलब्धियां',
+    'dashboard.scoreboard.subtitle': 'अपनी प्रगति को ट्रैक करें और उपलब्धियां अनलॉक करें।',
+    'dashboard.view.all.advanced': 'सभी उन्नत मॉड्यूल देखें',
+    'dashboard.view.full.scoreboard': 'पूरा स्कोरबोर्ड देखें',
+    'dashboard.total.points': 'कुल अंक',
+    'dashboard.badges.earned': 'अर्जित बैज',
+    'dashboard.lessons.completed': 'पूर्ण पाठ',
+    'dashboard.achievement.rate': 'उपलब्धि दर',
+    'dashboard.get.certificate.title': 'अपना प्रमाणपत्र प्राप्त करें',
+    'dashboard.get.certificate.desc': 'अपना व्यक्तिगत इको वॉरियर प्रमाणपत्र डाउनलोड करें',
+    'dashboard.view.certificate': 'प्रमाणपत्र देखें',
+    'dashboard.achievements.title': 'उपलब्धियां',
   }
 };
 
@@ -1992,7 +2024,6 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
   const toggleLanguage = () => {
     setLanguage(prev => {
       const newLanguage = prev === 'en' ? 'hi' : 'en';
-      console.log('🔄 Language toggle: From', prev, 'to', newLanguage);
       localStorage.setItem('language', newLanguage);
       return newLanguage;
     });
@@ -2001,8 +2032,6 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
   const t = (key: string): string => {
     try {
       const translation = translations[language][key];
-      // Debug: Log all translation attempts
-      console.log(`🔍 Translation: Language=${language}, Key=${key}, Result=${translation || key}`);
       return translation || key;
     } catch (error) {
       console.error('❌ Translation error:', error, 'Language:', language, 'Key:', key);
