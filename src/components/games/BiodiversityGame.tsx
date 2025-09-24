@@ -3,8 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { TreePine, Bug, CheckCircle, XCircle, Heart } from "lucide-react";
+import { useLanguage } from "@/hooks/useLanguage";
 
 export function BiodiversityGame() {
+  const { t } = useLanguage();
   const [currentStep, setCurrentStep] = useState(0);
   const [selectedActions, setSelectedActions] = useState<string[]>([]);
   const [biodiversityScore, setBiodiversityScore] = useState(100); // Starting biodiversity score
@@ -14,66 +16,66 @@ export function BiodiversityGame() {
   const conservationActions = [
     { 
       id: "protect-habitat", 
-      name: "Protect Natural Habitats", 
+      name: t('game.ecosystem.predator.protect.habitat'), 
       impact: +20, 
       correct: true, 
-      description: "Preserving ecosystems maintains species diversity",
+      description: t('game.ecosystem.predator.protect.habitat.desc'),
       icon: "🌳"
     },
     { 
       id: "reduce-pollution", 
-      name: "Reduce Pollution", 
+      name: t('game.ecosystem.predator.reduce.pollution'), 
       impact: +15, 
       correct: true, 
-      description: "Cleaner environment helps all species thrive",
+      description: t('game.ecosystem.predator.reduce.pollution.desc'),
       icon: "🌿"
     },
     { 
       id: "sustainable-farming", 
-      name: "Sustainable Agriculture", 
+      name: t('game.ecosystem.predator.sustainable.farming'), 
       impact: +12, 
       correct: true, 
-      description: "Eco-friendly farming protects soil and wildlife",
+      description: t('game.ecosystem.predator.sustainable.farming.desc'),
       icon: "🚜"
     },
     { 
       id: "marine-protection", 
-      name: "Marine Protection", 
+      name: t('game.ecosystem.predator.marine.protection'), 
       impact: +18, 
       correct: true, 
-      description: "Protecting oceans preserves marine biodiversity",
+      description: t('game.ecosystem.predator.marine.protection.desc'),
       icon: "🐠"
     },
     { 
       id: "deforestation", 
-      name: "Deforestation", 
+      name: t('game.ecosystem.predator.deforestation'), 
       impact: -25, 
       correct: false, 
-      description: "Cutting down forests destroys habitats",
+      description: t('game.ecosystem.predator.deforestation.desc'),
       icon: "🪓"
     },
     { 
       id: "overfishing", 
-      name: "Overfishing", 
+      name: t('game.ecosystem.predator.overfishing'), 
       impact: -20, 
       correct: false, 
-      description: "Excessive fishing depletes fish populations",
+      description: t('game.ecosystem.predator.overfishing.desc'),
       icon: "🎣"
     },
     { 
-      id: "urban-sprawl", 
-      name: "Urban Sprawl", 
+      id: "urban-sprawl",
+      name: t('game.ecosystem.predator.urban.sprawl'), 
       impact: -15, 
       correct: false, 
-      description: "City expansion destroys natural habitats",
+      description: t('game.ecosystem.predator.urban.sprawl.desc'),
       icon: "🏙️"
     },
     { 
       id: "invasive-species", 
-      name: "Invasive Species", 
+      name: t('game.ecosystem.predator.invasive.species'), 
       impact: -18, 
       correct: false, 
-      description: "Non-native species can harm local ecosystems",
+      description: t('game.ecosystem.predator.invasive.species.desc'),
       icon: "🦎"
     }
   ];
@@ -132,19 +134,19 @@ export function BiodiversityGame() {
   };
 
   const getScoreMessage = (score: number) => {
-    if (score >= 150) return "Excellent! Ecosystem is thriving!";
-    if (score >= 120) return "Good! Healthy biodiversity levels.";
-    if (score >= 90) return "Fair. Some species at risk.";
-    if (score >= 60) return "Concerning. Many species endangered.";
-    return "Critical! Ecosystem collapse imminent.";
+    if (score >= 150) return t('game.ecosystem.predator.excellent.ecosystem');
+    if (score >= 120) return t('game.ecosystem.predator.good.biodiversity');
+    if (score >= 90) return t('game.ecosystem.predator.fair.species');
+    if (score >= 60) return t('game.ecosystem.predator.concerning.species');
+    return t('game.ecosystem.predator.critical.ecosystem');
   };
 
   const getScoreLevel = (score: number) => {
-    if (score >= 150) return "Thriving";
-    if (score >= 120) return "Healthy";
-    if (score >= 90) return "Stable";
-    if (score >= 60) return "At Risk";
-    return "Critical";
+    if (score >= 150) return t('game.ecosystem.predator.thriving');
+    if (score >= 120) return t('game.ecosystem.predator.healthy');
+    if (score >= 90) return t('game.ecosystem.predator.stable');
+    if (score >= 60) return t('game.ecosystem.predator.at.risk');
+    return t('game.ecosystem.predator.critical');
   };
 
   if (gameCompleted) {
@@ -153,12 +155,12 @@ export function BiodiversityGame() {
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
             <CheckCircle className="w-5 h-5 text-green-600" />
-            <span>Biodiversity Assessment Complete</span>
+            <span>{t('game.ecosystem.predator.conservation.results')}</span>
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="text-center space-y-6">
-            <div className="text-4xl font-bold text-green-600">🎉 Mission Complete!</div>
+            <div className="text-4xl font-bold text-green-600">🎉 {t('game.complete.celebration')}</div>
             
             <div className="bg-gradient-to-r from-green-50 to-blue-50 p-6 rounded-lg">
               <div className="flex items-center justify-center space-x-4 mb-4">
@@ -167,7 +169,7 @@ export function BiodiversityGame() {
                   {biodiversityScore}/200
                 </span>
               </div>
-              <p className="text-lg font-medium mb-2">Biodiversity Score</p>
+              <p className="text-lg font-medium mb-2">{t('game.ecosystem.predator.final.biodiversity').replace('{score}', biodiversityScore.toString())}</p>
               <p className={`text-sm ${getScoreColor(biodiversityScore)}`}>
                 {getScoreMessage(biodiversityScore)}
               </p>
@@ -175,21 +177,21 @@ export function BiodiversityGame() {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-green-50 p-4 rounded-lg">
-                <p className="text-sm text-green-600 font-medium">Conservation Actions</p>
+                <p className="text-sm text-green-600 font-medium">{t('game.ecosystem.predator.conservation.score')}</p>
                 <p className="text-2xl font-bold text-green-800">{correctActions}/4</p>
-                <p className="text-xs text-green-600">Correct Choices</p>
+                <p className="text-xs text-green-600">{t('game.ecosystem.predator.correct.actions').replace('{count}', correctActions.toString())}</p>
               </div>
               <div className="bg-blue-50 p-4 rounded-lg">
-                <p className="text-sm text-blue-600 font-medium">Ecosystem Status</p>
+                <p className="text-sm text-blue-600 font-medium">{t('game.ecosystem.predator.ecosystem.status')}</p>
                 <p className={`text-2xl font-bold ${getScoreColor(biodiversityScore)}`}>
                   {getScoreLevel(biodiversityScore)}
                 </p>
-                <p className="text-xs text-blue-600">Biodiversity Level</p>
+                <p className="text-xs text-blue-600">{t('game.ecosystem.predator.biodiversity.level')}</p>
               </div>
             </div>
 
             <div className="space-y-3">
-              <h4 className="font-semibold">Your Actions:</h4>
+              <h4 className="font-semibold">{t('game.ecosystem.predator.your.actions')}</h4>
               {selectedActions.map(actionId => {
                 const action = conservationActions.find(a => a.id === actionId);
                 return (
@@ -210,7 +212,7 @@ export function BiodiversityGame() {
             </div>
 
             <Button onClick={handleRestart} className="w-full">
-              Play Again
+              {t('game.ecosystem.predator.restart')}
             </Button>
           </div>
         </CardContent>
@@ -223,20 +225,20 @@ export function BiodiversityGame() {
       <CardHeader>
         <CardTitle className="flex items-center space-x-2">
           <TreePine className="w-5 h-5" />
-          <span>Ecosystem Protector</span>
+          <span>{t('game.ecosystem.predator.title')}</span>
         </CardTitle>
       </CardHeader>
       <CardContent>
         {currentStep === 0 ? (
           <div className="space-y-6">
             <div className="text-center">
-              <h3 className="text-lg font-semibold mb-2">Protect Biodiversity</h3>
+              <h3 className="text-lg font-semibold mb-2">{t('game.ecosystem.predator.select.actions')}</h3>
               <p className="text-sm text-muted-foreground mb-4">
-                Choose up to 4 actions to protect biodiversity. Select conservation actions that help preserve species diversity.
+                {t('game.ecosystem.predator.choose.actions')}
               </p>
               <div className="flex items-center justify-center space-x-2 mb-4">
                 <Heart className="w-5 h-5 text-green-600" />
-                <span className="text-lg font-bold text-green-600">Biodiversity: {biodiversityScore}/200</span>
+                <span className="text-lg font-bold text-green-600">{t('game.ecosystem.predator.biodiversity.score').replace('{score}', biodiversityScore.toString())}</span>
               </div>
             </div>
 
@@ -273,27 +275,27 @@ export function BiodiversityGame() {
 
             <div className="text-center">
               <p className="text-sm text-muted-foreground mb-4">
-                Selected: {selectedActions.length}/4 actions
+                {t('game.ecosystem.predator.correct.actions').replace('{count}', selectedActions.length.toString())}
               </p>
               <Button 
                 onClick={handleNext} 
                 disabled={selectedActions.length === 0}
                 className="w-full"
               >
-                Assess Biodiversity Impact
+                {t('game.ecosystem.predator.assess.impact')}
               </Button>
             </div>
           </div>
         ) : (
           <div className="space-y-6">
             <div className="text-center">
-              <h3 className="text-lg font-semibold mb-4">Biodiversity Assessment Results</h3>
+              <h3 className="text-lg font-semibold mb-4">{t('game.ecosystem.predator.conservation.results')}</h3>
               
               <div className="bg-gradient-to-r from-green-50 to-blue-50 p-6 rounded-lg mb-6">
                 <div className="flex items-center justify-center space-x-4 mb-4">
                   <Heart className="w-12 h-12 text-green-500" />
                   <div>
-                    <p className="text-sm text-muted-foreground">New Biodiversity Score</p>
+                    <p className="text-sm text-muted-foreground">{t('game.ecosystem.predator.final.biodiversity').replace('{score}', biodiversityScore.toString())}</p>
                     <p className={`text-4xl font-bold ${getScoreColor(biodiversityScore)}`}>
                       {biodiversityScore}/200
                     </p>
@@ -306,21 +308,21 @@ export function BiodiversityGame() {
 
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div className="bg-green-50 p-4 rounded-lg">
-                  <p className="text-sm text-green-600 font-medium">Conservation Score</p>
+                  <p className="text-sm text-green-600 font-medium">{t('game.ecosystem.predator.conservation.score')}</p>
                   <p className="text-2xl font-bold text-green-800">{correctActions}/4</p>
-                  <p className="text-xs text-green-600">Correct Actions</p>
+                  <p className="text-xs text-green-600">{t('game.ecosystem.predator.correct.choices')}</p>
                 </div>
                 <div className="bg-blue-50 p-4 rounded-lg">
-                  <p className="text-sm text-blue-600 font-medium">Ecosystem Status</p>
+                  <p className="text-sm text-blue-600 font-medium">{t('game.ecosystem.predator.ecosystem.status')}</p>
                   <p className={`text-2xl font-bold ${getScoreColor(biodiversityScore)}`}>
                     {getScoreLevel(biodiversityScore)}
                   </p>
-                  <p className="text-xs text-blue-600">Biodiversity Level</p>
+                  <p className="text-xs text-blue-600">{t('game.ecosystem.predator.biodiversity.level')}</p>
                 </div>
               </div>
 
               <div className="space-y-2 mb-6">
-                <h4 className="font-semibold">Your Actions:</h4>
+                <h4 className="font-semibold">{t('game.ecosystem.predator.your.actions')}</h4>
                 {selectedActions.map(actionId => {
                   const action = conservationActions.find(a => a.id === actionId);
                   return (
@@ -341,7 +343,7 @@ export function BiodiversityGame() {
               </div>
 
               <Button onClick={handleNext} className="w-full">
-                View Final Assessment
+                {t('game.ecosystem.predator.view.final.assessment')}
               </Button>
             </div>
           </div>

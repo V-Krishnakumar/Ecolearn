@@ -25,7 +25,6 @@ import { AchievementNotification } from "@/components/AchievementNotification";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useUser } from "@/contexts/UserContext";
 import { Navigation } from "@/components/Navigation";
-import { runSeedAchievements } from "@/lib/supabase/seed-achievements";
 
 export default function Achievements() {
   const {
@@ -45,24 +44,6 @@ export default function Achievements() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedRarity, setSelectedRarity] = useState("all");
   const [showOnlyUnlocked, setShowOnlyUnlocked] = useState(false);
-  const [seeding, setSeeding] = useState(false);
-
-  const handleSeedAchievements = async () => {
-    setSeeding(true);
-    try {
-      const result = await runSeedAchievements();
-      if (result.success) {
-        // Reload achievements after seeding
-        window.location.reload();
-      } else {
-        console.error('Failed to seed achievements:', result.error);
-      }
-    } catch (error) {
-      console.error('Error seeding achievements:', error);
-    } finally {
-      setSeeding(false);
-    }
-  };
 
   // Filter achievements based on search and filters
   const filteredAchievements = achievements.filter(achievement => {
@@ -197,21 +178,6 @@ export default function Achievements() {
           {t('achievements.subtitle')}
         </p>
         
-        {/* Debug Info and Seed Button for Testing */}
-        <div className="mt-4 space-y-2">
-          <div className="text-sm text-gray-500">
-            Debug: {achievements.length} achievements loaded
-          </div>
-          {achievements.length === 0 && (
-            <Button 
-              onClick={handleSeedAchievements}
-              disabled={seeding}
-              className="bg-blue-600 hover:bg-blue-700"
-            >
-              {seeding ? 'Seeding...' : 'Seed Sample Achievements'}
-            </Button>
-          )}
-        </div>
       </div>
 
       {/* Stats Overview */}

@@ -3,8 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Thermometer, Zap, CheckCircle, XCircle } from "lucide-react";
+import { useLanguage } from "@/hooks/useLanguage";
 
 export function ClimateChangeGame() {
+  const { t } = useLanguage();
   const [currentStep, setCurrentStep] = useState(0);
   const [selectedFactors, setSelectedFactors] = useState<string[]>([]);
   const [temperature, setTemperature] = useState(15); // Starting temperature in Celsius
@@ -12,14 +14,14 @@ export function ClimateChangeGame() {
   const [score, setScore] = useState(0);
 
   const climateFactors = [
-    { id: "fossil-fuels", name: "Fossil Fuel Usage", impact: +2, correct: true, description: "Burning fossil fuels releases CO₂" },
-    { id: "deforestation", name: "Deforestation", impact: +1.5, correct: true, description: "Trees absorb CO₂ from atmosphere" },
-    { id: "renewable-energy", name: "Renewable Energy", impact: -1, correct: false, description: "Clean energy reduces emissions" },
-    { id: "industrial-emissions", name: "Industrial Emissions", impact: +2.5, correct: true, description: "Factories release greenhouse gases" },
-    { id: "transportation", name: "Transportation", impact: +1.8, correct: true, description: "Cars and planes emit CO₂" },
-    { id: "agriculture", name: "Agriculture", impact: +1.2, correct: true, description: "Livestock and fertilizers emit methane" },
-    { id: "reforestation", name: "Reforestation", impact: -0.8, correct: false, description: "Planting trees absorbs CO₂" },
-    { id: "carbon-capture", name: "Carbon Capture", impact: -1.5, correct: false, description: "Technology removes CO₂ from air" }
+    { id: "fossil-fuels", name: t('game.climate.simulator.fossil.fuels'), impact: +2, correct: true, description: t('game.climate.simulator.fossil.fuels.desc') },
+    { id: "deforestation", name: t('game.climate.simulator.deforestation'), impact: +1.5, correct: true, description: t('game.climate.simulator.deforestation.desc') },
+    { id: "renewable-energy", name: t('game.climate.simulator.renewable.energy'), impact: -1, correct: false, description: t('game.climate.simulator.renewable.energy.desc') },
+    { id: "industrial-emissions", name: t('game.climate.simulator.industrial.emissions'), impact: +2.5, correct: true, description: t('game.climate.simulator.industrial.emissions.desc') },
+    { id: "transportation", name: t('game.climate.simulator.transportation'), impact: +1.8, correct: true, description: t('game.climate.simulator.transportation.desc') },
+    { id: "agriculture", name: t('game.climate.simulator.agriculture'), impact: +1.2, correct: true, description: t('game.climate.simulator.agriculture.desc') },
+    { id: "reforestation", name: t('game.climate.simulator.reforestation'), impact: -0.8, correct: false, description: t('game.climate.simulator.reforestation.desc') },
+    { id: "carbon-capture", name: t('game.climate.simulator.carbon.capture'), impact: -1.5, correct: false, description: t('game.climate.simulator.carbon.capture.desc') }
   ];
 
   const handleFactorSelect = (factorId: string) => {
@@ -74,11 +76,11 @@ export function ClimateChangeGame() {
   };
 
   const getTemperatureMessage = (temp: number) => {
-    if (temp < 17) return "Excellent! Low carbon footprint.";
-    if (temp < 19) return "Good! Moderate climate impact.";
-    if (temp < 21) return "Fair. Some room for improvement.";
-    if (temp < 23) return "Concerning. High emissions.";
-    return "Critical! Immediate action needed.";
+    if (temp < 17) return t('game.climate.simulator.excellent');
+    if (temp < 19) return t('game.climate.simulator.good');
+    if (temp < 21) return t('game.climate.simulator.needs.improvement');
+    if (temp < 23) return t('game.climate.simulator.needs.improvement');
+    return t('game.climate.simulator.needs.improvement');
   };
 
   if (gameCompleted) {
@@ -87,12 +89,12 @@ export function ClimateChangeGame() {
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
             <CheckCircle className="w-5 h-5 text-green-600" />
-            <span>Climate Model Results</span>
+            <span>{t('game.climate.simulator.simulation.results')}</span>
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="text-center space-y-6">
-            <div className="text-4xl font-bold text-green-600">🎉 Game Complete!</div>
+            <div className="text-4xl font-bold text-green-600">🎉 {t('game.complete.celebration')}</div>
             
             <div className="bg-gradient-to-r from-blue-50 to-green-50 p-6 rounded-lg">
               <div className="flex items-center justify-center space-x-4 mb-4">
@@ -101,7 +103,7 @@ export function ClimateChangeGame() {
                   {temperature.toFixed(1)}°C
                 </span>
               </div>
-              <p className="text-lg font-medium mb-2">Global Average Temperature</p>
+              <p className="text-lg font-medium mb-2">{t('game.climate.simulator.final.temperature').replace('{temperature}', temperature.toFixed(1))}</p>
               <p className={`text-sm ${getTemperatureColor(temperature)}`}>
                 {getTemperatureMessage(temperature)}
               </p>
@@ -109,9 +111,9 @@ export function ClimateChangeGame() {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-blue-50 p-4 rounded-lg">
-                <p className="text-sm text-blue-600 font-medium">Score</p>
+                <p className="text-sm text-blue-600 font-medium">{t('game.score')}</p>
                 <p className="text-2xl font-bold text-blue-800">{score}/4</p>
-                <p className="text-xs text-blue-600">Correct Factors</p>
+                <p className="text-xs text-blue-600">{t('game.climate.simulator.correct.factors').replace('{count}', score.toString())}</p>
               </div>
               <div className="bg-green-50 p-4 rounded-lg">
                 <p className="text-sm text-green-600 font-medium">Impact</p>
@@ -143,7 +145,7 @@ export function ClimateChangeGame() {
             </div>
 
             <Button onClick={handleRestart} className="w-full">
-              Play Again
+              {t('game.climate.simulator.restart')}
             </Button>
           </div>
         </CardContent>
@@ -156,20 +158,20 @@ export function ClimateChangeGame() {
       <CardHeader>
         <CardTitle className="flex items-center space-x-2">
           <Thermometer className="w-5 h-5" />
-          <span>Climate Model Simulator</span>
+          <span>{t('game.climate.simulator.title')}</span>
         </CardTitle>
       </CardHeader>
       <CardContent>
         {currentStep === 0 ? (
           <div className="space-y-6">
             <div className="text-center">
-              <h3 className="text-lg font-semibold mb-2">Select Climate Factors</h3>
+              <h3 className="text-lg font-semibold mb-2">{t('game.climate.simulator.select.factors')}</h3>
               <p className="text-sm text-muted-foreground mb-4">
-                Choose up to 4 factors that affect global temperature. Select the ones that contribute to climate change.
+                {t('game.climate.simulator.choose.factors')}
               </p>
               <div className="flex items-center justify-center space-x-2 mb-4">
                 <Thermometer className="w-5 h-5 text-blue-600" />
-                <span className="text-lg font-bold text-blue-600">Current: {temperature}°C</span>
+                <span className="text-lg font-bold text-blue-600">{t('game.climate.simulator.current.temperature').replace('{temperature}', temperature.toString())}</span>
               </div>
             </div>
 
@@ -203,27 +205,27 @@ export function ClimateChangeGame() {
 
             <div className="text-center">
               <p className="text-sm text-muted-foreground mb-4">
-                Selected: {selectedFactors.length}/4 factors
+                {t('game.climate.simulator.correct.factors').replace('{count}', selectedFactors.length.toString())}
               </p>
               <Button 
                 onClick={handleNext} 
                 disabled={selectedFactors.length === 0}
                 className="w-full"
               >
-                Run Climate Model
+                {t('game.climate.simulator.run.model')}
               </Button>
             </div>
           </div>
         ) : (
           <div className="space-y-6">
             <div className="text-center">
-              <h3 className="text-lg font-semibold mb-4">Climate Model Results</h3>
+              <h3 className="text-lg font-semibold mb-4">{t('game.climate.simulator.simulation.results')}</h3>
               
               <div className="bg-gradient-to-r from-blue-50 to-orange-50 p-6 rounded-lg mb-6">
                 <div className="flex items-center justify-center space-x-4 mb-4">
                   <Thermometer className="w-12 h-12 text-orange-500" />
                   <div>
-                    <p className="text-sm text-muted-foreground">New Global Temperature</p>
+                    <p className="text-sm text-muted-foreground">{t('game.climate.simulator.new.temperature')}</p>
                     <p className={`text-4xl font-bold ${getTemperatureColor(temperature)}`}>
                       {temperature.toFixed(1)}°C
                     </p>
@@ -236,21 +238,21 @@ export function ClimateChangeGame() {
 
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div className="bg-blue-50 p-4 rounded-lg">
-                  <p className="text-sm text-blue-600 font-medium">Score</p>
+                  <p className="text-sm text-blue-600 font-medium">{t('game.score')}</p>
                   <p className="text-2xl font-bold text-blue-800">{score}/4</p>
-                  <p className="text-xs text-blue-600">Correct Factors</p>
+                  <p className="text-xs text-blue-600">{t('game.climate.simulator.correct.factors').replace('{count}', score.toString())}</p>
                 </div>
                 <div className="bg-green-50 p-4 rounded-lg">
-                  <p className="text-sm text-green-600 font-medium">Impact</p>
+                  <p className="text-sm text-green-600 font-medium">{t('game.climate.simulator.impact')}</p>
                   <p className={`text-2xl font-bold ${getTemperatureColor(temperature)}`}>
-                    {temperature < 19 ? "Low" : temperature < 23 ? "Medium" : "High"}
+                    {temperature < 19 ? t('game.climate.simulator.impact.low') : temperature < 23 ? t('game.climate.simulator.impact.medium') : t('game.climate.simulator.impact.high')}
                   </p>
-                  <p className="text-xs text-green-600">Climate Impact</p>
+                  <p className="text-xs text-green-600">{t('game.climate.simulator.climate.impact')}</p>
                 </div>
               </div>
 
               <div className="space-y-2 mb-6">
-                <h4 className="font-semibold">Your Selections:</h4>
+                <h4 className="font-semibold">{t('game.climate.simulator.your.selections')}</h4>
                 {selectedFactors.map(factorId => {
                   const factor = climateFactors.find(f => f.id === factorId);
                   return (
@@ -270,7 +272,7 @@ export function ClimateChangeGame() {
               </div>
 
               <Button onClick={handleNext} className="w-full">
-                View Final Results
+                {t('game.climate.simulator.view.final.results')}
               </Button>
             </div>
           </div>

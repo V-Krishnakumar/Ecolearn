@@ -151,7 +151,7 @@ export default function Scoreboard() {
           <div className="text-center py-8 text-red-500">
             <p>{error}</p>
             <Button onClick={loadScoreboardData} className="mt-4">
-              Retry
+              {t('common.retry')}
             </Button>
           </div>
         )}
@@ -172,7 +172,7 @@ export default function Scoreboard() {
                 className="mt-4"
                 variant="outline"
               >
-                {loading ? 'Refreshing...' : 'Refresh Data'}
+                {loading ? t('common.refreshing') : t('common.refresh.data')}
               </Button>
             </div>
 
