@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Camera, Upload, TreePine, Users, Award, Clock, CheckCircle } from "lucide-react";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { useLanguage } from "@/hooks/useLanguage";
 import { useUser } from "@/contexts/UserContext";
 import { TaskService, RealTimeTask, TaskSubmission } from "@/lib/supabase/tasks";
 
@@ -99,7 +99,85 @@ export default function StudentTasks() {
             console.error('Error loading tasks:', tasksError);
             setTasks(getTasksTemplate(t));
           } else {
-            setTasks(tasksData || []);
+            // Transform Supabase tasks to apply translations
+            const transformedTasks = tasksData?.map(task => {
+              // Map task titles and descriptions to translation keys based on category
+              const getTranslatedTitle = (title: string, category: string) => {
+                const titleLower = title.toLowerCase();
+                const categoryLower = category.toLowerCase();
+
+                if (titleLower.includes('plant') || titleLower.includes('tree') || categoryLower.includes('afforestation')) {
+                  return t('student.tasks.plant.tree');
+                } else if (titleLower.includes('cleanup') || titleLower.includes('community') || categoryLower.includes('waste')) {
+                  return t('student.tasks.community.cleanup');
+                } else if (titleLower.includes('waste') || titleLower.includes('audit') || categoryLower.includes('waste')) {
+                  return t('student.tasks.waste.audit');
+                } else if (titleLower.includes('water') || titleLower.includes('conservation') || categoryLower.includes('water')) {
+                  return t('student.tasks.water.conservation.challenge');
+                } else if (titleLower.includes('energy') || titleLower.includes('efficiency') || categoryLower.includes('energy')) {
+                  return t('student.tasks.energy.efficiency.audit');
+                }
+                return title; // Return original if no match
+              };
+
+              const getTranslatedDescription = (title: string, category: string) => {
+                const titleLower = title.toLowerCase();
+                const categoryLower = category.toLowerCase();
+
+                if (titleLower.includes('plant') || titleLower.includes('tree') || categoryLower.includes('afforestation')) {
+                  return t('student.tasks.plant.tree.desc');
+                } else if (titleLower.includes('cleanup') || titleLower.includes('community') || categoryLower.includes('waste')) {
+                  return t('student.tasks.community.cleanup.desc');
+                } else if (titleLower.includes('waste') || titleLower.includes('audit') || categoryLower.includes('waste')) {
+                  return t('student.tasks.waste.audit.desc');
+                } else if (titleLower.includes('water') || titleLower.includes('conservation') || categoryLower.includes('water')) {
+                  return t('student.tasks.water.conservation.challenge.desc');
+                } else if (titleLower.includes('energy') || titleLower.includes('efficiency') || categoryLower.includes('energy')) {
+                  return t('student.tasks.energy.efficiency.audit.desc');
+                }
+                return task.description || '';
+              };
+
+              const getTranslatedDifficulty = (difficulty: string) => {
+                const difficultyLower = difficulty.toLowerCase();
+                if (difficultyLower.includes('beginner') || difficultyLower.includes('easy')) {
+                  return t('student.tasks.difficulty.beginner');
+                } else if (difficultyLower.includes('intermediate') || difficultyLower.includes('medium')) {
+                  return t('student.tasks.difficulty.intermediate');
+                } else if (difficultyLower.includes('advanced') || difficultyLower.includes('hard')) {
+                  return t('student.tasks.difficulty.advanced');
+                }
+                return difficulty;
+              };
+
+              const getTranslatedCategory = (category: string) => {
+                const categoryLower = category.toLowerCase();
+                if (categoryLower.includes('afforestation') || categoryLower.includes('tree')) {
+                  return t('student.tasks.category.afforestation');
+                } else if (categoryLower.includes('waste') || categoryLower.includes('cleanup')) {
+                  return t('student.tasks.category.waste.management');
+                } else if (categoryLower.includes('water') || categoryLower.includes('conservation')) {
+                  return t('student.tasks.category.water.conservation');
+                } else if (categoryLower.includes('energy') || categoryLower.includes('efficiency')) {
+                  return t('student.tasks.category.energy.conservation');
+                }
+                return category;
+              };
+
+              return {
+                ...task,
+                title: getTranslatedTitle(task.title, task.category),
+                description: getTranslatedDescription(task.title, task.category),
+                difficulty: getTranslatedDifficulty(task.difficulty),
+                category: getTranslatedCategory(task.category)
+              };
+            }) || [];
+
+            if (transformedTasks.length === 0) {
+              setTasks(getTasksTemplate(t));
+            } else {
+              setTasks(transformedTasks);
+            }
           }
 
           // Load user submissions
@@ -302,7 +380,7 @@ export default function StudentTasks() {
                           </div>
                           <div>
                             <h3 className="text-lg font-semibold text-gray-900">{task.title}</h3>
-                            <p className="text-sm text-gray-600">{task.category}</p>
+                            <p className="text-sm text-gray-700 font-medium">{task.category}</p>
                           </div>
                         </div>
                         <Badge className={getDifficultyColor(task.difficulty)}>
@@ -310,10 +388,10 @@ export default function StudentTasks() {
                         </Badge>
                       </div>
 
-                      <p className="text-gray-700">{task.description}</p>
+                      <p className="text-gray-800 font-medium">{task.description}</p>
 
                       <div className="space-y-3">
-                        <div className="flex items-center justify-between text-sm text-gray-600">
+                        <div className="flex items-center justify-between text-sm text-gray-700">
                           <div className="flex items-center space-x-4">
                             <div className="flex items-center space-x-1">
                               <Clock className="h-4 w-4" />
@@ -332,8 +410,8 @@ export default function StudentTasks() {
 
                         <div className="space-y-2">
                           <div className="flex justify-between text-sm">
-                            <span>{t('student.tasks.completion.rate')}</span>
-                            <span>{Math.round(completionRate)}%</span>
+                            <span className="text-gray-800 font-medium">{t('student.tasks.completion.rate')}</span>
+                            <span className="text-gray-800 font-semibold">{Math.round(completionRate)}%</span>
                           </div>
                           <Progress value={completionRate} className="h-2" />
                         </div>
@@ -344,7 +422,7 @@ export default function StudentTasks() {
                             return (
                               <div className="space-y-2">
                                 <div className="flex items-center justify-between text-sm">
-                                  <span className="text-gray-600">Status:</span>
+                                  <span className="text-gray-800 font-medium">Status:</span>
                                   <Badge 
                                     variant={submission.status === 'approved' ? 'default' : 'secondary'}
                                     className={submission.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : ''}
@@ -386,78 +464,19 @@ export default function StudentTasks() {
           </div>
         </div>
 
-        {/* Coming Soon Tasks */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('student.tasks.status.coming.soon')}</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {upcomingTasks.map((task) => {
-              
-              return (
-                <Card key={task.id} className="bg-white shadow-lg border-0 opacity-75">
-                  <CardContent className="p-6">
-                    <div className="space-y-4">
-                      <div className="flex items-start justify-between">
-                        <div className="flex items-center space-x-3">
-                          <div className="p-3 bg-gray-100 rounded-full">
-                            {task.icon && <task.icon className="h-6 w-6 text-gray-600" />}
-                          </div>
-                          <div>
-                            <h3 className="text-lg font-semibold text-gray-900">{task.title}</h3>
-                            <p className="text-sm text-gray-600">{task.category}</p>
-                          </div>
-                        </div>
-                        <Badge className={getStatusColor(task.status)}>
-                          {getStatusText(task.status)}
-                        </Badge>
-                      </div>
-
-                      <p className="text-gray-700">{task.description}</p>
-
-                      <div className="flex items-center justify-between text-sm text-gray-600">
-                        <div className="flex items-center space-x-4">
-                          <div className="flex items-center space-x-1">
-                            <Clock className="h-4 w-4" />
-                            <span>{task.time_estimate_minutes} min</span>
-                          </div>
-                          <div className="flex items-center space-x-1">
-                            <Users className="h-4 w-4" />
-                            <span>{task.max_participants || 'Unlimited'} interested</span>
-                          </div>
-                        </div>
-                        <div className="flex items-center space-x-1">
-                          <Award className="h-4 w-4" />
-                          <span className="font-medium text-gray-600">{task.points} points</span>
-                        </div>
-                      </div>
-
-                      <Button
-                        disabled
-                        className="w-full bg-gray-300 text-gray-500 cursor-not-allowed"
-                      >
-                        <Clock className="h-4 w-4 mr-2" />
-                        Coming Soon
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-        </div>
 
         {/* Call to Action */}
         <Card className="bg-gradient-to-r from-green-500 to-blue-600 text-white border-0">
           <CardContent className="p-8 text-center">
-            <h3 className="text-2xl font-bold mb-2">🌱 Make a Real Impact!</h3>
+            <h3 className="text-2xl font-bold mb-2">{t('student.tasks.call.to.action.title')}</h3>
             <p className="text-lg mb-4">
-              Complete tasks to earn eco points and contribute to environmental protection in your community.
+              {t('student.tasks.call.to.action.description')}
             </p>
             <Button
               onClick={() => navigate('/student/achievements')}
-              variant="secondary"
-              className="bg-white text-green-600 hover:bg-gray-100"
+              className="bg-gray-800 text-white hover:bg-gray-700 border-2 border-gray-800 font-semibold"
             >
-              View Your Progress
+              {t('student.tasks.view.progress')}
             </Button>
           </CardContent>
         </Card>

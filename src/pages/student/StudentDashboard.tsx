@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 import { PlayCircle, Clock, Trophy, Star, FileText, GraduationCap, Thermometer, TreePine, Award, BookOpen, Target } from "lucide-react";
 import NewsFacts from "@/components/NewsFacts";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { useLanguage } from "@/hooks/useLanguage";
 import { useUser } from "@/contexts/UserContext";
 import { useSupabaseProgress } from "@/hooks/useSupabaseProgress";
 import { useSupabaseAchievements } from "@/hooks/useSupabaseAchievements";
@@ -167,17 +167,84 @@ export default function StudentDashboard() {
           console.error('Error loading lessons:', lessonsError);
           setLessons(getLessonsTemplate(t));
         } else {
-          // Transform Supabase lessons to match template format
-          const transformedLessons = lessonsData?.map(lesson => ({
-            id: lesson.id,
-            title: lesson.title,
-            description: lesson.description || '',
-            image: getLessonImage(lesson.category, lesson.title),
-            duration: lesson.duration_minutes,
-            difficulty: lesson.difficulty,
-            points: lesson.points,
-            category: lesson.category
-          })) || [];
+          // Transform Supabase lessons to match template format with translations
+          const transformedLessons = lessonsData?.map(lesson => {
+            // Map lesson titles and descriptions to translation keys
+            const getTranslatedTitle = (title: string, category: string) => {
+              const titleLower = title.toLowerCase();
+              const categoryLower = category.toLowerCase();
+              
+              if (titleLower.includes('waste') || categoryLower.includes('waste')) {
+                return t('lesson.waste.management');
+              } else if (titleLower.includes('water') || categoryLower.includes('water')) {
+                return t('lesson.water.treatment');
+              } else if (titleLower.includes('pollution') || categoryLower.includes('pollution')) {
+                return t('lesson.pollution.free');
+              } else if (titleLower.includes('afforestation') || categoryLower.includes('afforestation')) {
+                return t('lesson.afforestation');
+              } else if (titleLower.includes('deforestation') || categoryLower.includes('deforestation')) {
+                return t('lesson.deforestation');
+              } else if (titleLower.includes('renewable') || titleLower.includes('energy') || categoryLower.includes('renewable') || categoryLower.includes('energy')) {
+                return t('lesson.renewable.energy');
+              } else if (titleLower.includes('climate') || categoryLower.includes('climate')) {
+                return t('lesson.climate.change');
+              } else if (titleLower.includes('biodiversity') || categoryLower.includes('biodiversity')) {
+                return t('lesson.biodiversity');
+              } else if (titleLower.includes('environmental') || categoryLower.includes('environmental')) {
+                return t('lesson.environmental.policy');
+              }
+              return title; // Return original if no match
+            };
+
+            const getTranslatedDescription = (title: string, category: string) => {
+              const titleLower = title.toLowerCase();
+              const categoryLower = category.toLowerCase();
+              
+              if (titleLower.includes('waste') || categoryLower.includes('waste')) {
+                return t('lesson.waste.management.desc');
+              } else if (titleLower.includes('water') || categoryLower.includes('water')) {
+                return t('lesson.water.treatment.desc');
+              } else if (titleLower.includes('pollution') || categoryLower.includes('pollution')) {
+                return t('lesson.pollution.free.desc');
+              } else if (titleLower.includes('afforestation') || categoryLower.includes('afforestation')) {
+                return t('lesson.afforestation.desc');
+              } else if (titleLower.includes('deforestation') || categoryLower.includes('deforestation')) {
+                return t('lesson.deforestation.desc');
+              } else if (titleLower.includes('renewable') || titleLower.includes('energy') || categoryLower.includes('renewable') || categoryLower.includes('energy')) {
+                return t('lesson.renewable.energy.desc');
+              } else if (titleLower.includes('climate') || categoryLower.includes('climate')) {
+                return t('lesson.climate.change.desc');
+              } else if (titleLower.includes('biodiversity') || categoryLower.includes('biodiversity')) {
+                return t('lesson.biodiversity.desc');
+              } else if (titleLower.includes('environmental') || categoryLower.includes('environmental')) {
+                return t('lesson.environmental.policy.desc');
+              }
+              return lesson.description || '';
+            };
+
+            const getTranslatedDifficulty = (difficulty: string) => {
+              const difficultyLower = difficulty.toLowerCase();
+              if (difficultyLower.includes('beginner') || difficultyLower.includes('easy')) {
+                return t('difficulty.beginner');
+              } else if (difficultyLower.includes('intermediate') || difficultyLower.includes('medium')) {
+                return t('difficulty.intermediate');
+              } else if (difficultyLower.includes('advanced') || difficultyLower.includes('hard')) {
+                return t('difficulty.advanced');
+              }
+              return difficulty;
+            };
+
+            return {
+              id: lesson.id,
+              title: getTranslatedTitle(lesson.title, lesson.category),
+              description: getTranslatedDescription(lesson.title, lesson.category),
+              image: getLessonImage(lesson.category, lesson.title),
+              duration: `${lesson.duration_minutes} ${t('common.minutes')}`,
+              difficulty: getTranslatedDifficulty(lesson.difficulty),
+              points: lesson.points,
+              category: lesson.category
+            };
+          }) || [];
           
           if (transformedLessons.length === 0) {
             setLessons(getLessonsTemplate(t));
@@ -335,8 +402,8 @@ export default function StudentDashboard() {
             )}
           </div>
           <div className="text-lg text-gray-600 max-w-2xl mx-auto">
-            <p className="mb-2">Explore interactive lessons about environmental protection and sustainability.</p>
-            <p>Each lesson includes videos, quizzes, and hands-on activities to help you become an eco-hero!</p>
+            <p className="mb-2">{t('student.dashboard.explore.lessons')}</p>
+            <p>{t('student.dashboard.lesson.includes')}</p>
           </div>
         </div>
 

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useNavigate } from "react-router-dom";
 import { Trophy, Star, Award, Target, BookOpen, Zap, Gift } from "lucide-react";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { useLanguage } from "@/hooks/useLanguage";
 import { useUser } from "@/contexts/UserContext";
 import { LeaderboardService } from "@/lib/supabase/leaderboard";
 import { StatisticsService, WeeklyProgress, UserStats } from "@/lib/supabase/statistics";
@@ -225,6 +225,56 @@ export default function Scoreboard() {
                     <div className="grid gap-4">
                       {achievements.slice(0, 6).map((achievement, index) => {
                         const isUnlocked = unlockedAchievements.some(ua => ua.achievement_id === achievement.id);
+                        
+                        // Map achievement names and descriptions to translation keys
+                        const getTranslatedAchievementName = (name: string) => {
+                          const nameLower = name.toLowerCase();
+                          if (nameLower.includes('eco warrior') || nameLower.includes('environmental')) {
+                            return t('achievement.eco.warrior');
+                          } else if (nameLower.includes('first steps') || nameLower.includes('first lesson') || nameLower.includes('beginner')) {
+                            return t('achievement.first.lesson');
+                          } else if (nameLower.includes('quiz master') || nameLower.includes('quiz')) {
+                            return t('achievement.quiz.master');
+                          } else if (nameLower.includes('speed learner') || nameLower.includes('speed')) {
+                            return t('achievement.speed.learner');
+                          } else if (nameLower.includes('task master') || nameLower.includes('task')) {
+                            return t('achievement.task.master');
+    } else if (nameLower.includes('streak') || nameLower.includes('consecutive')) {
+      return t('achievement.study.streak');
+    } else if (nameLower.includes('dedicated learner') || nameLower.includes('dedicated')) {
+      return t('achievement.dedicated.learner');
+    } else if (nameLower.includes('completion') || nameLower.includes('complete')) {
+      return t('achievement.lesson.completion');
+    } else if (nameLower.includes('perfect') || nameLower.includes('100')) {
+      return t('achievement.perfect.score');
+    }
+                          return name; // Return original if no match
+                        };
+
+                        const getTranslatedAchievementDescription = (name: string, description: string) => {
+                          const nameLower = name.toLowerCase();
+                          if (nameLower.includes('eco warrior') || nameLower.includes('environmental')) {
+                            return t('achievement.eco.warrior.desc');
+                          } else if (nameLower.includes('first steps') || nameLower.includes('first lesson') || nameLower.includes('beginner')) {
+                            return t('achievement.first.lesson.desc');
+                          } else if (nameLower.includes('quiz master') || nameLower.includes('quiz')) {
+                            return t('achievement.quiz.master.desc');
+                          } else if (nameLower.includes('speed learner') || nameLower.includes('speed')) {
+                            return t('achievement.speed.learner.desc');
+                          } else if (nameLower.includes('task master') || nameLower.includes('task')) {
+                            return t('achievement.task.master.desc');
+    } else if (nameLower.includes('streak') || nameLower.includes('consecutive')) {
+      return t('achievement.study.streak.desc');
+    } else if (nameLower.includes('dedicated learner') || nameLower.includes('dedicated')) {
+      return t('achievement.dedicated.learner.desc');
+    } else if (nameLower.includes('completion') || nameLower.includes('complete')) {
+      return t('achievement.lesson.completion.desc');
+    } else if (nameLower.includes('perfect') || nameLower.includes('100')) {
+      return t('achievement.perfect.score.desc');
+    }
+                          return description; // Return original if no match
+                        };
+
                         return (
                           <div
                             key={achievement.id}
@@ -242,10 +292,10 @@ export default function Scoreboard() {
                                 </div>
                                 <div>
                                   <h3 className={`font-semibold ${isUnlocked ? 'text-foreground' : 'text-muted-foreground'}`}>
-                                    {achievement.name}
+                                    {getTranslatedAchievementName(achievement.name)}
                                   </h3>
                                   <p className="text-sm text-muted-foreground">
-                                    {achievement.description}
+                                    {getTranslatedAchievementDescription(achievement.name, achievement.description)}
                                   </p>
                                   {isUnlocked && (
                                     <p className="text-xs text-primary mt-1">
@@ -411,7 +461,7 @@ export default function Scoreboard() {
                   <CardHeader>
                     <CardTitle className="flex items-center space-x-2">
                       <Trophy className="w-5 h-5 text-yellow-500" />
-                      <span>Leaderboard</span>
+                      <span>{t('scoreboard.leaderboard')}</span>
                     </CardTitle>
                   </CardHeader>
                   <CardContent>

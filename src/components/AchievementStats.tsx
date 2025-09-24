@@ -3,7 +3,7 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Trophy, Star, Target, Award } from "lucide-react";
 import { AchievementStats } from "@/types/achievements";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { useLanguage } from "@/hooks/useLanguage";
 
 interface AchievementStatsProps {
   stats: AchievementStats;
@@ -139,19 +139,46 @@ export function AchievementStats({ stats, className = "" }: AchievementStatsProp
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              {stats.recentAchievements.slice(0, 3).map((achievement) => (
-                <div key={achievement.id} className="flex items-center space-x-3 p-2 rounded-lg bg-green-50">
-                  <div className="text-2xl">{achievement.icon}</div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-green-800 truncate">
-                      {achievement.title}
-                    </p>
-                    <p className="text-xs text-green-600">
-                      +{achievement.points} {t('achievements.points')}
-                    </p>
+              {stats.recentAchievements.slice(0, 3).map((achievement) => {
+                // Map achievement titles to translation keys
+                const getTranslatedAchievementTitle = (title: string) => {
+                  const titleLower = title.toLowerCase();
+                  if (titleLower.includes('eco warrior') || titleLower.includes('environmental')) {
+                    return t('achievement.eco.warrior');
+                  } else if (titleLower.includes('first steps') || titleLower.includes('first lesson') || titleLower.includes('beginner')) {
+                    return t('achievement.first.lesson');
+                  } else if (titleLower.includes('quiz master') || titleLower.includes('quiz')) {
+                    return t('achievement.quiz.master');
+                  } else if (titleLower.includes('speed learner') || titleLower.includes('speed')) {
+                    return t('achievement.speed.learner');
+                  } else if (titleLower.includes('task master') || titleLower.includes('task')) {
+                    return t('achievement.task.master');
+    } else if (titleLower.includes('streak') || titleLower.includes('consecutive')) {
+      return t('achievement.study.streak');
+    } else if (titleLower.includes('dedicated learner') || titleLower.includes('dedicated')) {
+      return t('achievement.dedicated.learner');
+    } else if (titleLower.includes('completion') || titleLower.includes('complete')) {
+      return t('achievement.lesson.completion');
+    } else if (titleLower.includes('perfect') || titleLower.includes('100')) {
+      return t('achievement.perfect.score');
+    }
+                  return title; // Return original if no match
+                };
+
+                return (
+                  <div key={achievement.id} className="flex items-center space-x-3 p-2 rounded-lg bg-green-50">
+                    <div className="text-2xl">{achievement.icon}</div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-green-800 truncate">
+                        {getTranslatedAchievementTitle(achievement.title)}
+                      </p>
+                      <p className="text-xs text-green-600">
+                        +{achievement.points} {t('achievements.points')}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </CardContent>
         </Card>

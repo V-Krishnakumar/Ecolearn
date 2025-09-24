@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { useUser } from "@/contexts/UserContext";
 import { TeacherDataManager, Class, Assignment } from "@/lib/teacherData";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { useLanguage } from "@/hooks/useLanguage";
 
 const LESSON_OPTIONS = [
   { id: 'L1', title: 'Waste Management Basics', type: 'lesson' },

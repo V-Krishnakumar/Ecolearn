@@ -10,6 +10,8 @@ interface AchievementCardProps {
   showProgress?: boolean;
   isUnlocked?: boolean;
   progress?: number;
+  translatedName?: string;
+  translatedDescription?: string;
 }
 
 export function AchievementCard({ 
@@ -17,7 +19,9 @@ export function AchievementCard({
   onClick, 
   showProgress = true,
   isUnlocked = false,
-  progress = 0
+  progress = 0,
+  translatedName,
+  translatedDescription
 }: AchievementCardProps) {
 
   const getRarityColor = (rarity: string) => {
@@ -54,10 +58,10 @@ export function AchievementCard({
             </div>
             <div className="flex-1">
               <CardTitle className={`text-lg ${isUnlocked ? 'text-green-800' : 'text-gray-700'}`}>
-                {achievement.name}
+                {translatedName || achievement.name}
               </CardTitle>
               <p className={`text-sm ${isUnlocked ? 'text-green-600' : 'text-gray-500'}`}>
-                {achievement.description}
+                {translatedDescription || achievement.description}
               </p>
             </div>
           </div>

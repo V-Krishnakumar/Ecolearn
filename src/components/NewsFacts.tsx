@@ -14,7 +14,7 @@ import {
   ExternalLink,
   RefreshCw
 } from 'lucide-react';
-import { useLanguage } from '@/contexts/LanguageContext';
+import { useLanguage } from "@/hooks/useLanguage";
 import { newsService, NewsArticle, ENVIRONMENTAL_FACTS, DAILY_TIPS } from '@/lib/newsApi';
 
 const NewsFacts: React.FC = () => {

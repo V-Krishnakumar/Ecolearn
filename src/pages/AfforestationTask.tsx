@@ -18,7 +18,7 @@ import {
   Users,
   Trash2
 } from "lucide-react";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { useLanguage } from "@/hooks/useLanguage";
 import { useToast } from "@/hooks/use-toast";
 import { useUser } from "@/contexts/UserContext";
 import { TaskService } from "@/lib/supabase/tasks";

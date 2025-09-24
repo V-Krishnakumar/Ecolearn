@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { useUser } from "@/contexts/UserContext";
 import { TeacherDataManager, Class, Student, Assignment, Progress } from "@/lib/teacherData";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { useLanguage } from "@/hooks/useLanguage";
 import {
   BarChart,
   Bar,

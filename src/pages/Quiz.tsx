@@ -7,7 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, XCircle, ArrowRight, RotateCcw, Trophy } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { useLanguage } from "@/hooks/useLanguage";
 import { useSupabaseProgress } from "@/hooks/useSupabaseProgress";
 import { useSupabaseAchievements } from "@/hooks/useSupabaseAchievements";
 import { AchievementNotification } from "@/components/AchievementNotification";

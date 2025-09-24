@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Home, BookOpen, User, Trophy, LogOut, Languages, Camera, GraduationCap, FileText, Award } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useUser } from "@/contexts/UserContext";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { useLanguage } from "@/hooks/useLanguage";
 
 export function Navigation() {
   const navigate = useNavigate();

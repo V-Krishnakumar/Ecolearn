@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import { useUser } from "@/contexts/UserContext";
 import { TeacherDataManager, Class, Student } from "@/lib/teacherData";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { useLanguage } from "@/hooks/useLanguage";
 
 export default function TeacherClasses() {
   const navigate = useNavigate();

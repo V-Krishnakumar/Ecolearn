@@ -44,26 +44,57 @@ const knowledgeBase: Record<string, string> = {
     "Sources: river plastic, fishing gear, runoff. Actions: proper waste management, capture stormwater, beach cleanups, responsible seafood.",
 };
 
-const FALLBACK_RESPONSE =
-  "I can answer many environment questions (waste, water, pollution, forests, energy). Ask me anything — for broader answers, add an API key later.";
+const FALLBACK_RESPONSE_EN = "I can answer many environment questions (waste, water, pollution, forests, energy). Ask me anything — for broader answers, add an API key later.";
+const FALLBACK_RESPONSE_HI = "मैं कई पर्यावरणीय प्रश्नों का उत्तर दे सकता हूं (अपशिष्ट, जल, प्रदूषण, जंगल, ऊर्जा)। मुझसे कुछ भी पूछें - अधिक विस्तृत उत्तरों के लिए, बाद में एक API कुंजी जोड़ें।";
 
-function answerFromKnowledge(query: string): string {
+// Hindi knowledge base
+const knowledgeBaseHindi: Record<string, string> = {
+  "अपशिष्ट प्रबंधन": "अपशिष्ट प्रबंधन 3 R के सिद्धांतों का पालन करता है: कम करना, पुन: उपयोग, पुनर्चक्रण। कार्बनिक पदार्थों को खाद के लिए, पुनर्चक्रण योग्य (कागज, धातु, प्लास्टिक), और लैंडफिल अपशिष्ट के लिए अलग करें। सुझाव: घर/स्कूल में एक लेबल वाली 3-बिन प्रणाली रखें।",
+  "पुनर्चक्रण": "कंटेनरों को धोएं, कार्डबोर्ड को समतल करें, पुनर्चक्रण योग्य के साथ खाद्य अपशिष्ट मिलाने से बचें। दूषण पूरे बैच को पुनर्चक्रण अयोग्य बना सकता है।",
+  "प्लास्टिक पुनर्चक्रण": "कई नगरपालिकाएं #1 (PET) और #2 (HDPE) स्वीकार करती हैं। नरम फिल्में/बैग आमतौर पर स्टोर ड्रॉप-ऑफ की आवश्यकता होती है। सुझाव: स्थानीय दिशानिर्देश जांचें - प्रतीक हमेशा पुनर्चक्रण योग्य नहीं होते।",
+  "ई-अपशिष्ट": "इलेक्ट्रॉनिक्स में मूल्यवान धातुएं और खतरनाक सामग्री होती है। प्रदूषण को रोकने और पुनर्प्राप्ति को सक्षम करने के लिए प्रमाणित ई-अपशिष्ट संग्रह बिंदुओं का उपयोग करें।",
+  "खाद": "खाद भूरे (सूखे पत्ते, कार्डबोर्ड) और हरे (खाद्य स्क्रैप) का मिश्रण है। इसे निचोड़े हुए स्पंज की तरह नम रखें और ऑक्सीजन जोड़ने के लिए साप्ताहिक रूप से मोड़ें।",
+  "लैंडफिल": "जब कार्बनिक पदार्थ ऑक्सीजन के बिना विघटित होते हैं तो लैंडफिल मीथेन उत्पन्न करते हैं। उत्सर्जन को कम करने के लिए खाद्य स्क्रैप को खाद में और पुनर्चक्रण योग्य को पुनर्चक्रण में भेजें।",
+  "वृत्ताकार अर्थव्यवस्था": "अपशिष्ट को डिज़ाइन से बाहर करें, सामग्रियों को उपयोग में रखें, और प्रकृति को पुनर्जीवित करें। टिकाऊ सामान खरीदें, मरम्मत करें, और रिफिल/पुन: उपयोग पैकेजिंग को प्राथमिकता दें।",
+  "जल उपचार": "सामान्य चरण: स्क्रीनिंग, स्कंदन/फ्लोक्यूलेशन, अवसादन, निस्पंदन, कीटाणुशोधन। सुझाव: जलग्रहण क्षेत्रों की रक्षा करें - रोकथाम उपचार से सस्ता है।",
+  "अपशिष्ट जल": "अपशिष्ट जल संयंत्र प्राथमिक (बसाना), द्वितीयक (वातन सूक्ष्मजीव), और कभी-कभी तृतीयक (उन्नत निस्पंदन/कीटाणुशोधन) उपचार का उपयोग करते हैं।",
+  "जल संरक्षण": "रिसाव ठीक करें, कम-प्रवाह फिक्स्चर स्थापित करें, बगीचों के लिए वर्षा जल कैप्चर करें, और सूखा-सहिष्णु पौधे चुनें। सुझाव: छोटे शावर प्रति मिनट लीटर बचाते हैं।",
+  "प्रदूषण": "सार्वजनिक परिवहन, ईवी, और स्वच्छ ऊर्जा के माध्यम से वायु प्रदूषण कम करें; रसायनों के उचित निपटान और तूफानी जल प्रबंधन द्वारा जल प्रदूषण कम करें।",
+  "वायु प्रदूषण": "मुख्य स्रोत: परिवहन, उद्योग, जलना। कार्य: कारपूल, सार्वजनिक परिवहन का उपयोग, खुले जलने से बचें, और स्वच्छ ऊर्जा नीतियों का समर्थन करें।",
+  "माइक्रोप्लास्टिक": "कपड़ों से फाइबर और टायरों से टुकड़े जलमार्गों में प्रवेश करते हैं। सुझाव: माइक्रोप्लास्टिक लॉन्ड्री फिल्टर का उपयोग करें और एकल-उपयोग प्लास्टिक कम करें।",
+  "वनरोपण": "वनरोपण गैर-वन भूमि पर नए जंगल बनाता है। देशी प्रजातियां चुनें, जैव विविधता सुनिश्चित करें, और पहले 2-3 वर्षों के लिए रखरखाव की योजना बनाएं।",
+  "वनों की कटाई": "मुख्य चालक: कृषि, लॉगिंग, सड़कें। प्रभाव: जैव विविधता हानि, उत्सर्जन। समाधान: संरक्षित क्षेत्र, सतत वानिकी, समुदाय अधिकार।",
+  "नवीकरणीय ऊर्जा": "सौर, पवन, जल, भूतापीय, और बायोमास। सुझाव: ऊर्जा दक्षता (LED, इन्सुलेशन) से शुरू करें - यह सबसे सस्ती जलवायु कार्रवाई है।",
+  "सौर बनाम पवन": "सौर छतों और धूप वाले क्षेत्रों के लिए उपयुक्त है; पवन को स्थिर पवन गति और स्थान की आवश्यकता है। दोनों उत्सर्जन कम करते हैं - मिश्रण स्थानीय संसाधनों पर निर्भर करता है।",
+  "कार्बन फुटप्रिंट": "सबसे बड़े लीवर: आहार (कम खाद्य अपशिष्ट, अधिक पौधे-आधारित), परिवहन (चलना/साइकिल/पारगमन, ईवी), घर ऊर्जा (इन्सुलेट, कुशल उपकरण)।",
+  "जैव विविधता": "आवासों की रक्षा करें, कीटनाशक कम करें, देशी प्रजातियां लगाएं, और हरे गलियारे जोड़ें। सुझाव: बैकयार्ड देशी बगीचे परागणकर्ताओं का समर्थन करते हैं।",
+  "समुद्री प्रदूषण": "स्रोत: नदी प्लास्टिक, मछली पकड़ने के गियर, अपवाह। कार्य: उचित अपशिष्ट प्रबंधन, तूफानी जल कैप्चर, समुद्र तट सफाई, जिम्मेदार समुद्री भोजन।"
+};
+
+function answerFromKnowledge(query: string, language: 'en' | 'hi' = 'en'): string {
   const q = query.toLowerCase();
+  const knowledge = language === 'hi' ? knowledgeBaseHindi : knowledgeBase;
+  const fallback = language === 'hi' ? FALLBACK_RESPONSE_HI : FALLBACK_RESPONSE_EN;
+  
   // Simple keyword scoring
-  const scores = Object.entries(knowledgeBase).map(([k, v]) => {
+  const scores = Object.entries(knowledge).map(([k, v]) => {
     const terms = k.split(/\s+/);
     const score = terms.reduce((s, t) => (q.includes(t) ? s + 1 : s), 0);
     return { k, v, score };
   });
   scores.sort((a, b) => b.score - a.score);
   const top = scores[0];
-  if (!top || top.score === 0) return FALLBACK_RESPONSE;
+  if (!top || top.score === 0) return fallback;
 
   // Compose a concise answer with an actionable tip when possible
-  return `${top.v}\n\nNeed more detail? Tell me your context (home, school, city) and goal.`;
+  const followUp = language === 'hi' 
+    ? "अधिक विवरण चाहिए? मुझे अपना संदर्भ (घर, स्कूल, शहर) और लक्ष्य बताएं।"
+    : "Need more detail? Tell me your context (home, school, city) and goal.";
+  
+  return `${top.v}\n\n${followUp}`;
 }
 
-export async function askAI(messages: ChatMessage[]): Promise<string> {
+export async function askAI(messages: ChatMessage[], language: 'en' | 'hi' = 'en'): Promise<string> {
   const apiKey = import.meta.env.VITE_GOOGLE_API_KEY as string | undefined;
   const last = messages.filter(m => m.role === "user").pop()?.content || "";
   
@@ -99,6 +130,8 @@ export async function askAI(messages: ChatMessage[]): Promise<string> {
           contents: [{
             parts: [{
               text: `You are EcoLearn's environmental tutor for students. Answer environmental questions clearly and educationally. Keep answers under 6 sentences, include one actionable tip when relevant, and use emojis to make it engaging. Focus on practical, student-friendly explanations. Draw inspiration from environmental topics like waste management, water treatment, pollution control, afforestation, deforestation, and renewable energy.
+
+${language === 'hi' ? 'IMPORTANT: Respond in Hindi (हिंदी). Use simple Hindi that students can understand. Include Hindi translations for technical terms when needed.' : 'IMPORTANT: Respond in English.'}
 
 Student question: ${last}`
             }]
@@ -140,19 +173,28 @@ Student question: ${last}`
   // Comprehensive environmental knowledge base with smart matching
   
   // Greetings and general questions
-  if (query.includes("hello") || query.includes("hi") || query.includes("hey") || query.includes("good morning") || query.includes("good afternoon") || query.includes("what can you help") || query.includes("what do you do")) {
+  if (query.includes("hello") || query.includes("hi") || query.includes("hey") || query.includes("good morning") || query.includes("good afternoon") || query.includes("what can you help") || query.includes("what do you do") || query.includes("नमस्ते") || query.includes("हैलो") || query.includes("क्या आप मदद") || query.includes("आप क्या करते")) {
+    if (language === 'hi') {
+      return "नमस्ते! मैं EcoLearn का पर्यावरणीय सहायक हूं। मैं आपको अपशिष्ट प्रबंधन, नवीकरणीय ऊर्जा, जल संरक्षण, प्रदूषण नियंत्रण, सतत जीवन, जलवायु परिवर्तन और बहुत कुछ के बारे में सीखने में मदद कर सकता हूं! आज आपको कौन सा पर्यावरणीय विषय रुचिकर लगता है?";
+    }
     return "Hello! I'm EcoLearn's environmental assistant. I can help you learn about waste management, renewable energy, water conservation, pollution control, sustainable living, climate change, and much more! What environmental topic interests you today?";
   }
   
   // Simple, practical questions students ask
   
   // How to plant a tree
-  if (query.includes("how to plant") && query.includes("tree")) {
+  if (query.includes("how to plant") && query.includes("tree") || query.includes("पेड़ कैसे लगाएं") || query.includes("वृक्षारोपण")) {
+    if (language === 'hi') {
+      return "बहुत अच्छा सवाल! यहां पेड़ लगाने के चरण हैं:\n\n🌱 **चरण 1**: अपनी जलवायु और स्थान के लिए सही पेड़ चुनें\n🕳️ **चरण 2**: जड़ गेंद से 2-3 गुना चौड़ा गड्ढा खोदें\n🌿 **चरण 3**: पेड़ को गड्ढे में रखें, जड़ का फ्लेयर जमीन से ऊपर रखें\n💧 **चरण 4**: मिट्टी से भरें और अच्छी तरह पानी दें\n🌳 **चरण 5**: आधार के चारों ओर गीली घास डालें (लेकिन तने को छूने न दें)\n\n💡 **सुझाव**: सबसे अच्छे परिणाम के लिए पतझड़ या शुरुआती वसंत में लगाएं। पहले 2 साल नियमित रूप से पानी दें!";
+    }
     return "Great question! Here's how to plant a tree step by step:\n\n🌱 **Step 1**: Choose the right tree for your climate and space\n🕳️ **Step 2**: Dig a hole 2-3 times wider than the root ball\n🌿 **Step 3**: Place the tree in the hole, keeping the root flare above ground\n💧 **Step 4**: Fill with soil and water thoroughly\n🌳 **Step 5**: Add mulch around the base (but not touching the trunk)\n\n💡 **Pro Tip**: Plant in fall or early spring for best results. Water regularly for the first 2 years!";
   }
   
   // Green dustbin/bin questions
-  if (query.includes("green dustbin") || query.includes("green bin") || query.includes("green garbage") || query.includes("what goes in green bin") || query.includes("green waste")) {
+  if (query.includes("green dustbin") || query.includes("green bin") || query.includes("green garbage") || query.includes("what goes in green bin") || query.includes("green waste") || query.includes("हरा डस्टबिन") || query.includes("हरे डिब्बे में क्या डालें")) {
+    if (language === 'hi') {
+      return "हरा डिब्बा कार्बनिक अपशिष्ट के लिए है! इसमें ये चीजें जाती हैं:\n\n✅ **खाद्य स्क्रैप**: फल के छिलके, सब्जी के टुकड़े, कॉफी ग्राउंड\n✅ **बगीचे का कचरा**: घास की कतरन, पत्ते, छोटी शाखाएं\n✅ **कागज उत्पाद**: इस्तेमाल किए गए टिशू, पेपर टॉवल (यदि बहुत गंदे न हों)\n\n❌ **इसमें न डालें**: प्लास्टिक बैग, मांस, डेयरी, या तेल वाला पका हुआ भोजन\n\n💡 **सुझाव**: अपने रसोई में खाद्य स्क्रैप के लिए एक छोटा कंटेनर रखें, फिर इसे नियमित रूप से हरे डिब्बे में खाली करें!";
+    }
     return "The green bin is for organic waste! Here's what goes in it:\n\n✅ **Food scraps**: Fruit peels, vegetable trimmings, coffee grounds\n✅ **Garden waste**: Grass clippings, leaves, small branches\n✅ **Paper products**: Used tissues, paper towels (if not too dirty)\n\n❌ **Don't put in**: Plastic bags, meat, dairy, or cooked food with oil\n\n💡 **Pro Tip**: Keep a small container in your kitchen for food scraps, then empty it into the green bin regularly!";
   }
   
@@ -445,7 +487,7 @@ Student question: ${last}`
   }
   
   // Use the original knowledge base as fallback
-  return answerFromKnowledge(last);
+  return answerFromKnowledge(last, language);
 }
 
 

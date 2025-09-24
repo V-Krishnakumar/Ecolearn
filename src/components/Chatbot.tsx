@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { askAI, type ChatMessage } from "@/lib/ai";
 import { Send, MessageCircle, X } from "lucide-react";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { useLanguage } from "@/hooks/useLanguage";
 
 export default function Chatbot() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
     { role: "assistant", content: t('chatbot.greeting') },
@@ -24,7 +24,7 @@ export default function Chatbot() {
     setMessages(next);
     setInput("");
     setIsLoading(true);
-    const reply = await askAI(next);
+    const reply = await askAI(next, language);
     setMessages([...next, { role: "assistant", content: reply }]);
     setIsLoading(false);
   };

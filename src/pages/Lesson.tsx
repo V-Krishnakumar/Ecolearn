@@ -8,7 +8,7 @@ import { Progress } from "@/components/ui/progress";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Play, Pause, RotateCcw, ArrowRight, Clock, BookOpen } from "lucide-react";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { useLanguage } from "@/hooks/useLanguage";
 import { useSupabaseProgress } from "@/hooks/useSupabaseProgress";
 import { useSupabaseAchievements } from "@/hooks/useSupabaseAchievements";
 import { useNotifications } from "@/contexts/NotificationContext";

@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Play, Pause, RotateCcw, ArrowRight, Clock, BookOpen, FileText } from "lucide-react";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { useLanguage } from "@/hooks/useLanguage";
 const environmentalPolicyImg = "/images/lesson-environmental-policy.jpg";
 
 export default function EnvironmentalPolicy() {

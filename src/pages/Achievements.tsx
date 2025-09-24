@@ -22,7 +22,7 @@ import { useSupabaseAchievements } from "@/hooks/useSupabaseAchievements";
 import { AchievementCard } from "@/components/AchievementCard";
 import { AchievementStats } from "@/components/AchievementStats";
 import { AchievementNotification } from "@/components/AchievementNotification";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { useLanguage } from "@/hooks/useLanguage";
 import { useUser } from "@/contexts/UserContext";
 import { Navigation } from "@/components/Navigation";
 import { runSeedAchievements } from "@/lib/supabase/seed-achievements";
@@ -74,6 +74,55 @@ export default function Achievements() {
     
     return matchesSearch && matchesCategory && matchesRarity && matchesUnlocked;
   });
+
+  // Helper function to translate achievement names and descriptions
+  const getTranslatedAchievementName = (name: string) => {
+    const nameLower = name.toLowerCase();
+    if (nameLower.includes('eco warrior') || nameLower.includes('environmental')) {
+      return t('achievement.eco.warrior');
+    } else if (nameLower.includes('first steps') || nameLower.includes('first lesson') || nameLower.includes('beginner')) {
+      return t('achievement.first.lesson');
+    } else if (nameLower.includes('quiz master') || nameLower.includes('quiz')) {
+      return t('achievement.quiz.master');
+    } else if (nameLower.includes('speed learner') || nameLower.includes('speed')) {
+      return t('achievement.speed.learner');
+    } else if (nameLower.includes('task master') || nameLower.includes('task')) {
+      return t('achievement.task.master');
+    } else if (nameLower.includes('streak') || nameLower.includes('consecutive')) {
+      return t('achievement.study.streak');
+    } else if (nameLower.includes('dedicated learner') || nameLower.includes('dedicated')) {
+      return t('achievement.dedicated.learner');
+    } else if (nameLower.includes('completion') || nameLower.includes('complete')) {
+      return t('achievement.lesson.completion');
+    } else if (nameLower.includes('perfect') || nameLower.includes('100')) {
+      return t('achievement.perfect.score');
+    }
+    return name; // Return original if no match
+  };
+
+  const getTranslatedAchievementDescription = (name: string, description: string) => {
+    const nameLower = name.toLowerCase();
+    if (nameLower.includes('eco warrior') || nameLower.includes('environmental')) {
+      return t('achievement.eco.warrior.desc');
+    } else if (nameLower.includes('first steps') || nameLower.includes('first lesson') || nameLower.includes('beginner')) {
+      return t('achievement.first.lesson.desc');
+    } else if (nameLower.includes('quiz master') || nameLower.includes('quiz')) {
+      return t('achievement.quiz.master.desc');
+    } else if (nameLower.includes('speed learner') || nameLower.includes('speed')) {
+      return t('achievement.speed.learner.desc');
+    } else if (nameLower.includes('task master') || nameLower.includes('task')) {
+      return t('achievement.task.master.desc');
+    } else if (nameLower.includes('streak') || nameLower.includes('consecutive')) {
+      return t('achievement.study.streak.desc');
+    } else if (nameLower.includes('dedicated learner') || nameLower.includes('dedicated')) {
+      return t('achievement.dedicated.learner.desc');
+    } else if (nameLower.includes('completion') || nameLower.includes('complete')) {
+      return t('achievement.lesson.completion.desc');
+    } else if (nameLower.includes('perfect') || nameLower.includes('100')) {
+      return t('achievement.perfect.score.desc');
+    }
+    return description; // Return original if no match
+  };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
@@ -317,6 +366,10 @@ export default function Achievements() {
               const isUnlocked = !!studentAchievement?.is_unlocked;
               const progress = studentAchievement?.progress || 0;
               
+              // Translate achievement name and description
+              const translatedName = getTranslatedAchievementName(achievement.name);
+              const translatedDescription = getTranslatedAchievementDescription(achievement.name, achievement.description);
+              
               return (
                 <AchievementCard
                   key={achievement.id}
@@ -324,6 +377,8 @@ export default function Achievements() {
                   showProgress={true}
                   isUnlocked={isUnlocked}
                   progress={progress}
+                  translatedName={translatedName}
+                  translatedDescription={translatedDescription}
                 />
               );
             })}

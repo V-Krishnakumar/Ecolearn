@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 import { PlayCircle, Clock, Trophy, Star, FileText, GraduationCap, Thermometer, TreePine, ArrowRight, Award, BookOpen, Target } from "lucide-react";
 import NewsFacts from "@/components/NewsFacts";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { useLanguage } from "@/hooks/useLanguage";
 import { useUser } from "@/contexts/UserContext";
 import { useSupabaseProgress } from "@/hooks/useSupabaseProgress";
 import { useSupabaseAchievements } from "@/hooks/useSupabaseAchievements";

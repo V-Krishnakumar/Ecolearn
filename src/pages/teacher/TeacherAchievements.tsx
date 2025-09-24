@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { useUser } from "@/contexts/UserContext";
 import { TeacherDataManager, Class, Student } from "@/lib/teacherData";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { useLanguage } from "@/hooks/useLanguage";
 
 const PREDEFINED_BADGES = [
   { name: 'Green Hero', description: 'For outstanding environmental awareness', color: 'bg-green-100 text-green-800' },

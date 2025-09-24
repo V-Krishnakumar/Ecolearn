@@ -17,7 +17,7 @@ import {
   Award
 } from "lucide-react";
 import { useUser } from "@/contexts/UserContext";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { useLanguage } from "@/hooks/useLanguage";
 import Chatbot from "@/components/Chatbot";
 
 const getNavigationItems = (t: (key: string) => string) => [

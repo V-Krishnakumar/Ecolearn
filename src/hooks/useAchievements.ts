@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { AchievementManager } from '@/lib/achievements';
 import { Achievement, AchievementStats } from '@/types/achievements';
 import { useUser } from '@/contexts/UserContext';
-import { useLanguage } from '@/contexts/LanguageContext';
+import { useLanguage } from "@/hooks/useLanguage";
 
 export function useAchievements() {
   const { user } = useUser();

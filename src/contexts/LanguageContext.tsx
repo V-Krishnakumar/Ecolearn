@@ -1,14 +1,6 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
-
-type Language = 'en' | 'hi';
-
-interface LanguageContextType {
-  language: Language;
-  toggleLanguage: () => void;
-  t: (key: string) => string;
-}
-
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+import React, { useState, ReactNode } from 'react';
+import { Language, LanguageContextType } from '../types/language';
+import { LanguageContext } from './LanguageContextInstance';
 
 // Translation dictionary
 const translations = {
@@ -50,6 +42,8 @@ const translations = {
     'student.dashboard.achievements': 'Achievements',
     'student.dashboard.progress': 'Progress',
     'student.dashboard.continue.learning': 'Continue your environmental learning journey',
+    'student.dashboard.explore.lessons': 'Explore interactive lessons about environmental protection and sustainability.',
+    'student.dashboard.lesson.includes': 'Each lesson includes videos, quizzes, and hands-on activities to help you become an eco-hero!',
     'student.dashboard.view.all.advanced.modules': 'View All Advanced Modules',
     'student.dashboard.scoreboard.achievements': 'Scoreboard & Achievements',
     'student.dashboard.view.full.scoreboard': 'View Full Scoreboard',
@@ -184,6 +178,9 @@ const translations = {
     'student.tasks.total.participants': 'Total Participants',
     'student.tasks.completion.rate': 'Completion Rate',
     'student.tasks.eco.points.earned': 'Eco Points Earned',
+    'student.tasks.available.now': 'Available Now',
+    'student.tasks.call.to.action.title': '🌱 Make a Real Impact!',
+    'student.tasks.call.to.action.description': 'Complete tasks to earn eco points and contribute to environmental protection in your community.',
     
     // Achievements
     'achievements.title': 'Achievements',
@@ -215,6 +212,7 @@ const translations = {
     'achievements.progress.complete': 'Complete',
     'achievements.by.category': 'By Category',
     'achievements.by.rarity': 'By Rarity',
+    'achievements.count': 'achievements',
     'achievements.rarity.common': 'Common',
     'achievements.rarity.rare': 'Rare',
     'achievements.rarity.epic': 'Epic',
@@ -259,6 +257,12 @@ const translations = {
     'lesson.deforestation.desc': 'Learn about the causes and effects of deforestation and how to prevent it.',
     'lesson.renewable.energy': 'Renewable Energy',
     'lesson.renewable.energy.desc': 'Discover clean energy sources like solar, wind, and hydroelectric power for a sustainable future.',
+    'lesson.climate.change': 'Climate Change',
+    'lesson.climate.change.desc': 'Understand the causes and effects of climate change and learn how to take action for a better future.',
+    'lesson.biodiversity': 'Biodiversity',
+    'lesson.biodiversity.desc': 'Explore the importance of biodiversity and learn how to protect different species and ecosystems.',
+    'lesson.environmental.policy': 'Environmental Policy',
+    'lesson.environmental.policy.desc': 'Learn about environmental laws, policies, and how governments work to protect our planet.',
     
     // Lesson Content
     'lesson.waste.management.content': 'Understanding waste management is crucial for environmental protection. This lesson covers the 3 R\'s: Reduce, Reuse, and Recycle. You\'ll learn about different types of waste, proper sorting techniques, composting methods, and how individuals and communities can implement effective waste management strategies.',
@@ -319,6 +323,7 @@ const translations = {
     'scoreboard.badges.earned': 'Badges Earned',
     'scoreboard.lessons.completed': 'Lessons Completed',
     'scoreboard.achievement.rate': 'Achievement Rate',
+    'scoreboard.leaderboard': 'Leaderboard',
     'scoreboard.achievement.badges': 'Achievement Badges',
     'scoreboard.weekly.activity': 'Weekly Activity',
     'scoreboard.quick.stats': 'Quick Stats',
@@ -343,12 +348,20 @@ const translations = {
     'achievement.first.steps.desc': 'Complete your first lesson',
     'achievement.quiz.master': 'Quiz Master',
     'achievement.quiz.master.desc': 'Score 100% on a quiz',
+    'achievement.first.lesson': 'First Steps',
+    'achievement.first.lesson.desc': 'Complete your first lesson',
     'achievement.eco.warrior': 'Eco Warrior',
     'achievement.eco.warrior.desc': 'Complete 3 lessons',
     'achievement.speed.learner': 'Speed Learner',
     'achievement.speed.learner.desc': 'Complete a lesson in under 10 minutes',
     'achievement.perfect.score': 'Perfect Score',
     'achievement.perfect.score.desc': 'Get perfect scores on 3 quizzes',
+    'achievement.study.streak': 'Study Streak',
+    'achievement.study.streak.desc': 'Study for 7 consecutive days',
+    'achievement.lesson.completion': 'Lesson Completion',
+    'achievement.lesson.completion.desc': 'Complete your first lesson',
+    'achievement.task.master': 'Task Master',
+    'achievement.task.master.desc': 'Submit 5 real-time tasks',
     'achievement.dedicated.learner': 'Dedicated Learner',
     'achievement.dedicated.learner.desc': 'Study for 7 days in a row',
     
@@ -1016,7 +1029,6 @@ const translations = {
     'dashboard.view.full.scoreboard': 'View Full Scoreboard',
     'dashboard.total.points': 'Total Points',
     'dashboard.badges.earned': 'Badges Earned',
-    'dashboard.lessons.completed': 'Lessons Completed',
     'dashboard.achievement.rate': 'Achievement Rate',
     'dashboard.get.certificate.title': 'Get Your Certificate',
     'dashboard.get.certificate.desc': 'Download your personalized Eco Warrior certificate',
@@ -1061,6 +1073,8 @@ const translations = {
     'student.dashboard.achievements': 'उपलब्धियां',
     'student.dashboard.progress': 'प्रगति',
     'student.dashboard.continue.learning': 'अपनी पर्यावरणीय शिक्षा यात्रा जारी रखें',
+    'student.dashboard.explore.lessons': 'पर्यावरण संरक्षण और स्थिरता के बारे में इंटरैक्टिव पाठों का अन्वेषण करें।',
+    'student.dashboard.lesson.includes': 'प्रत्येक पाठ में वीडियो, क्विज़ और हाथों से किए जाने वाले गतिविधियां शामिल हैं जो आपको एक इको-हीरो बनने में मदद करती हैं!',
     'student.dashboard.view.all.advanced.modules': 'सभी उन्नत मॉड्यूल देखें',
     'student.dashboard.scoreboard.achievements': 'स्कोरबोर्ड और उपलब्धियां',
     'student.dashboard.view.full.scoreboard': 'पूरा स्कोरबोर्ड देखें',
@@ -1195,6 +1209,9 @@ const translations = {
     'student.tasks.total.participants': 'कुल प्रतिभागी',
     'student.tasks.completion.rate': 'पूर्णता दर',
     'student.tasks.eco.points.earned': 'इको पॉइंट्स अर्जित',
+    'student.tasks.available.now': 'अभी उपलब्ध',
+    'student.tasks.call.to.action.title': '🌱 वास्तविक प्रभाव डालें!',
+    'student.tasks.call.to.action.description': 'इको पॉइंट्स अर्जित करने और अपने समुदाय में पर्यावरण संरक्षण में योगदान देने के लिए कार्य पूर्ण करें।',
     
     
     // Student Lessons
@@ -1234,6 +1251,12 @@ const translations = {
     'lesson.deforestation.desc': 'वनों की कटाई के कारणों और प्रभावों के बारे में जानें और इसे कैसे रोकें।',
     'lesson.renewable.energy': 'नवीकरणीय ऊर्जा',
     'lesson.renewable.energy.desc': 'स्थिर भविष्य के लिए सौर, पवन और जलविद्युत शक्ति जैसे स्वच्छ ऊर्जा स्रोतों की खोज करें।',
+    'lesson.climate.change': 'जलवायु परिवर्तन',
+    'lesson.climate.change.desc': 'जलवायु परिवर्तन के कारणों और प्रभावों को समझें और बेहतर भविष्य के लिए कार्रवाई करना सीखें।',
+    'lesson.biodiversity': 'जैव विविधता',
+    'lesson.biodiversity.desc': 'जैव विविधता के महत्व का अन्वेषण करें और विभिन्न प्रजातियों और पारिस्थितिकी तंत्रों की सुरक्षा कैसे करें, सीखें।',
+    'lesson.environmental.policy': 'पर्यावरण नीति',
+    'lesson.environmental.policy.desc': 'पर्यावरणीय कानूनों, नीतियों के बारे में जानें और सरकारें हमारे ग्रह की सुरक्षा के लिए कैसे काम करती हैं।',
     
     // Lesson Content
     'lesson.waste.management.content': 'अपशिष्ट प्रबंधन को समझना पर्यावरण संरक्षण के लिए महत्वपूर्ण है। यह पाठ 3 R के सिद्धांतों को कवर करता है: कम करना, पुन: उपयोग और पुनर्चक्रण। आप विभिन्न प्रकार के अपशिष्ट, उचित छंटाई तकनीकों, खाद बनाने की विधियों और व्यक्तियों और समुदायों द्वारा प्रभावी अपशिष्ट प्रबंधन रणनीतियों को कैसे लागू किया जा सकता है, इसके बारे में जानेंगे।',
@@ -1294,6 +1317,7 @@ const translations = {
     'scoreboard.badges.earned': 'अर्जित बैज',
     'scoreboard.lessons.completed': 'पूर्ण पाठ',
     'scoreboard.achievement.rate': 'उपलब्धि दर',
+    'scoreboard.leaderboard': 'लीडरबोर्ड',
     'scoreboard.achievement.badges': 'उपलब्धि बैज',
     'scoreboard.weekly.activity': 'साप्ताहिक गतिविधि',
     'scoreboard.quick.stats': 'त्वरित आंकड़े',
@@ -1318,12 +1342,20 @@ const translations = {
     'achievement.first.steps.desc': 'अपना पहला पाठ पूर्ण करें',
     'achievement.quiz.master': 'क्विज़ मास्टर',
     'achievement.quiz.master.desc': 'क्विज़ में 100% स्कोर करें',
+    'achievement.first.lesson': 'पहला कदम',
+    'achievement.first.lesson.desc': 'अपना पहला पाठ पूर्ण करें',
     'achievement.eco.warrior': 'इको योद्धा',
     'achievement.eco.warrior.desc': '3 पाठ पूर्ण करें',
     'achievement.speed.learner': 'तेज़ सीखने वाला',
     'achievement.speed.learner.desc': '10 मिनट से कम में एक पाठ पूर्ण करें',
     'achievement.perfect.score': 'परफेक्ट स्कोर',
     'achievement.perfect.score.desc': '3 क्विज़ में परफेक्ट स्कोर प्राप्त करें',
+    'achievement.study.streak': 'अध्ययन श्रृंखला',
+    'achievement.study.streak.desc': '7 लगातार दिनों तक अध्ययन करें',
+    'achievement.lesson.completion': 'पाठ पूर्णता',
+    'achievement.lesson.completion.desc': 'अपना पहला पाठ पूर्ण करें',
+    'achievement.task.master': 'कार्य मास्टर',
+    'achievement.task.master.desc': '5 रियल टाइम कार्य जमा करें',
     'achievement.dedicated.learner': 'समर्पित सीखने वाला',
     'achievement.dedicated.learner.desc': 'लगातार 7 दिन तक अध्ययन करें',
     
@@ -1851,6 +1883,10 @@ const translations = {
     'achievements.search.placeholder': 'उपलब्धियां खोजें...',
     'achievements.category': 'श्रेणी',
     'achievements.rarity': 'दुर्लभता',
+    'achievements.rarity.common': 'सामान्य',
+    'achievements.rarity.rare': 'दुर्लभ',
+    'achievements.rarity.epic': 'महाकाव्य',
+    'achievements.rarity.legendary': 'पौराणिक',
     'achievements.filter.unlocked.only': 'केवल अनलॉक दिखाएं',
     'achievements.stats.unlocked': 'अनलॉक',
     'achievements.stats.locked': 'लॉक',
@@ -1863,6 +1899,7 @@ const translations = {
     'achievements.progress.complete': 'पूर्ण',
     'achievements.progress.empty': 'अपनी प्रगति देखने के लिए कुछ उपलब्धियां पूर्ण करें!',
     'achievements.by.category': 'श्रेणी के अनुसार',
+    'achievements.by.rarity': 'दुर्लभता के अनुसार',
     'achievements.recent.title': 'हाल की उपलब्धियां',
     'achievements.points': 'अंक',
     'achievements.no.achievements': 'कोई उपलब्धि नहीं मिली',
@@ -2025,7 +2062,6 @@ const translations = {
     'dashboard.view.full.scoreboard': 'पूरा स्कोरबोर्ड देखें',
     'dashboard.total.points': 'कुल अंक',
     'dashboard.badges.earned': 'अर्जित बैज',
-    'dashboard.lessons.completed': 'पूर्ण पाठ',
     'dashboard.achievement.rate': 'उपलब्धि दर',
     'dashboard.get.certificate.title': 'अपना प्रमाणपत्र प्राप्त करें',
     'dashboard.get.certificate.desc': 'अपना व्यक्तिगत इको वॉरियर प्रमाणपत्र डाउनलोड करें',
@@ -2065,10 +2101,3 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
   );
 };
 
-export const useLanguage = () => {
-  const context = useContext(LanguageContext);
-  if (context === undefined) {
-    throw new Error('useLanguage must be used within a LanguageProvider');
-  }
-  return context;
-};

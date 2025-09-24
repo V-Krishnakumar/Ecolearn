@@ -9,13 +9,11 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/use-toast";
 import { useUser } from "@/contexts/UserContext";
 import AnimatedBackground from "@/components/AnimatedBackground";
-import { useLanguage } from "@/contexts/LanguageContext";
 import { UserRole } from "@/lib/localAuth";
 
 export default function Auth() {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { t } = useLanguage();
   const { signIn, signUp, startDemo } = useUser();
   const [formData, setFormData] = useState({
     name: "",
@@ -38,16 +36,16 @@ export default function Auth() {
     
     if (result.success && result.user) {
       toast({
-        title: t('demo.started.title'),
-        description: role === 'student' ? t('demo.started.student.desc') : t('demo.started.teacher.desc'),
+        title: 'Demo Started! 🎉',
+        description: role === 'student' ? 'Welcome to the student demo! Explore lessons and activities.' : 'Welcome to the teacher demo! Manage your classes and assignments.',
       });
       // Redirect based on role
       const redirectPath = role === 'teacher' ? '/teacher/dashboard' : '/student/dashboard';
       setTimeout(() => navigate(redirectPath), 1000);
     } else {
       toast({
-        title: t('demo.failed.title'),
-        description: result.error || t('demo.failed.desc'),
+        title: 'Demo Failed',
+        description: result.error || 'Unable to start demo. Please try again.',
         variant: "destructive",
       });
     }
@@ -68,8 +66,8 @@ export default function Auth() {
         });
       } else {
         toast({
-          title: t('auth.welcome.back'),
-          description: t('auth.login.success'),
+          title: 'Welcome Back!',
+          description: 'Successfully logged in to EcoLearn!',
         });
         // Redirect based on role
         const redirectPath = result.user?.role === 'teacher' ? '/teacher/dashboard' : '/student/dashboard';
@@ -133,35 +131,35 @@ export default function Auth() {
             <h1 className="text-3xl md:text-4xl font-bold text-green-200 drop-shadow-[0_0_14px_rgba(34,197,94,0.95)] tracking-tight">EcoLearn</h1>
           </div>
           <p className="text-white text-lg md:text-xl font-semibold drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)]">
-            {t('auth.subtitle')}
+            Empowering Environmental Education
           </p>
         </div>
 
         <Card className="shadow-card border-0 bg-white/95 backdrop-blur-sm">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl font-bold text-foreground">
-              {t('auth.join.community')}
+              Join Our Community
             </CardTitle>
             <CardDescription>
-              {t('auth.start.journey')}
+              Start your environmental learning journey today
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="login" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="login">{t('auth.login')}</TabsTrigger>
-                <TabsTrigger value="register">{t('auth.register')}</TabsTrigger>
+                <TabsTrigger value="login">Login</TabsTrigger>
+                <TabsTrigger value="register">Register</TabsTrigger>
               </TabsList>
               
               <TabsContent value="login">
                 <form onSubmit={handleLogin} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="email">{t('auth.email')}</Label>
+                    <Label htmlFor="email">Email</Label>
                     <Input
                       id="email"
                       name="email"
                       type="email"
-                      placeholder={t('auth.email.placeholder')}
+                      placeholder="Enter your email address"
                       value={formData.email}
                       onChange={handleInputChange}
                       required
@@ -169,12 +167,12 @@ export default function Auth() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="password">{t('auth.password')}</Label>
+                    <Label htmlFor="password">Password</Label>
                     <Input
                       id="password"
                       name="password"
                       type="password"
-                      placeholder={t('auth.password.placeholder')}
+                      placeholder="Enter your password"
                       value={formData.password}
                       onChange={handleInputChange}
                       required
@@ -186,7 +184,7 @@ export default function Auth() {
                     disabled={isLoading}
                     className="w-full bg-gradient-nature hover:opacity-90 transition-all duration-200 shadow-glow disabled:opacity-50"
                   >
-                    {isLoading ? "Signing in..." : t('auth.login.to.ecolearn')}
+                    {isLoading ? "Signing in..." : "Login to EcoLearn"}
                   </Button>
                 </form>
               </TabsContent>
@@ -194,12 +192,12 @@ export default function Auth() {
               <TabsContent value="register">
                 <form onSubmit={handleRegister} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="name">{t('auth.full.name')}</Label>
+                    <Label htmlFor="name">Full Name</Label>
                     <Input
                       id="name"
                       name="name"
                       type="text"
-                      placeholder={t('auth.name.placeholder')}
+                      placeholder="Enter your full name"
                       value={formData.name}
                       onChange={handleInputChange}
                       required
@@ -207,12 +205,12 @@ export default function Auth() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="email">{t('auth.email')}</Label>
+                    <Label htmlFor="email">Email</Label>
                     <Input
                       id="email"
                       name="email"
                       type="email"
-                      placeholder={t('auth.email.placeholder')}
+                      placeholder="Enter your email address"
                       value={formData.email}
                       onChange={handleInputChange}
                       required
@@ -220,12 +218,12 @@ export default function Auth() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="password">{t('auth.password')}</Label>
+                    <Label htmlFor="password">Password</Label>
                     <Input
                       id="password"
                       name="password"
                       type="password"
-                      placeholder={t('auth.password.create.placeholder')}
+                      placeholder="Create a strong password"
                       value={formData.password}
                       onChange={handleInputChange}
                       required
@@ -260,7 +258,7 @@ export default function Auth() {
                     disabled={isLoading}
                     className="w-full bg-gradient-nature hover:opacity-90 transition-all duration-200 shadow-glow disabled:opacity-50"
                   >
-                    {isLoading ? "Creating account..." : t('auth.create.account')}
+                    {isLoading ? "Creating account..." : "Create Account"}
                   </Button>
                 </form>
               </TabsContent>
@@ -270,7 +268,7 @@ export default function Auth() {
 
         <div className="text-center mt-6">
           <p className="text-white/80 text-sm mb-4">
-            {t('demo.ready.explore')}
+            Ready to explore? Try our demo!
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button
@@ -279,7 +277,7 @@ export default function Auth() {
               onClick={() => handleDemoStart('student')}
             >
               <span className="text-lg mr-2">🎓</span>
-              {t('demo.student.title')}
+              Student Demo
             </Button>
             <Button
               variant="outline"
@@ -287,7 +285,7 @@ export default function Auth() {
               onClick={() => handleDemoStart('teacher')}
             >
               <span className="text-lg mr-2">👩‍🏫</span>
-              {t('demo.teacher.title')}
+              Teacher Demo
             </Button>
           </div>
         </div>

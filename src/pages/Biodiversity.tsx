@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Play, Pause, RotateCcw, ArrowRight, Clock, BookOpen, TreePine, Bug, Globe } from "lucide-react";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { useLanguage } from "@/hooks/useLanguage";
 import { BiodiversityGame } from "@/components/games/BiodiversityGame";
 const biodiversityImg = "/images/lesson-biodiversity.jpg";
 

@@ -12,7 +12,7 @@ import {
   Languages
 } from "lucide-react";
 import { useUser } from "@/contexts/UserContext";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { useLanguage } from "@/hooks/useLanguage";
 
 const getNavigationItems = (t: (key: string) => string) => [
   {
