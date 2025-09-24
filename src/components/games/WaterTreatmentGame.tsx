@@ -162,6 +162,11 @@ function WaterGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number, pr
   const [gameScenarios, setGameScenarios] = useState<Scenario[]>(scenarios);
   const [score, setScore] = useState(0);
 
+  // Update scenarios when language changes
+  useEffect(() => {
+    setGameScenarios(getScenarios(t));
+  }, [t]);
+
   const handleSolutionSelect = (scenarioId: string, solution: string) => {
     const scenario = gameScenarios.find(s => s.id === scenarioId);
     if (!scenario || scenario.solved) return;

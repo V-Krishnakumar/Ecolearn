@@ -237,7 +237,7 @@ export default function StudentTasks() {
     if (submission) {
       switch (submission.status) {
         case 'approved': return 'Approved';
-        case 'pending': return 'Under Review';
+        case 'pending': return t('student.tasks.under.review');
         case 'rejected': return 'Needs Revision';
         default: return 'Submitted';
       }
@@ -422,17 +422,17 @@ export default function StudentTasks() {
                             return (
                               <div className="space-y-2">
                                 <div className="flex items-center justify-between text-sm">
-                                  <span className="text-gray-800 font-medium">Status:</span>
+                                  <span className="text-gray-800 font-medium">{t('student.tasks.status')}</span>
                                   <Badge 
                                     variant={submission.status === 'approved' ? 'default' : 'secondary'}
                                     className={submission.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : ''}
                                   >
-                                    {submission.status === 'pending' ? 'Under Review' : submission.status}
+                                    {submission.status === 'pending' ? t('student.tasks.under.review') : submission.status}
                                   </Badge>
                                 </div>
                                 {submission.status === 'pending' && (
                                   <div className="text-xs text-yellow-700 bg-yellow-50 p-2 rounded">
-                                    ⏳ Awaiting approval - points will be awarded once reviewed
+                                    {t('student.tasks.awaiting.approval')}
                                   </div>
                                 )}
                                 <Button
@@ -440,7 +440,7 @@ export default function StudentTasks() {
                                   className="w-full bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white"
                                 >
                                   <CheckCircle className="h-4 w-4 mr-2" />
-                                  View Submission
+                                  {t('student.tasks.view.submission')}
                                 </Button>
                               </div>
                             );

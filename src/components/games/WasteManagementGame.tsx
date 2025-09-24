@@ -114,6 +114,11 @@ function WasteGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number, pr
   const [feedback, setFeedback] = useState("");
   const { draggedItem, setDraggedItem } = useDragDrop();
 
+  // Update items when language changes
+  useEffect(() => {
+    setItems(getWasteItems(t));
+  }, [t]);
+
   const getBinItems = (category: string) => 
     items.filter(item => item.placed && item.category === category);
 

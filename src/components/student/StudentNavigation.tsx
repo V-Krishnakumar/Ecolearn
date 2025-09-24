@@ -9,7 +9,6 @@ import {
   LogOut,
   User,
   MessageCircle,
-  Languages,
   Home,
   Camera,
   GraduationCap,
@@ -19,6 +18,7 @@ import {
 import { useUser } from "@/contexts/UserContext";
 import { useLanguage } from "@/hooks/useLanguage";
 import Chatbot from "@/components/Chatbot";
+import { LanguageDropdown } from "@/components/LanguageDropdown";
 
 const getNavigationItems = (t: (key: string) => string) => [
   {
@@ -57,7 +57,7 @@ export default function StudentNavigation() {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, signOut } = useUser();
-  const { t, language, toggleLanguage } = useLanguage();
+  const { t } = useLanguage();
 
   const navigationItems = getNavigationItems(t);
 
@@ -106,18 +106,7 @@ export default function StudentNavigation() {
 
             {/* User Menu */}
             <div className="flex items-center space-x-4">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={toggleLanguage}
-                className="flex items-center space-x-2"
-                title={language === "en" ? "Switch to Hindi" : "Switch to English"}
-              >
-                <Languages className="h-4 w-4" />
-                <span className="hidden sm:inline">
-                  {language === "en" ? "हिंदी" : "English"}
-                </span>
-              </Button>
+              <LanguageDropdown />
               <div className="flex items-center space-x-2 text-sm text-gray-600">
                 <User className="h-4 w-4" />
                 <span>{user?.username}</span>

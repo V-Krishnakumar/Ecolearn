@@ -121,6 +121,12 @@ function PollutionGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number
   const [airQuality, setAirQuality] = useState(0); // 0-100, higher is better
   const { draggedItem, setDraggedItem, setDraggedOver } = useDragDrop();
 
+  // Update sources and solutions when language changes
+  useEffect(() => {
+    setGameSources(getPollutionSources(t));
+    setGameSolutions(getSolutions(t));
+  }, [t]);
+
   const handleDragStart = (solution: Solution) => {
     setDraggedItem(solution);
   };

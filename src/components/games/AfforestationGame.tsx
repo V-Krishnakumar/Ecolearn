@@ -159,6 +159,11 @@ function AfforestationGameContent({ onScoreUpdate }: { onScoreUpdate: (score: nu
   const [score, setScore] = useState(0);
   const { draggedItem, setDraggedItem } = useDragDrop();
 
+  // Update seeds when language changes
+  useEffect(() => {
+    setGameSeeds(getSeeds(t));
+  }, [t]);
+
   const handleDragStart = (seed: Seed) => {
     setDraggedItem(seed);
   };

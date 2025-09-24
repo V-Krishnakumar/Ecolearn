@@ -196,6 +196,12 @@ function RenewableGameContent({ onScoreUpdate }: { onScoreUpdate: (score: number
   const [budget, setBudget] = useState(1000); // $1000K budget
   const { draggedItem, setDraggedItem } = useDragDrop();
 
+  // Update sources and buildings when language changes
+  useEffect(() => {
+    setGameSources(getEnergySources(t));
+    setGameBuildings(getCityBuildings(t));
+  }, [t]);
+
   const handleDragStart = (source: EnergySource) => {
     setDraggedItem(source);
   };

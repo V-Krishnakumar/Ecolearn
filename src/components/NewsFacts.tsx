@@ -31,7 +31,7 @@ const NewsFacts: React.FC = () => {
     const loadNews = async () => {
       setLoading(true);
       try {
-        const newsData = await newsService.getEnvironmentalNews(language as 'en' | 'hi');
+        const newsData = await newsService.getEnvironmentalNews(language as 'en' | 'hi' | 'pa');
         console.log('News loaded:', newsData.length, 'articles');
         console.log('Sample news article:', newsData[0]);
         console.log('Article title length:', newsData[0]?.title?.length);
@@ -83,13 +83,13 @@ const NewsFacts: React.FC = () => {
 
   // Load random fact and tip
   useEffect(() => {
-    setCurrentFact(newsService.getRandomFact(language as 'en' | 'hi'));
-    setCurrentTip(newsService.getRandomTip(language as 'en' | 'hi'));
+    setCurrentFact(newsService.getRandomFact(language as 'en' | 'hi' | 'pa'));
+    setCurrentTip(newsService.getRandomTip(language as 'en' | 'hi' | 'pa'));
     
     // Refresh fact and tip every 5 minutes
     const interval = setInterval(() => {
-      setCurrentFact(newsService.getRandomFact(language as 'en' | 'hi'));
-      setCurrentTip(newsService.getRandomTip(language as 'en' | 'hi'));
+      setCurrentFact(newsService.getRandomFact(language as 'en' | 'hi' | 'pa'));
+      setCurrentTip(newsService.getRandomTip(language as 'en' | 'hi' | 'pa'));
     }, 5 * 60 * 1000);
     
     return () => clearInterval(interval);
@@ -98,7 +98,7 @@ const NewsFacts: React.FC = () => {
   const refreshNews = async () => {
     setLoading(true);
     try {
-      const newsData = await newsService.getEnvironmentalNews(language as 'en' | 'hi');
+      const newsData = await newsService.getEnvironmentalNews(language as 'en' | 'hi' | 'pa');
       setNews(newsData.slice(0, 5));
     } catch (error) {
       console.error('Failed to refresh news:', error);

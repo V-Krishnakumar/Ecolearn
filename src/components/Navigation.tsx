@@ -1,15 +1,16 @@
 
 import { NavLink, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Home, BookOpen, User, Trophy, LogOut, Languages, Camera, GraduationCap, FileText, Award } from "lucide-react";
+import { Home, BookOpen, User, Trophy, LogOut, Camera, GraduationCap, FileText, Award } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useUser } from "@/contexts/UserContext";
 import { useLanguage } from "@/hooks/useLanguage";
+import { LanguageDropdown } from "@/components/LanguageDropdown";
 
 export function Navigation() {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { language, toggleLanguage, t } = useLanguage();
+  const { t, language } = useLanguage();
   const { profile, signOut } = useUser();
 
 
@@ -126,18 +127,7 @@ export function Navigation() {
 
                   {/* User Menu */}
                   <div className="flex items-center space-x-4">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={toggleLanguage}
-              className="flex items-center space-x-2"
-              title={language === "en" ? "Switch to Hindi" : "Switch to English"}
-            >
-              <Languages className="h-4 w-4" />
-              <span className="hidden sm:inline">
-                {language === "en" ? "हिंदी" : "English"}
-              </span>
-            </Button>
+            <LanguageDropdown />
             <div className="flex items-center space-x-2 text-sm text-gray-600">
               <User className="h-4 w-4" />
               <span>{profile?.username || t("nav.user")}</span>

@@ -152,6 +152,18 @@ export const ENVIRONMENTAL_FACTS = {
     "ग्रेट बैरियर रीफ अंतरिक्ष से दिखाई देती है",
     "पवन ऊर्जा सबसे तेजी से बढ़ने वाला नवीकरणीय ऊर्जा स्रोत है",
     "एक पवन टर्बाइन 500 घरों को बिजली दे सकता है"
+  ],
+  pa: [
+    "ਇੱਕ ਪੇੜ ਸਾਲ ਵਿੱਚ 22 ਕਿਲੋ CO2 ਸੋਖ ਸਕਦਾ ਹੈ",
+    "ਮਧੂਮੱਖੀਆਂ ਦੁਨੀਆ ਦੇ 70% ਸਭ ਤੋਂ ਮਹੱਤਵਪੂਰਨ ਫਸਲਾਂ ਦਾ ਪਰਾਗਣ ਕਰਦੀਆਂ ਹਨ",
+    "ਇੱਕ ਐਲੂਮੀਨੀਅਮ ਕੈਨ ਨੂੰ ਰੀਸਾਈਕਲ ਕਰਨ ਨਾਲ 3 ਘੰਟੇ ਟੀਵੀ ਚਲਾਉਣ ਲਈ ਕਾਫ਼ੀ ਊਰਜਾ ਬਚਦੀ ਹੈ",
+    "ਸਮੁੰਦਰ ਦੁਨੀਆ ਦੇ 70% ਆਕਸੀਜਨ ਦਾ ਉਤਪਾਦਨ ਕਰਦਾ ਹੈ",
+    "ਇੱਕ ਦੁਬਾਰਾ ਵਰਤੋਂ ਵਾਲੀ ਪਾਣੀ ਦੀ ਬੋਤਲ ਸਾਲ ਵਿੱਚ 156 ਪਲਾਸਟਿਕ ਬੋਤਲਾਂ ਬਚਾ ਸਕਦੀ ਹੈ",
+    "ਸੂਰਜੀ ਊਰਜਾ ਸਿਰਫ਼ 6 ਘੰਟਿਆਂ ਵਿੱਚ ਪੂਰੀ ਦੁਨੀਆ ਨੂੰ ਬਿਜਲੀ ਦੇ ਸਕਦੀ ਹੈ",
+    "ਜੰਗਲ ਦੁਨੀਆ ਦੇ 31% ਭੂਮੀ ਖੇਤਰ ਨੂੰ ਕਵਰ ਕਰਦੇ ਹਨ",
+    "ਗ੍ਰੇਟ ਬੈਰੀਅਰ ਰੀਫ਼ ਸਪੇਸ ਤੋਂ ਦਿਖਾਈ ਦਿੰਦੀ ਹੈ",
+    "ਹਵਾ ਊਰਜਾ ਸਭ ਤੋਂ ਤੇਜ਼ੀ ਨਾਲ ਵਧਣ ਵਾਲਾ ਨਵੀਕਰਣਯੋਗ ਊਰਜਾ ਸਰੋਤ ਹੈ",
+    "ਇੱਕ ਹਵਾ ਟਰਬਾਈਨ 500 ਘਰਾਂ ਨੂੰ ਬਿਜਲੀ ਦੇ ਸਕਦਾ ਹੈ"
   ]
 };
 
@@ -180,6 +192,18 @@ export const DAILY_TIPS = {
     "स्थानीय और मौसमी उत्पाद खरीदें",
     "पानी बचाने के लिए अपने घर में रिसाव ठीक करें",
     "अपने खाद्य स्क्रैप को कंपोस्ट करें"
+  ],
+  pa: [
+    "ਪਲਾਸਟਿਕ ਦੀ ਬਜਾਏ ਦੁਬਾਰਾ ਵਰਤੋਂ ਵਾਲੀ ਪਾਣੀ ਦੀ ਬੋਤਲ ਵਰਤੋ",
+    "ਕਮਰਾ ਛੱਡਦੇ ਸਮੇਂ ਲਾਈਟ ਬੰਦ ਕਰ ਦਿਓ",
+    "ਛੋਟੀਆਂ ਯਾਤਰਾਵਾਂ ਲਈ ਪੈਦਲ ਚਲੋ ਜਾਂ ਸਾਈਕਲ ਚਲਾਓ",
+    "ਊਰਜਾ ਕੁਸ਼ਲ LED ਬਲਬ ਵਰਤੋ",
+    "ਹਫ਼ਤੇ ਵਿੱਚ ਇੱਕ ਭੋਜਨ ਮਾਸ ਦੀ ਖਪਤ ਘਟਾਓ",
+    "ਇੱਕ ਪੇੜ ਲਗਾਓ ਜਾਂ ਛੋਟਾ ਬਾਗ਼ ਸ਼ੁਰੂ ਕਰੋ",
+    "ਜਦੋਂ ਵੀ ਸੰਭਵ ਹੋਵੇ ਜਨਤਕ ਆਵਾਜਾਈ ਵਰਤੋ",
+    "ਸਥਾਨੀ ਅਤੇ ਮੌਸਮੀ ਉਤਪਾਦ ਖਰੀਦੋ",
+    "ਪਾਣੀ ਬਚਾਉਣ ਲਈ ਆਪਣੇ ਘਰ ਵਿੱਚ ਰਿਸਾਵ ਠੀਕ ਕਰੋ",
+    "ਆਪਣੇ ਖਾਣੇ ਦੇ ਸਕ੍ਰੈਪ ਨੂੰ ਕੰਪੋਸਟ ਕਰੋ"
   ]
 };
 
@@ -195,7 +219,7 @@ export class NewsService {
     return NewsService.instance;
   }
 
-  async getEnvironmentalNews(language: 'en' | 'hi' = 'en'): Promise<NewsArticle[]> {
+  async getEnvironmentalNews(language: 'en' | 'hi' | 'pa' = 'en'): Promise<NewsArticle[]> {
     const cacheKey = `environmental_news_${language}`;
     const cached = this.cache.get(cacheKey);
     
@@ -254,13 +278,13 @@ export class NewsService {
     return 'Environmental News';
   }
 
-  getRandomFact(language: 'en' | 'hi' = 'en'): string {
-    const facts = ENVIRONMENTAL_FACTS[language];
+  getRandomFact(language: 'en' | 'hi' | 'pa' = 'en'): string {
+    const facts = ENVIRONMENTAL_FACTS[language] || ENVIRONMENTAL_FACTS['en'];
     return facts[Math.floor(Math.random() * facts.length)];
   }
 
-  getRandomTip(language: 'en' | 'hi' = 'en'): string {
-    const tips = DAILY_TIPS[language];
+  getRandomTip(language: 'en' | 'hi' | 'pa' = 'en'): string {
+    const tips = DAILY_TIPS[language] || DAILY_TIPS['en'];
     return tips[Math.floor(Math.random() * tips.length)];
   }
 

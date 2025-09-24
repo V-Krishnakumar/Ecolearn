@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { RotateCcw, Star, Trophy, ArrowRight } from "lucide-react";
+import { useLanguage } from "@/hooks/useLanguage";
 
 interface GameWrapperProps {
   title: string;
@@ -30,6 +31,7 @@ export function GameWrapper({
   isCompleted,
   gameIcon
 }: GameWrapperProps) {
+  const { t } = useLanguage();
   const [showCelebration, setShowCelebration] = useState(false);
 
   useEffect(() => {
@@ -75,7 +77,7 @@ export function GameWrapper({
                   {score}
                 </div>
                 <div className="text-xs text-muted-foreground">
-                  / {maxScore} points
+                  / {maxScore} {t('game.points')}
                 </div>
               </div>
               <Button
@@ -85,7 +87,7 @@ export function GameWrapper({
                 className="shrink-0"
               >
                 <RotateCcw className="w-4 h-4 mr-2" />
-                Restart
+                {t('game.restart')}
               </Button>
             </div>
           </div>
@@ -105,10 +107,10 @@ export function GameWrapper({
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-2">
               <Star className="w-5 h-5 text-accent" />
-              <span className="font-medium">Game Progress</span>
+              <span className="font-medium">{t('game.progress')}</span>
             </div>
             <Badge variant={isCompleted ? "default" : "secondary"} className={isCompleted ? "bg-success" : ""}>
-              {isCompleted ? "Completed!" : `${Math.round(progress)}%`}
+              {isCompleted ? t('game.completed') : `${Math.round(progress)}%`}
             </Badge>
           </div>
 
@@ -122,7 +124,7 @@ export function GameWrapper({
                 size="lg"
               >
                 <ArrowRight className="w-4 h-4 mr-2" />
-                Continue to Quiz
+                {t('game.continue.quiz')}
               </Button>
             </div>
           )}
@@ -135,8 +137,8 @@ export function GameWrapper({
           <div className="animate-scale-pulse">
             <div className="bg-success text-success-foreground px-8 py-4 rounded-lg shadow-glow text-center">
               <Trophy className="w-12 h-12 mx-auto mb-2" />
-              <div className="text-2xl font-bold">🎉 Game Complete! 🎉</div>
-              <div className="text-lg">Score: {score}/{maxScore}</div>
+              <div className="text-2xl font-bold">{t('game.complete.celebration')}</div>
+              <div className="text-lg">{t('game.score')}: {score}/{maxScore}</div>
             </div>
           </div>
         </div>

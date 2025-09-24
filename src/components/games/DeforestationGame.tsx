@@ -162,6 +162,15 @@ function DeforestationGameContent({ onScoreUpdate }: { onScoreUpdate: (score: nu
   const [score, setScore] = useState(0);
   const [moves, setMoves] = useState(0);
 
+  // Update panels when language changes
+  useEffect(() => {
+    const shuffled = [...getStoryPanels(t)].sort(() => Math.random() - 0.5);
+    setGamePanels(shuffled.map((panel, index) => ({
+      ...panel,
+      currentPosition: index + 1
+    })));
+  }, [t]);
+
   const movePanel = (panelId: string, direction: 'up' | 'down') => {
     setGamePanels(prev => {
       const newPanels = [...prev];
