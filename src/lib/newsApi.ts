@@ -127,6 +127,60 @@ const FALLBACK_NEWS_HI: NewsArticle[] = [
   }
 ];
 
+// Punjabi translations of fallback news
+const FALLBACK_NEWS_PA: NewsArticle[] = [
+  {
+    id: '1',
+    title: 'ਸੂਰਜੀ ਊਰਜਾ ਵਿੱਚ ਸਫਲਤਾ: ਨਵਾਂ ਦੱਖਤਾ ਰਿਕਾਰਡ ਸਥਾਪਿਤ',
+    description: 'ਵਿਗਿਆਨੀਆਂ ਨੇ ਸੂਰਜੀ ਪੈਨਲ ਤਕਨਾਲੋਜੀ ਵਿੱਚ 47.1% ਦੱਖਤਾ ਹਾਸਿਲ ਕੀਤਾ, ਜੋ ਸਸਤੀ ਨਵੀਕਰਣਯੋਗ ਊਰਜਾ ਦਾ ਵਾਅਦਾ ਕਰਦੀ ਹੈ।',
+    url: '#',
+    publishedAt: new Date().toISOString(),
+    source: 'EcoTech News',
+    category: 'ਨਵੀਕਰਣਯੋਗ ਊਰਜਾ',
+    imageUrl: 'https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?w=300&h=200&fit=crop'
+  },
+  {
+    id: '2',
+    title: 'ਸਮੁੰਦਰੀ ਸਫਾਈ ਪ੍ਰੋਜੈਕਟ ਨੇ 100,000 ਕਿਲੋ ਪਲਾਸਟਿਕ ਹਟਾਇਆ',
+    description: 'ਪ੍ਰਸ਼ਾਂਤ ਕੂੜਾ ਪੈਚ ਸਫਾਈ ਪਹਿਲ ਵਿੱਚ ਵੱਡੀ ਉਪਲਬਧੀ ਹਾਸਿਲ ਕੀਤੀ।',
+    url: '#',
+    publishedAt: new Date(Date.now() - 86400000).toISOString(),
+    source: 'Ocean Conservation',
+    category: 'ਸਮੁੰਦਰੀ ਸੰਭਾਲ',
+    imageUrl: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=300&h=200&fit=crop'
+  },
+  {
+    id: '3',
+    title: 'ਜਲਵਾਯੂ ਪਰਿਵਰਤਨ: ਨਵੀਂ ਕਾਰਬਨ ਕੈਪਚਰ ਤਕਨਾਲੋਜੀ',
+    description: 'ਕ੍ਰਾਂਤੀਕਾਰੀ ਵਿਧੀ ਵਾਯੂਮੰਡਲ ਤੋਂ CO2 ਨੂੰ 10 ਗੁਣਾ ਵਧੇਰੇ ਕੁਸ਼ਲਤਾ ਨਾਲ ਹਟਾਉਂਦੀ ਹੈ।',
+    url: '#',
+    publishedAt: new Date(Date.now() - 172800000).toISOString(),
+    source: 'Climate Science',
+    category: 'ਜਲਵਾਯੂ ਕਾਰਵਾਈ',
+    imageUrl: 'https://images.unsplash.com/photo-1569163139394-de6e4f3e8e8b?w=300&h=200&fit=crop'
+  },
+  {
+    id: '4',
+    title: 'ਜੈਵਿਕ ਵਿਭਿੰਨਤਾ: ਅਮੇਜ਼ਨ ਵਿੱਚ ਨਵੀਆਂ ਪ੍ਰਜਾਤੀਆਂ ਖੋਜੀਆਂ ਗਈਆਂ',
+    description: 'ਵਿਗਿਆਨੀਆਂ ਨੇ ਪਹਿਲਾਂ ਤੋਂ ਅਨਛੁਏ ਵਰਸਾਵਨ ਖੇਤਰ ਵਿੱਚ 20 ਨਵੀਆਂ ਪ੍ਰਜਾਤੀਆਂ ਖੋਜੀਆਂ ਹਨ।',
+    url: '#',
+    publishedAt: new Date(Date.now() - 259200000).toISOString(),
+    source: 'Nature Research',
+    category: 'ਜੈਵਿਕ ਵਿਭਿੰਨਤਾ',
+    imageUrl: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=300&h=200&fit=crop'
+  },
+  {
+    id: '5',
+    title: 'ਹਵਾ ਊਰਜਾ: ਤੈਰਦੇ ਟਰਬਾਈਨ ਨੇ ਨਵਾਂ ਰਿਕਾਰਡ ਬਣਾਇਆ',
+    description: 'ਆਫਸ਼ੋਰ ਹਵਾ ਫਾਰਮ ਉਮੀਦ ਤੋਂ 50% ਵਧੇਰੇ ਬਿਜਲੀ ਪੈਦਾ ਕਰਦੇ ਹਨ।',
+    url: '#',
+    publishedAt: new Date(Date.now() - 345600000).toISOString(),
+    source: 'Renewable Energy Today',
+    category: 'ਨਵੀਕਰਣਯੋਗ ਊਰਜਾ',
+    imageUrl: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=300&h=200&fit=crop'
+  }
+];
+
 // Environmental facts data
 export const ENVIRONMENTAL_FACTS = {
   en: [
@@ -251,7 +305,7 @@ export class NewsService {
     }
 
     // Use fallback data based on language
-    const fallbackData = language === 'hi' ? FALLBACK_NEWS_HI : FALLBACK_NEWS_EN;
+    const fallbackData = language === 'hi' ? FALLBACK_NEWS_HI : language === 'pa' ? FALLBACK_NEWS_PA : FALLBACK_NEWS_EN;
     this.cache.set(cacheKey, { data: fallbackData, timestamp: Date.now() });
     return fallbackData;
   }

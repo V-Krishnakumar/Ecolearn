@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useNavigate } from "react-router-dom";
-import { Trophy, Star, Award, Target, BookOpen, Zap, Gift } from "lucide-react";
+import { Trophy, Star, Award, Target, BookOpen, Zap, Gift, TreePine, Droplets, Globe, Recycle, Gamepad2, Calendar, Flame, Shield, Gem, Brain, Tv, GraduationCap, CheckCircle } from "lucide-react";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useUser } from "@/contexts/UserContext";
 import { LeaderboardService } from "@/lib/supabase/leaderboard";
@@ -275,6 +275,64 @@ export default function Scoreboard() {
                           return description; // Return original if no match
                         };
 
+                        const getAchievementIcon = (name: string, category: string) => {
+                          const nameLower = name.toLowerCase();
+                          const categoryLower = category.toLowerCase();
+
+                          // Learning achievements
+                          if (nameLower.includes('first steps') || nameLower.includes('first lesson') || nameLower.includes('beginner')) {
+                            return TreePine;
+                          } else if (nameLower.includes('video') || nameLower.includes('watcher')) {
+                            return Tv;
+                          } else if (nameLower.includes('quiz master') || nameLower.includes('quiz')) {
+                            return Brain;
+                          } else if (nameLower.includes('knowledge') || nameLower.includes('seeker')) {
+                            return BookOpen;
+                          } else if (nameLower.includes('speed learner') || nameLower.includes('speed')) {
+                            return Zap;
+                          } else if (nameLower.includes('perfect') || nameLower.includes('100')) {
+                            return CheckCircle;
+                          }
+                          
+                          // Environmental achievements
+                          else if (nameLower.includes('tree') || nameLower.includes('warrior') || categoryLower.includes('afforestation')) {
+                            return TreePine;
+                          } else if (nameLower.includes('water') || nameLower.includes('guardian') || categoryLower.includes('water')) {
+                            return Droplets;
+                          } else if (nameLower.includes('climate') || nameLower.includes('champion') || categoryLower.includes('climate')) {
+                            return Globe;
+                          } else if (nameLower.includes('waste') || nameLower.includes('manager') || categoryLower.includes('waste')) {
+                            return Recycle;
+                          }
+                          
+                          // Game achievements
+                          else if (nameLower.includes('game') || nameLower.includes('gamer') || categoryLower.includes('game')) {
+                            return Gamepad2;
+                          } else if (nameLower.includes('perfect gamer')) {
+                            return Star;
+                          }
+                          
+                          // Streak achievements
+                          else if (nameLower.includes('daily') || nameLower.includes('learner') || categoryLower.includes('streak')) {
+                            return Calendar;
+                          } else if (nameLower.includes('dedicated') || nameLower.includes('learner')) {
+                            return Flame;
+                          } else if (nameLower.includes('unstoppable')) {
+                            return Zap;
+                          }
+                          
+                          // Special achievements
+                          else if (nameLower.includes('certificate') || nameLower.includes('earner')) {
+                            return GraduationCap;
+                          } else if (nameLower.includes('eco warrior') || nameLower.includes('environmental')) {
+                            return Shield;
+                          } else if (nameLower.includes('point') || nameLower.includes('collector')) {
+                            return Gem;
+                          }
+                          
+                          return Award; // Default icon
+                        };
+
                         return (
                           <div
                             key={achievement.id}
@@ -288,7 +346,10 @@ export default function Scoreboard() {
                             <div className="flex items-center justify-between">
                               <div className="flex items-center space-x-4">
                                 <div className={`p-3 rounded-full ${isUnlocked ? 'bg-primary/10' : 'bg-muted'}`}>
-                                  <span className="text-2xl">{achievement.icon}</span>
+                                  {(() => {
+                                    const IconComponent = getAchievementIcon(achievement.name, achievement.category || '');
+                                    return <IconComponent className="h-6 w-6 text-primary" />;
+                                  })()}
                                 </div>
                                 <div>
                                   <h3 className={`font-semibold ${isUnlocked ? 'text-foreground' : 'text-muted-foreground'}`}>

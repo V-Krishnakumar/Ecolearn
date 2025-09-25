@@ -6,12 +6,22 @@ import { useLanguage } from "@/hooks/useLanguage";
 export default function Chatbot() {
   const { t, language } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    { role: "assistant", content: t('chatbot.greeting') },
-  ]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const endRef = useRef<HTMLDivElement | null>(null);
+
+  // Initialize messages with translated greeting
+  useEffect(() => {
+    setMessages([{ role: "assistant", content: t('chatbot.greeting') }]);
+  }, [t, language]);
+
+  // Optional: Clear conversation when language changes (uncomment if desired)
+  // useEffect(() => {
+  //   if (messages.length > 1) {
+  //     setMessages([{ role: "assistant", content: t('chatbot.greeting') }]);
+  //   }
+  // }, [language]);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -37,6 +47,7 @@ export default function Chatbot() {
             <div className="flex items-center space-x-2">
               <MessageCircle className="w-4 h-4" />
               <span className="font-semibold">{t('chatbot.title')}</span>
+              <span className="text-xs opacity-75">({language.toUpperCase()})</span>
             </div>
             <button onClick={() => setIsOpen(false)} className="opacity-90 hover:opacity-100">
               <X className="w-4 h-4" />

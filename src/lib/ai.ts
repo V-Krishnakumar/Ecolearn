@@ -46,6 +46,7 @@ const knowledgeBase: Record<string, string> = {
 
 const FALLBACK_RESPONSE_EN = "I can answer many environment questions (waste, water, pollution, forests, energy). Ask me anything — for broader answers, add an API key later.";
 const FALLBACK_RESPONSE_HI = "मैं कई पर्यावरणीय प्रश्नों का उत्तर दे सकता हूं (अपशिष्ट, जल, प्रदूषण, जंगल, ऊर्जा)। मुझसे कुछ भी पूछें - अधिक विस्तृत उत्तरों के लिए, बाद में एक API कुंजी जोड़ें।";
+const FALLBACK_RESPONSE_PA = "ਮੈਂ ਕਈ ਵਾਤਾਵਰਣ ਸਵਾਲਾਂ ਦਾ ਜਵਾਬ ਦੇ ਸਕਦਾ ਹਾਂ (ਅਪਸ਼ਿਸ਼ਟ, ਪਾਣੀ, ਪ੍ਰਦੂਸ਼ਣ, ਜੰਗਲ, ਊਰਜਾ)। ਮੈਨੂੰ ਕੁਝ ਵੀ ਪੁੱਛੋ - ਵਧੇਰੇ ਵਿਸਤ੍ਰਿਤ ਜਵਾਬਾਂ ਲਈ, ਬਾਅਦ ਵਿੱਚ ਇੱਕ API ਕੁੰਜੀ ਜੋੜੋ।";
 
 // Hindi knowledge base
 const knowledgeBaseHindi: Record<string, string> = {
@@ -71,10 +72,34 @@ const knowledgeBaseHindi: Record<string, string> = {
   "समुद्री प्रदूषण": "स्रोत: नदी प्लास्टिक, मछली पकड़ने के गियर, अपवाह। कार्य: उचित अपशिष्ट प्रबंधन, तूफानी जल कैप्चर, समुद्र तट सफाई, जिम्मेदार समुद्री भोजन।"
 };
 
-function answerFromKnowledge(query: string, language: 'en' | 'hi' = 'en'): string {
+// Punjabi knowledge base
+const knowledgeBasePunjabi: Record<string, string> = {
+  "ਅਪਸ਼ਿਸ਼ਟ ਪ੍ਰਬੰਧਨ": "ਅਪਸ਼ਿਸ਼ਟ ਪ੍ਰਬੰਧਨ 3 R ਦੇ ਸਿਧਾਂਤਾਂ ਦਾ ਪਾਲਣ ਕਰਦਾ ਹੈ: ਘਟਾਉਣਾ, ਦੁਬਾਰਾ ਵਰਤੋਂ, ਰੀਸਾਈਕਲਿੰਗ। ਕਾਰਬਨਿਕ ਪਦਾਰਥਾਂ ਨੂੰ ਖਾਦ ਲਈ, ਰੀਸਾਈਕਲਿੰਗ ਯੋਗ (ਕਾਗਜ਼, ਧਾਤੂ, ਪਲਾਸਟਿਕ), ਅਤੇ ਲੈਂਡਫਿਲ ਅਪਸ਼ਿਸ਼ਟ ਲਈ ਵੱਖ ਕਰੋ। ਸੁਝਾਅ: ਘਰ/ਸਕੂਲ ਵਿੱਚ ਇੱਕ ਲੇਬਲ ਵਾਲੀ 3-ਬਿਨ ਪ੍ਰਣਾਲੀ ਰੱਖੋ।",
+  "ਰੀਸਾਈਕਲਿੰਗ": "ਕੰਟੇਨਰਾਂ ਨੂੰ ਧੋਓ, ਕਾਰਡਬੋਰਡ ਨੂੰ ਸਮਤਲ ਕਰੋ, ਰੀਸਾਈਕਲਿੰਗ ਯੋਗ ਨਾਲ ਖਾਦ ਅਪਸ਼ਿਸ਼ਟ ਮਿਲਾਉਣ ਤੋਂ ਬਚੋ। ਦੂਸ਼ਣ ਪੂਰੇ ਬੈਚ ਨੂੰ ਰੀਸਾਈਕਲਿੰਗ ਅਯੋਗ ਬਣਾ ਸਕਦਾ ਹੈ।",
+  "ਪਲਾਸਟਿਕ ਰੀਸਾਈਕਲਿੰਗ": "ਕਈ ਨਗਰਪਾਲਿਕਾਵਾਂ #1 (PET) ਅਤੇ #2 (HDPE) ਸਵੀਕਾਰ ਕਰਦੀਆਂ ਹਨ। ਨਰਮ ਫਿਲਮਾਂ/ਬੈਗਾਂ ਆਮ ਤੌਰ 'ਤੇ ਸਟੋਰ ਡ੍ਰੌਪ-ਆਫ ਦੀ ਲੋੜ ਹੁੰਦੀ ਹੈ। ਸੁਝਾਅ: ਸਥਾਨੀ ਦਿਸ਼ਾ-ਨਿਰਦੇਸ਼ਾਂ ਦੀ ਜਾਂਚ ਕਰੋ - ਪ੍ਰਤੀਕ ਹਮੇਸ਼ਾ ਰੀਸਾਈਕਲਿੰਗ ਯੋਗ ਨਹੀਂ ਹੁੰਦੇ।",
+  "ਈ-ਅਪਸ਼ਿਸ਼ਟ": "ਇਲੈਕਟ੍ਰੌਨਿਕਸ ਵਿੱਚ ਕੀਮਤੀ ਧਾਤੂਆਂ ਅਤੇ ਖਤਰਨਾਕ ਸਮਗਰੀ ਹੁੰਦੀ ਹੈ। ਪ੍ਰਦੂਸ਼ਣ ਨੂੰ ਰੋਕਣ ਅਤੇ ਪੁਨਰ-ਪ੍ਰਾਪਤੀ ਨੂੰ ਸੰਭਵ ਬਣਾਉਣ ਲਈ ਪ੍ਰਮਾਣਿਤ ਈ-ਅਪਸ਼ਿਸ਼ਟ ਸੰਗ੍ਰਹਿ ਬਿੰਦੂਆਂ ਦਾ ਉਪਯੋਗ ਕਰੋ।",
+  "ਖਾਦ": "ਖਾਦ ਭੂਰੇ (ਸੁੱਕੇ ਪੱਤੇ, ਕਾਰਡਬੋਰਡ) ਅਤੇ ਹਰੇ (ਖਾਦ ਸਕ੍ਰੈਪ) ਦਾ ਮਿਸ਼ਰਣ ਹੈ। ਇਸਨੂੰ ਨਿਚੋੜੇ ਹੋਏ ਸਪੰਜ ਵਰਗਾ ਨਮ ਰੱਖੋ ਅਤੇ ਆਕਸੀਜਨ ਜੋੜਨ ਲਈ ਹਫਤਾਵਾਰੀ ਮੋੜੋ।",
+  "ਲੈਂਡਫਿਲ": "ਜਦੋਂ ਕਾਰਬਨਿਕ ਪਦਾਰਥ ਆਕਸੀਜਨ ਤੋਂ ਬਿਨਾਂ ਘੁਲਦੇ ਹਨ ਤਾਂ ਲੈਂਡਫਿਲ ਮੀਥੇਨ ਪੈਦਾ ਕਰਦੇ ਹਨ। ਉਤਸਰਜਨ ਘਟਾਉਣ ਲਈ ਖਾਦ ਸਕ੍ਰੈਪ ਨੂੰ ਖਾਦ ਵਿੱਚ ਅਤੇ ਰੀਸਾਈਕਲਿੰਗ ਯੋਗ ਨੂੰ ਰੀਸਾਈਕਲਿੰਗ ਵਿੱਚ ਭੇਜੋ।",
+  "ਵਰਤਾਲਾਕਾਰ ਅਰਥਵਿਵਸਥਾ": "ਅਪਸ਼ਿਸ਼ਟ ਨੂੰ ਡਿਜ਼ਾਈਨ ਤੋਂ ਬਾਹਰ ਕਰੋ, ਸਮਗਰੀਆਂ ਨੂੰ ਵਰਤੋਂ ਵਿੱਚ ਰੱਖੋ, ਅਤੇ ਪ੍ਰਕਿਰਤੀ ਨੂੰ ਦੁਬਾਰਾ ਜੀਵਿਤ ਕਰੋ। ਟਿਕਾਊ ਸਾਮਾਨ ਖਰੀਦੋ, ਮੁਰੰਮਤ ਕਰੋ, ਅਤੇ ਰਿਫਿਲ/ਦੁਬਾਰਾ ਵਰਤੋਂ ਪੈਕੇਜਿੰਗ ਨੂੰ ਤਰਜੀਹ ਦਿਓ।",
+  "ਪਾਣੀ ਉਪਚਾਰ": "ਆਮ ਕਦਮ: ਸਕ੍ਰੀਨਿੰਗ, ਸਕੰਦਨ/ਫਲੋਕਿਊਲੇਸ਼ਨ, ਅਵਸਾਦਨ, ਨਿਸਫੰਦਨ, ਕੀਟਾਣੂਸ਼ੋਧਨ। ਸੁਝਾਅ: ਜਲਗ੍ਰਹਿ ਖੇਤਰਾਂ ਦੀ ਰੱਖਿਆ ਕਰੋ - ਰੋਕਥਾਮ ਉਪਚਾਰ ਤੋਂ ਸਸਤਾ ਹੈ।",
+  "ਅਪਸ਼ਿਸ਼ਟ ਪਾਣੀ": "ਅਪਸ਼ਿਸ਼ਟ ਪਾਣੀ ਸੰਸਥਾਨ ਪ੍ਰਾਇਮਰੀ (ਬਿਠਾਉਣਾ), ਸੈਕੰਡਰੀ (ਵਾਤਨ ਸੂਖ਼ਮਜੀਵ), ਅਤੇ ਕਈ ਵਾਰ ਤ੍ਰਿਤੀਯਕ (ਉਨ੍ਨਤ ਨਿਸਫੰਦਨ/ਕੀਟਾਣੂਸ਼ੋਧਨ) ਉਪਚਾਰ ਦਾ ਉਪਯੋਗ ਕਰਦੇ ਹਨ।",
+  "ਪਾਣੀ ਸੰਭਾਲ": "ਰਿਸਾਵ ਠੀਕ ਕਰੋ, ਘੱਟ-ਪ੍ਰਵਾਹ ਫਿਕਸਚਰ ਸਥਾਪਿਤ ਕਰੋ, ਬਾਗਾਂ ਲਈ ਵਰਖਾ ਪਾਣੀ ਕੈਪਚਰ ਕਰੋ, ਅਤੇ ਸੁੱਕਾ-ਸਹਿਣਸ਼ੀਲ ਪੌਦੇ ਚੁਣੋ। ਸੁਝਾਅ: ਛੋਟੇ ਸ਼ਾਵਰ ਪ੍ਰਤੀ ਮਿੰਟ ਲੀਟਰ ਬਚਾਉਂਦੇ ਹਨ।",
+  "ਪ੍ਰਦੂਸ਼ਣ": "ਸਾਰਵਜਨਿਕ ਆਵਾਜਾਈ, ਈਵੀ, ਅਤੇ ਸਾਫ਼ ਊਰਜਾ ਦੁਆਰਾ ਹਵਾ ਪ੍ਰਦੂਸ਼ਣ ਘਟਾਓ; ਰਸਾਇਣਾਂ ਦੇ ਉਚਿਤ ਨਿਪਟਾਰੇ ਅਤੇ ਤੂਫਾਨੀ ਪਾਣੀ ਪ੍ਰਬੰਧਨ ਦੁਆਰਾ ਪਾਣੀ ਪ੍ਰਦੂਸ਼ਣ ਘਟਾਓ।",
+  "ਹਵਾ ਪ੍ਰਦੂਸ਼ਣ": "ਮੁੱਖ ਸਰੋਤ: ਆਵਾਜਾਈ, ਉਦਯੋਗ, ਸਾੜਨਾ। ਕਾਰਵਾਈ: ਕਾਰਪੂਲ, ਸਾਰਵਜਨਿਕ ਆਵਾਜਾਈ ਦਾ ਉਪਯੋਗ, ਖੁੱਲ੍ਹੇ ਸਾੜਨ ਤੋਂ ਬਚੋ, ਅਤੇ ਸਾਫ਼ ਊਰਜਾ ਨੀਤੀਆਂ ਦਾ ਸਮਰਥਨ ਕਰੋ।",
+  "ਮਾਈਕ੍ਰੋਪਲਾਸਟਿਕ": "ਕੱਪੜਿਆਂ ਤੋਂ ਫਾਈਬਰ ਅਤੇ ਟਾਇਰਾਂ ਤੋਂ ਟੁਕੜੇ ਜਲਮਾਰਗਾਂ ਵਿੱਚ ਦਾਖਲ ਹੁੰਦੇ ਹਨ। ਸੁਝਾਅ: ਮਾਈਕ੍ਰੋਪਲਾਸਟਿਕ ਲੌਂਡਰੀ ਫਿਲਟਰ ਦਾ ਉਪਯੋਗ ਕਰੋ ਅਤੇ ਇੱਕਲ-ਵਰਤੋਂ ਪਲਾਸਟਿਕ ਘਟਾਓ।",
+  "ਵਨਰੋਪਣ": "ਵਨਰੋਪਣ ਗੈਰ-ਵਨ ਭੂਮੀ 'ਤੇ ਨਵੇਂ ਜੰਗਲ ਬਣਾਉਂਦਾ ਹੈ। ਦੇਸੀ ਪ੍ਰਜਾਤੀਆਂ ਚੁਣੋ, ਜੈਵਿਕ ਵਿਭਿੰਨਤਾ ਸੁਨਿਸ਼ਚਿਤ ਕਰੋ, ਅਤੇ ਪਹਿਲੇ 2-3 ਸਾਲਾਂ ਲਈ ਰੱਖ-ਰਖਾਅ ਦੀ ਯੋਜਨਾ ਬਣਾਓ।",
+  "ਜੰਗਲਾਂ ਦੀ ਕਟਾਈ": "ਮੁੱਖ ਚਾਲਕ: ਖੇਤੀਬਾੜੀ, ਲਾਗਿੰਗ, ਸੜਕਾਂ। ਪ੍ਰਭਾਵ: ਜੈਵਿਕ ਵਿਭਿੰਨਤਾ ਹਾਨੀ, ਉਤਸਰਜਨ। ਹੱਲ: ਸੁਰੱਖਿਤ ਖੇਤਰ, ਟਿਕਾਊ ਵਨਿਕੀ, ਸਮੁਦਾਇ ਅਧਿਕਾਰ।",
+  "ਨਵੀਕਰਣੀ ਊਰਜਾ": "ਸੂਰਜ, ਹਵਾ, ਪਾਣੀ, ਭੂ-ਤਾਪੀ, ਅਤੇ ਬਾਇਓਮਾਸ। ਸੁਝਾਅ: ਊਰਜਾ ਦੱਖਤਾ (LED, ਇਨਸੂਲੇਸ਼ਨ) ਨਾਲ ਸ਼ੁਰੂ ਕਰੋ - ਇਹ ਸਭ ਤੋਂ ਸਸਤੀ ਜਲਵਾਯੂ ਕਾਰਵਾਈ ਹੈ।",
+  "ਸੂਰਜ ਬਨਾਮ ਹਵਾ": "ਸੂਰਜ ਛੱਤਾਂ ਅਤੇ ਧੁੱਪ ਵਾਲੇ ਖੇਤਰਾਂ ਲਈ ਉਪਯੁਕਤ ਹੈ; ਹਵਾ ਨੂੰ ਸਥਿਰ ਹਵਾ ਦੀ ਗਤੀ ਅਤੇ ਸਥਾਨ ਦੀ ਲੋੜ ਹੈ। ਦੋਵੇਂ ਉਤਸਰਜਨ ਘਟਾਉਂਦੇ ਹਨ - ਮਿਸ਼ਰਣ ਸਥਾਨੀ ਸਰੋਤਾਂ 'ਤੇ ਨਿਰਭਰ ਕਰਦਾ ਹੈ।",
+  "ਕਾਰਬਨ ਫੁੱਟਪ੍ਰਿੰਟ": "ਸਭ ਤੋਂ ਵੱਡੇ ਲੀਵਰ: ਖੁਰਾਕ (ਘੱਟ ਖਾਦ ਅਪਸ਼ਿਸ਼ਟ, ਵਧੇਰੇ ਪੌਦੇ-ਆਧਾਰਿਤ), ਆਵਾਜਾਈ (ਚਲਣਾ/ਸਾਈਕਲ/ਪਾਰਗਮਨ, ਈਵੀ), ਘਰ ਊਰਜਾ (ਇਨਸੂਲੇਟ, ਦੱਖਤ ਉਪਕਰਣ)।",
+  "ਜੈਵਿਕ ਵਿਭਿੰਨਤਾ": "ਰਹਿਣ-ਸਥਾਨਾਂ ਦੀ ਰੱਖਿਆ ਕਰੋ, ਕੀਟਨਾਸ਼ਕ ਘਟਾਓ, ਦੇਸੀ ਪ੍ਰਜਾਤੀਆਂ ਲਗਾਓ, ਅਤੇ ਹਰੇ ਗਲੀਆਰੇ ਜੋੜੋ। ਸੁਝਾਅ: ਬੈਕਯਾਰਡ ਦੇਸੀ ਬਾਗ ਪਰਾਗਣਕਰਤਾਵਾਂ ਦਾ ਸਮਰਥਨ ਕਰਦੇ ਹਨ।",
+  "ਸਮੁੰਦਰੀ ਪ੍ਰਦੂਸ਼ਣ": "ਸਰੋਤ: ਨਦੀ ਪਲਾਸਟਿਕ, ਮੱਛੀ ਪਕੜਨ ਦੇ ਗੀਅਰ, ਅਪਵਾਹ। ਕਾਰਵਾਈ: ਉਚਿਤ ਅਪਸ਼ਿਸ਼ਟ ਪ੍ਰਬੰਧਨ, ਤੂਫਾਨੀ ਪਾਣੀ ਕੈਪਚਰ, ਬੀਚ ਸਫਾਈ, ਜ਼ਿੰਮੇਵਾਰ ਸਮੁੰਦਰੀ ਭੋਜਨ।"
+};
+
+function answerFromKnowledge(query: string, language: 'en' | 'hi' | 'pa' = 'en'): string {
   const q = query.toLowerCase();
-  const knowledge = language === 'hi' ? knowledgeBaseHindi : knowledgeBase;
-  const fallback = language === 'hi' ? FALLBACK_RESPONSE_HI : FALLBACK_RESPONSE_EN;
+  const knowledge = language === 'hi' ? knowledgeBaseHindi : language === 'pa' ? knowledgeBasePunjabi : knowledgeBase;
+  const fallback = language === 'hi' ? FALLBACK_RESPONSE_HI : language === 'pa' ? FALLBACK_RESPONSE_PA : FALLBACK_RESPONSE_EN;
   
   // Simple keyword scoring
   const scores = Object.entries(knowledge).map(([k, v]) => {
@@ -89,12 +114,14 @@ function answerFromKnowledge(query: string, language: 'en' | 'hi' = 'en'): strin
   // Compose a concise answer with an actionable tip when possible
   const followUp = language === 'hi' 
     ? "अधिक विवरण चाहिए? मुझे अपना संदर्भ (घर, स्कूल, शहर) और लक्ष्य बताएं।"
+    : language === 'pa'
+    ? "ਹੋਰ ਵਿਸਥਾਰ ਚਾਹੀਦਾ ਹੈ? ਮੈਨੂੰ ਆਪਣਾ ਸੰਦਰਭ (ਘਰ, ਸਕੂਲ, ਸ਼ਹਿਰ) ਅਤੇ ਟੀਚਾ ਦੱਸੋ।"
     : "Need more detail? Tell me your context (home, school, city) and goal.";
   
   return `${top.v}\n\n${followUp}`;
 }
 
-export async function askAI(messages: ChatMessage[], language: 'en' | 'hi' = 'en'): Promise<string> {
+export async function askAI(messages: ChatMessage[], language: 'en' | 'hi' | 'pa' = 'en'): Promise<string> {
   const apiKey = import.meta.env.VITE_GOOGLE_API_KEY as string | undefined;
   const last = messages.filter(m => m.role === "user").pop()?.content || "";
   
@@ -131,7 +158,7 @@ export async function askAI(messages: ChatMessage[], language: 'en' | 'hi' = 'en
             parts: [{
               text: `You are EcoLearn's environmental tutor for students. Answer environmental questions clearly and educationally. Keep answers under 6 sentences, include one actionable tip when relevant, and use emojis to make it engaging. Focus on practical, student-friendly explanations. Draw inspiration from environmental topics like waste management, water treatment, pollution control, afforestation, deforestation, and renewable energy.
 
-${language === 'hi' ? 'IMPORTANT: Respond in Hindi (हिंदी). Use simple Hindi that students can understand. Include Hindi translations for technical terms when needed.' : 'IMPORTANT: Respond in English.'}
+${language === 'hi' ? 'IMPORTANT: Respond in Hindi (हिंदी). Use simple Hindi that students can understand. Include Hindi translations for technical terms when needed.' : language === 'pa' ? 'IMPORTANT: Respond in Punjabi (ਪੰਜਾਬੀ). Use simple Punjabi that students can understand. Include Punjabi translations for technical terms when needed.' : 'IMPORTANT: Respond in English.'}
 
 Student question: ${last}`
             }]
@@ -173,9 +200,12 @@ Student question: ${last}`
   // Comprehensive environmental knowledge base with smart matching
   
   // Greetings and general questions
-  if (query.includes("hello") || query.includes("hi") || query.includes("hey") || query.includes("good morning") || query.includes("good afternoon") || query.includes("what can you help") || query.includes("what do you do") || query.includes("नमस्ते") || query.includes("हैलो") || query.includes("क्या आप मदद") || query.includes("आप क्या करते")) {
+  if (query.includes("hello") || query.includes("hi") || query.includes("hey") || query.includes("good morning") || query.includes("good afternoon") || query.includes("what can you help") || query.includes("what do you do") || query.includes("नमस्ते") || query.includes("हैलो") || query.includes("क्या आप मदद") || query.includes("आप क्या करते") || query.includes("ਸਤ ਸ੍ਰੀ ਅਕਾਲ") || query.includes("ਸਤ ਸ੍ਰੀ ਅਕਾਲ") || query.includes("ਕੀ ਤੁਸੀਂ ਮਦਦ") || query.includes("ਤੁਸੀਂ ਕੀ ਕਰਦੇ")) {
     if (language === 'hi') {
       return "नमस्ते! मैं EcoLearn का पर्यावरणीय सहायक हूं। मैं आपको अपशिष्ट प्रबंधन, नवीकरणीय ऊर्जा, जल संरक्षण, प्रदूषण नियंत्रण, सतत जीवन, जलवायु परिवर्तन और बहुत कुछ के बारे में सीखने में मदद कर सकता हूं! आज आपको कौन सा पर्यावरणीय विषय रुचिकर लगता है?";
+    }
+    if (language === 'pa') {
+      return "ਸਤ ਸ੍ਰੀ ਅਕਾਲ! ਮੈਂ EcoLearn ਦਾ ਵਾਤਾਵਰਣਕ ਸਹਾਇਕ ਹਾਂ। ਮੈਂ ਤੁਹਾਨੂੰ ਅਪਸ਼ਿਸ਼ਟ ਪ੍ਰਬੰਧਨ, ਨਵੀਕਰਣੀ ਊਰਜਾ, ਪਾਣੀ ਸੰਭਾਲ, ਪ੍ਰਦੂਸ਼ਣ ਨਿਯੰਤਰਣ, ਟਿਕਾਊ ਜੀਵਨ, ਜਲਵਾਯੂ ਪਰਿਵਰਤਨ ਅਤੇ ਬਹੁਤ ਕੁਝ ਬਾਰੇ ਸਿੱਖਣ ਵਿੱਚ ਮਦਦ ਕਰ ਸਕਦਾ ਹਾਂ! ਅੱਜ ਤੁਹਾਨੂੰ ਕਿਹੜਾ ਵਾਤਾਵਰਣਕ ਵਿਸ਼ਾ ਦਿਲਚਸਪ ਲੱਗਦਾ ਹੈ?";
     }
     return "Hello! I'm EcoLearn's environmental assistant. I can help you learn about waste management, renewable energy, water conservation, pollution control, sustainable living, climate change, and much more! What environmental topic interests you today?";
   }
@@ -183,17 +213,23 @@ Student question: ${last}`
   // Simple, practical questions students ask
   
   // How to plant a tree
-  if (query.includes("how to plant") && query.includes("tree") || query.includes("पेड़ कैसे लगाएं") || query.includes("वृक्षारोपण")) {
+  if (query.includes("how to plant") && query.includes("tree") || query.includes("पेड़ कैसे लगाएं") || query.includes("वृक्षारोपण") || query.includes("ਪੇੜ ਕਿਵੇਂ ਲਗਾਏਂ") || query.includes("ਵ੍ਰਿਕਸ਼ਾਰੋਪਣ")) {
     if (language === 'hi') {
       return "बहुत अच्छा सवाल! यहां पेड़ लगाने के चरण हैं:\n\n🌱 **चरण 1**: अपनी जलवायु और स्थान के लिए सही पेड़ चुनें\n🕳️ **चरण 2**: जड़ गेंद से 2-3 गुना चौड़ा गड्ढा खोदें\n🌿 **चरण 3**: पेड़ को गड्ढे में रखें, जड़ का फ्लेयर जमीन से ऊपर रखें\n💧 **चरण 4**: मिट्टी से भरें और अच्छी तरह पानी दें\n🌳 **चरण 5**: आधार के चारों ओर गीली घास डालें (लेकिन तने को छूने न दें)\n\n💡 **सुझाव**: सबसे अच्छे परिणाम के लिए पतझड़ या शुरुआती वसंत में लगाएं। पहले 2 साल नियमित रूप से पानी दें!";
+    }
+    if (language === 'pa') {
+      return "ਬਹੁਤ ਵਧੀਆ ਸਵਾਲ! ਇੱਥੇ ਪੇੜ ਲਗਾਉਣ ਦੇ ਕਦਮ ਹਨ:\n\n🌱 **ਕਦਮ 1**: ਆਪਣੇ ਜਲਵਾਯੂ ਅਤੇ ਸਥਾਨ ਲਈ ਸਹੀ ਪੇੜ ਚੁਣੋ\n🕳️ **ਕਦਮ 2**: ਜੜ੍ਹ ਗੇਂਦ ਤੋਂ 2-3 ਗੁਣਾ ਚੌੜਾ ਗੱਡਾ ਖੋਦੋ\n🌿 **ਕਦਮ 3**: ਪੇੜ ਨੂੰ ਗੱਡੇ ਵਿੱਚ ਰੱਖੋ, ਜੜ੍ਹ ਦਾ ਫਲੇਅਰ ਜ਼ਮੀਨ ਤੋਂ ਉੱਪਰ ਰੱਖੋ\n💧 **ਕਦਮ 4**: ਮਿੱਟੀ ਨਾਲ ਭਰੋ ਅਤੇ ਚੰਗੀ ਤਰ੍ਹਾਂ ਪਾਣੀ ਦਿਓ\n🌳 **ਕਦਮ 5**: ਬੇਸ ਦੇ ਚਾਰੇ ਪਾਸੇ ਗਿੱਲੀ ਘਾਹ ਪਾਓ (ਪਰ ਤਣੇ ਨੂੰ ਛੂਹਣ ਨਾ ਦਿਓ)\n\n💡 **ਸੁਝਾਅ**: ਸਭ ਤੋਂ ਵਧੀਆ ਨਤੀਜਿਆਂ ਲਈ ਪਤਝੜ ਜਾਂ ਸ਼ੁਰੂਆਤੀ ਬਸੰਤ ਵਿੱਚ ਲਗਾਓ। ਪਹਿਲੇ 2 ਸਾਲ ਨਿਯਮਿਤ ਤੌਰ 'ਤੇ ਪਾਣੀ ਦਿਓ!";
     }
     return "Great question! Here's how to plant a tree step by step:\n\n🌱 **Step 1**: Choose the right tree for your climate and space\n🕳️ **Step 2**: Dig a hole 2-3 times wider than the root ball\n🌿 **Step 3**: Place the tree in the hole, keeping the root flare above ground\n💧 **Step 4**: Fill with soil and water thoroughly\n🌳 **Step 5**: Add mulch around the base (but not touching the trunk)\n\n💡 **Pro Tip**: Plant in fall or early spring for best results. Water regularly for the first 2 years!";
   }
   
   // Green dustbin/bin questions
-  if (query.includes("green dustbin") || query.includes("green bin") || query.includes("green garbage") || query.includes("what goes in green bin") || query.includes("green waste") || query.includes("हरा डस्टबिन") || query.includes("हरे डिब्बे में क्या डालें")) {
+  if (query.includes("green dustbin") || query.includes("green bin") || query.includes("green garbage") || query.includes("what goes in green bin") || query.includes("green waste") || query.includes("हरा डस्टबिन") || query.includes("हरे डिब्बे में क्या डालें") || query.includes("ਹਰਾ ਡਸਟਬਿਨ") || query.includes("ਹਰੇ ਡੱਬੇ ਵਿੱਚ ਕੀ ਪਾਈਏ")) {
     if (language === 'hi') {
       return "हरा डिब्बा कार्बनिक अपशिष्ट के लिए है! इसमें ये चीजें जाती हैं:\n\n✅ **खाद्य स्क्रैप**: फल के छिलके, सब्जी के टुकड़े, कॉफी ग्राउंड\n✅ **बगीचे का कचरा**: घास की कतरन, पत्ते, छोटी शाखाएं\n✅ **कागज उत्पाद**: इस्तेमाल किए गए टिशू, पेपर टॉवल (यदि बहुत गंदे न हों)\n\n❌ **इसमें न डालें**: प्लास्टिक बैग, मांस, डेयरी, या तेल वाला पका हुआ भोजन\n\n💡 **सुझाव**: अपने रसोई में खाद्य स्क्रैप के लिए एक छोटा कंटेनर रखें, फिर इसे नियमित रूप से हरे डिब्बे में खाली करें!";
+    }
+    if (language === 'pa') {
+      return "ਹਰਾ ਡੱਬਾ ਕਾਰਬਨਿਕ ਅਪਸ਼ਿਸ਼ਟ ਲਈ ਹੈ! ਇਸ ਵਿੱਚ ਇਹ ਚੀਜ਼ਾਂ ਜਾਂਦੀਆਂ ਹਨ:\n\n✅ **ਖਾਦ ਸਕ੍ਰੈਪ**: ਫਲਾਂ ਦੇ ਛਿਲਕੇ, ਸਬਜ਼ੀਆਂ ਦੇ ਟੁਕੜੇ, ਕੌਫੀ ਗ੍ਰਾਉਂਡ\n✅ **ਬਾਗ ਦਾ ਕੂੜਾ**: ਘਾਹ ਦੀਆਂ ਕਤਰਨਾਂ, ਪੱਤੇ, ਛੋਟੀਆਂ ਸ਼ਾਖਾਵਾਂ\n✅ **ਕਾਗਜ਼ ਉਤਪਾਦ**: ਵਰਤੇ ਗਏ ਟਿਸ਼ੂ, ਪੇਪਰ ਟੌਵਲ (ਜੇ ਬਹੁਤ ਗੰਦੇ ਨਾ ਹੋਣ)\n\n❌ **ਇਸ ਵਿੱਚ ਨਾ ਪਾਓ**: ਪਲਾਸਟਿਕ ਬੈਗ, ਮਾਸ, ਡੇਅਰੀ, ਜਾਂ ਤੇਲ ਵਾਲਾ ਪਕਾਇਆ ਭੋਜਨ\n\n💡 **ਸੁਝਾਅ**: ਆਪਣੇ ਰਸੋਈ ਵਿੱਚ ਖਾਦ ਸਕ੍ਰੈਪ ਲਈ ਇੱਕ ਛੋਟਾ ਕੰਟੇਨਰ ਰੱਖੋ, ਫਿਰ ਇਸਨੂੰ ਨਿਯਮਿਤ ਤੌਰ 'ਤੇ ਹਰੇ ਡੱਬੇ ਵਿੱਚ ਖਾਲੀ ਕਰੋ!";
     }
     return "The green bin is for organic waste! Here's what goes in it:\n\n✅ **Food scraps**: Fruit peels, vegetable trimmings, coffee grounds\n✅ **Garden waste**: Grass clippings, leaves, small branches\n✅ **Paper products**: Used tissues, paper towels (if not too dirty)\n\n❌ **Don't put in**: Plastic bags, meat, dairy, or cooked food with oil\n\n💡 **Pro Tip**: Keep a small container in your kitchen for food scraps, then empty it into the green bin regularly!";
   }

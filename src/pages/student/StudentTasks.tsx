@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Camera, Upload, TreePine, Users, Award, Clock, CheckCircle } from "lucide-react";
+import { Camera, Upload, TreePine, Users, Award, Clock, CheckCircle, Trash2, Droplets, Zap, Leaf, Recycle, Shield } from "lucide-react";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useUser } from "@/contexts/UserContext";
 import { TaskService, RealTimeTask, TaskSubmission } from "@/lib/supabase/tasks";
@@ -28,7 +28,7 @@ const getTasksTemplate = (t: (key: string) => string) => [
     id: 2,
     title: t('student.tasks.community.cleanup'),
     description: t('student.tasks.community.cleanup.desc'),
-    icon: Users,
+    icon: Trash2,
     difficulty: t('student.tasks.difficulty.intermediate'),
     participants: 850,
     completed: 420,
@@ -41,7 +41,7 @@ const getTasksTemplate = (t: (key: string) => string) => [
     id: 3,
     title: t('student.tasks.waste.audit'),
     description: t('student.tasks.waste.audit.desc'),
-    icon: Award,
+    icon: Recycle,
     difficulty: t('student.tasks.difficulty.advanced'),
     participants: 320,
     completed: 180,
@@ -54,7 +54,7 @@ const getTasksTemplate = (t: (key: string) => string) => [
     id: 4,
     title: t('student.tasks.water.conservation.challenge'),
     description: t('student.tasks.water.conservation.challenge.desc'),
-    icon: Award,
+    icon: Droplets,
     difficulty: t('student.tasks.difficulty.intermediate'),
     participants: 650,
     completed: 320,
@@ -67,7 +67,7 @@ const getTasksTemplate = (t: (key: string) => string) => [
     id: 5,
     title: t('student.tasks.energy.efficiency.audit'),
     description: t('student.tasks.energy.efficiency.audit.desc'),
-    icon: Award,
+    icon: Zap,
     difficulty: t('student.tasks.difficulty.advanced'),
     participants: 280,
     completed: 150,
@@ -164,12 +164,31 @@ export default function StudentTasks() {
                 return category;
               };
 
+              const getTaskIcon = (title: string, category: string) => {
+                const titleLower = title.toLowerCase();
+                const categoryLower = category.toLowerCase();
+
+                if (titleLower.includes('plant') || titleLower.includes('tree') || categoryLower.includes('afforestation')) {
+                  return TreePine;
+                } else if (titleLower.includes('cleanup') || titleLower.includes('community') || categoryLower.includes('waste')) {
+                  return Trash2;
+                } else if (titleLower.includes('waste') || titleLower.includes('audit') || categoryLower.includes('waste')) {
+                  return Recycle;
+                } else if (titleLower.includes('water') || titleLower.includes('conservation') || categoryLower.includes('water')) {
+                  return Droplets;
+                } else if (titleLower.includes('energy') || titleLower.includes('efficiency') || categoryLower.includes('energy')) {
+                  return Zap;
+                }
+                return Award; // Default icon
+              };
+
               return {
                 ...task,
                 title: getTranslatedTitle(task.title, task.category),
                 description: getTranslatedDescription(task.title, task.category),
                 difficulty: getTranslatedDifficulty(task.difficulty),
-                category: getTranslatedCategory(task.category)
+                category: getTranslatedCategory(task.category),
+                icon: getTaskIcon(task.title, task.category)
               };
             }) || [];
 
@@ -474,7 +493,7 @@ export default function StudentTasks() {
             </p>
             <Button
               onClick={() => navigate('/student/achievements')}
-              className="bg-gray-800 text-white hover:bg-gray-700 border-2 border-gray-800 font-semibold"
+              className="bg-gray-800 text-white hover:bg-gray-700 border-2 border-white font-semibold"
             >
               {t('student.tasks.view.progress')}
             </Button>

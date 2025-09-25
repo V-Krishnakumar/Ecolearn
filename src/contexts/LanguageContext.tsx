@@ -48,6 +48,8 @@ const translations = {
     'student.dashboard.scoreboard.achievements': 'Scoreboard & Achievements',
     'student.dashboard.view.full.scoreboard': 'View Full Scoreboard',
     'common.loading': 'Loading...',
+    'common.refreshing': 'Refreshing...',
+    'common.refresh.data': 'Refresh Data',
     
     // Teacher Dashboard specific
     'teacher.dashboard.welcome': 'Welcome back, {username}! 👩‍🏫',
@@ -223,6 +225,7 @@ const translations = {
     'achievements.rarity.legendary': 'Legendary',
     'achievements.quick.stats': 'Quick Stats',
     'achievements.stats.total.points': 'Total Points',
+    'achievements.loading': 'Loading achievements...',
     
     // Student Lessons
     'student.lessons.title': 'Environmental Lessons',
@@ -1190,6 +1193,8 @@ const translations = {
     'student.dashboard.scoreboard.achievements': 'स्कोरबोर्ड और उपलब्धियां',
     'student.dashboard.view.full.scoreboard': 'पूरा स्कोरबोर्ड देखें',
     'common.loading': 'लोड हो रहा है...',
+    'common.refreshing': 'ताज़ा कर रहा है...',
+    'common.refresh.data': 'डेटा ताज़ा करें',
     
     // Teacher Dashboard specific
     'teacher.dashboard.welcome': 'वापस स्वागत है, {username}! 👩‍🏫',
@@ -3220,6 +3225,13 @@ const translations = {
     // Task Completion
     'task.completed.title': 'ਕਾਰਜ ਪੂਰਾ! 🌟',
     'task.completed.description': 'ਵਧਾਈਆਂ! ਤੁਸੀਂ ਵਨੀਕਰਣ ਕਾਰਜ ਨੂੰ ਸਫਲਤਾਪੂਰਵਕ ਪੂਰਾ ਕੀਤਾ। ਤੁਹਾਡਾ ਯੋਗਦਾਨ ਸਾਡੇ ਗ੍ਰਹਿ ਨੂੰ ਹਰਾ-ਭਰਾ ਬਣਾਉਣ ਵਿੱਚ ਮਦਦ ਕਰਦਾ ਹੈ!',
+    
+    // Chatbot
+    'chatbot.greeting': 'ਸਤ ਸ੍ਰੀ ਅਕਾਲ! ਮੈਂ EcoLearn ਦਾ ਸਹਾਇਕ ਹਾਂ। ਮੈਨੂੰ ਕੋਈ ਵੀ ਵਾਤਾਵਰਣ ਸਵਾਲ ਪੁੱਛੋ।',
+    'chatbot.placeholder': 'ਅਪਸ਼ਿਸ਼ਟ, ਪਾਣੀ, ਊਰਜਾ ਬਾਰੇ ਪੁੱਛੋ…',
+    'chatbot.thinking': 'ਸੋਚ ਰਿਹਾ ਹਾਂ…',
+    'chatbot.title': 'EcoLearn ਸਹਾਇਕ',
+    'chatbot.ask.anything': 'ਮੈਨੂੰ ਕੁਝ ਵੀ ਪੁੱਛੋ',
   }
 };
 
