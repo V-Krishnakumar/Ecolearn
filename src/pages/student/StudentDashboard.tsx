@@ -18,6 +18,8 @@ import { AchievementStats } from "@/components/AchievementStats";
 import { AchievementNotification } from "@/components/AchievementNotification";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import ScrollStoryAnimation from "@/components/ScrollStoryAnimation";
 
 // Lesson images from public directory
 const wasteManagementImg = "/images/lesson-waste-management.jpg";
@@ -382,10 +384,22 @@ export default function StudentDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
+    <div className="relative min-h-screen bg-[#020602]">
+      {/* First portion is the cinematic scroll animation */}
+      <ScrollStoryAnimation />
+      
+      {/* Dashboard Content Fades in at the end of the scroll container */}
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 1.2, ease: "easeOut" }}
+        className="relative z-10 bg-gradient-to-b from-[#020602] to-white/95 rounded-t-[3rem] shadow-[0_-20px_50px_rgba(2,6,2,0.8)]"
+      >
+        <div className="absolute top-0 w-full h-full bg-gradient-to-br from-green-50 to-blue-50 opacity-95 -z-10 rounded-t-[3rem]"></div>
       <StudentNavigation />
       
-      <div className="w-full px-8 py-8">
+      <div className="w-full px-8 py-8 pt-12">
         {/* Welcome Section */}
         <div className="mb-8 text-center">
           <div className="flex items-center justify-center space-x-3 mb-4">
@@ -564,6 +578,7 @@ export default function StudentDashboard() {
 
       </div>
       
+      </motion.div>
     </div>
   );
 }
