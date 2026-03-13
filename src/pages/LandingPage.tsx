@@ -18,7 +18,6 @@ import {
 } from 'lucide-react';
 
 import '../index.css'; // Ensure index.css is loaded for Inter/Poppins font if defined there
-
 const LandingPage: React.FC = () => {
   const navigate = useNavigate();
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -101,41 +100,6 @@ const LandingPage: React.FC = () => {
       icon: GraduationCap,
       color: "bg-[#C5192D]",
       description: "Ensure inclusive and equitable quality education and promote lifelong learning opportunities for all"
-    },
-    {
-      number: 6,
-      title: "Clean Water and Sanitation",
-      icon: Droplets,
-      color: "bg-blue-500",
-      description: "Ensure availability and sustainable management of water"
-    },
-    {
-      number: 7,
-      title: "Affordable and Clean Energy",
-      icon: Zap,
-      color: "bg-yellow-500",
-      description: "Ensure access to affordable, reliable, sustainable energy"
-    },
-    {
-      number: 11,
-      title: "Sustainable Cities and Communities",
-      icon: Building2,
-      color: "bg-orange-500",
-      description: "Make cities and human settlements inclusive and sustainable"
-    },
-    {
-      number: 12,
-      title: "Responsible Consumption and Production",
-      icon: Recycle,
-      color: "bg-red-500",
-      description: "Ensure sustainable consumption and production patterns"
-    },
-    {
-      number: 13,
-      title: "Climate Action",
-      icon: Thermometer,
-      color: "bg-green-600",
-      description: "Take urgent action to combat climate change"
     },
     {
       number: 14,
@@ -259,6 +223,7 @@ const LandingPage: React.FC = () => {
                 Sustainable Future
               </span>
             </h1>
+<<<<<<< HEAD
             <div className="text-lg md:text-xl mt-8 max-w-3xl mx-auto leading-relaxed font-[500] tracking-[0.5px] min-h-[4rem]" style={{ fontFamily: "'Poppins', 'Inter', 'Nunito', sans-serif" }}>
               <span className="typewriter-text">
                 {displayText.split(' ').map((word, index, array) => {
@@ -269,11 +234,28 @@ const LandingPage: React.FC = () => {
                       className={isGreener ? "text-[#22c55e]" : "text-white"} 
                         style={{ textShadow: '0px 3px 10px rgba(0,0,0,0.4)' }}
                     >
+=======
+            <div className="text-xl md:text-2xl mb-10 max-w-3xl mx-auto leading-relaxed font-medium min-h-[4rem]">
+              <span className="typewriter-text">
+                {displayText.split(' ').map((word, index, array) => {
+                  const isHighlighted = word === 'games' || word === 'lessons,' || word === 'actions.';
+                  const color = word === 'games' || word === 'actions.' ? 'text-yellow-400 font-bold drop-shadow-lg' : 
+                               word === 'lessons,' ? 'text-cyan-400 font-bold drop-shadow-lg' : 'text-white drop-shadow-lg';
+                  const shadowStyle = word === 'games' || word === 'actions.' ? { textShadow: '0 0 15px rgba(251, 191, 36, 0.8)' } :
+                                    word === 'lessons,' ? { textShadow: '0 0 15px rgba(34, 211, 238, 0.8)' } :
+                                    { textShadow: '0 0 10px rgba(255, 255, 255, 0.6)' };
+                  return (
+                    <span key={index} className={color} style={shadowStyle}>
+>>>>>>> b62548257d18e8fa8d705efdea784047c1829fb3
                       {word}{index < array.length - 1 ? ' ' : ''}
                     </span>
                   );
                 })}
+<<<<<<< HEAD
                 <span className={`text-[#22c55e] font-bold drop-shadow-lg ${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity duration-75`} style={{ textShadow: '0 0 15px rgba(34, 197, 94, 0.8)' }}>
+=======
+                <span className={`text-yellow-400 font-bold drop-shadow-lg ${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity duration-75`} style={{ textShadow: '0 0 15px rgba(251, 191, 36, 0.8)' }}>
+>>>>>>> b62548257d18e8fa8d705efdea784047c1829fb3
                   |
                 </span>
               </span>
@@ -306,6 +288,7 @@ const LandingPage: React.FC = () => {
       <section className="py-20 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-7xl mx-auto relative">
           {/* Background overlay */}
+<<<<<<< HEAD
           <div className="absolute inset-0 bg-black/35 rounded-3xl -m-4"></div>
           <div className="absolute inset-0 bg-white/10 backdrop-blur-[10px] rounded-3xl -m-4"></div>
           <div className="text-center mb-16 animate-fade-in relative z-10">
@@ -340,6 +323,21 @@ const LandingPage: React.FC = () => {
             <p className="text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed font-medium" style={{ color: 'rgba(255,255,255,0.85)', textShadow: '0px 2px 10px rgba(0,0,0,0.3)' }}>
               We align with the{' '}
               <span className="font-bold" style={{ background: 'linear-gradient(90deg,#22c55e,#3b82f6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', filter: 'drop-shadow(0px 2px 4px rgba(0,0,0,0.5))' }}>United Nations Sustainable Development Goals</span>{' '}
+=======
+          <div className="absolute inset-0 bg-white/95 backdrop-blur-sm rounded-3xl -m-4"></div>
+          <div className="text-center mb-16 animate-fade-in relative z-10">
+            <div className="inline-flex items-center bg-gradient-to-r from-green-500 to-blue-500 p-4 rounded-2xl mb-8 shadow-xl">
+              <Globe className="h-12 w-12 text-white" />
+            </div>
+            <h2 className="text-5xl font-bold mb-6">
+              <span className="bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
+                Our SDG Goals
+              </span>
+            </h2>
+            <p className="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed font-medium">
+              We align with the{' '}
+              <span className="text-green-600 font-bold">United Nations Sustainable Development Goals</span>{' '}
+>>>>>>> b62548257d18e8fa8d705efdea784047c1829fb3
               to create meaningful impact.
             </p>
           </div>
@@ -350,7 +348,11 @@ const LandingPage: React.FC = () => {
               return (
                 <div
                   key={goal.number}
+<<<<<<< HEAD
                   className="group bg-white/75 rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4 border border-gray-200/50 animate-fade-in relative overflow-hidden backdrop-blur-sm"
+=======
+                  className="group bg-gradient-to-br from-white via-white to-gray-50/50 rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4 border border-gray-200/50 animate-fade-in relative overflow-hidden backdrop-blur-sm"
+>>>>>>> b62548257d18e8fa8d705efdea784047c1829fb3
                   style={{ animationDelay: `${index * 150}ms` }}
                 >
                   {/* Background gradient overlay */}
@@ -381,6 +383,7 @@ const LandingPage: React.FC = () => {
         </div>
       </section>
 
+<<<<<<< HEAD
       {/* SECTION 1 — Join the Global Movement */}
       <section className="py-12 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-7xl mx-auto relative group">
@@ -493,6 +496,8 @@ const LandingPage: React.FC = () => {
         </div>
       </section>
 
+=======
+>>>>>>> b62548257d18e8fa8d705efdea784047c1829fb3
       {/* About Us Section */}
       <section id="about-section" className="py-20 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-4xl mx-auto text-center relative">
