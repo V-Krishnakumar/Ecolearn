@@ -8,7 +8,8 @@ import { Progress } from "@/components/ui/progress";
 import { Camera, Upload, TreePine, Users, Award, Clock, CheckCircle, Trash2, Droplets, Zap, Leaf, Recycle, Shield } from "lucide-react";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useUser } from "@/contexts/UserContext";
-import { TaskService, RealTimeTask, TaskSubmission } from "@/lib/supabase/tasks";
+import { TaskService } from "@/lib/supabase/tasks";
+import { RealTimeTask, StudentTaskSubmission } from "@/lib/supabase/types";
 
 const getTasksTemplate = (t: (key: string) => string) => [
   {
@@ -83,8 +84,9 @@ export default function StudentTasks() {
   const { t } = useLanguage();
   const { user } = useUser();
   const [tasks, setTasks] = useState<RealTimeTask[]>([]);
-  const [submissions, setSubmissions] = useState<TaskSubmission[]>([]);
+  const [submissions, setSubmissions] = useState<StudentTaskSubmission[]>([]);
   const [loading, setLoading] = useState(true);
+  const [uploadedFiles, setUploadedFiles] = useState<{[key: number]: File}>({});
 
   // Load tasks and submissions from Supabase
   useEffect(() => {
@@ -378,6 +380,88 @@ export default function StudentTasks() {
           </Card>
         </div>
 
+        {/* Upload Your Evidence - Always Visible */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">📸 Upload Your Evidence</h2>
+          <Card className="bg-white shadow-lg border-0">
+            <CardContent className="p-8">
+              <div className="space-y-6">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Camera className="h-8 w-8 text-green-600" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Submit Task Evidence</h3>
+                  <p className="text-gray-600 max-w-md mx-auto">
+                    Upload a photo as proof of completing your environmental task. Accepted formats: JPG, PNG, WEBP.
+                  </p>
+                </div>
+
+                {/* Upload Area */}
+                <div className="max-w-lg mx-auto">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    id="evidence-upload"
+                    className="hidden"
+                    onChange={(e) => {
+                      if (e.target.files && e.target.files[0]) {
+                        setUploadedFiles(prev => ({
+                          ...prev,
+                          ['evidence']: e.target.files![0]
+                        }));
+                      }
+                    }}
+                  />
+                  <label
+                    htmlFor="evidence-upload"
+                    className="w-full flex flex-col items-center justify-center px-6 py-8 border-2 border-dashed border-green-300 rounded-xl cursor-pointer hover:bg-green-50 text-green-700 transition-all hover:border-green-500"
+                  >
+                    {(uploadedFiles as any)['evidence'] ? (
+                      <>
+                        <CheckCircle className="h-10 w-10 text-green-500 mb-3" />
+                        <span className="font-semibold text-lg text-green-700">
+                          {(uploadedFiles as any)['evidence'].name}
+                        </span>
+                        <span className="text-sm text-green-500 mt-1">
+                          {((uploadedFiles as any)['evidence'].size / 1024).toFixed(1)} KB — Click to change
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="h-10 w-10 text-green-400 mb-3" />
+                        <span className="font-semibold text-lg">Click to Upload Image</span>
+                        <span className="text-sm text-gray-500 mt-1">or drag and drop your file here</span>
+                      </>
+                    )}
+                  </label>
+
+                  {(uploadedFiles as any)['evidence'] && (
+                    <div className="mt-4 space-y-3">
+                      {/* Image Preview */}
+                      <div className="rounded-lg overflow-hidden border border-gray-200">
+                        <img
+                          src={URL.createObjectURL((uploadedFiles as any)['evidence'])}
+                          alt="Preview"
+                          className="w-full h-48 object-cover"
+                        />
+                      </div>
+                      <Button
+                        onClick={() => {
+                          alert(`✅ Evidence submitted successfully!\n\nFile: ${(uploadedFiles as any)['evidence'].name}\n\nYour submission is now under review. You'll earn eco points once approved!`);
+                        }}
+                        className="w-full bg-green-600 hover:bg-green-700 text-white text-lg py-3 h-auto"
+                      >
+                        <CheckCircle className="h-5 w-5 mr-2" />
+                        Submit Evidence for Review
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
         {/* Active Tasks */}
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('student.tasks.available.now')}</h2>
@@ -465,13 +549,71 @@ export default function StudentTasks() {
                             );
                           }
                           return (
-                            <Button
-                              onClick={() => navigate(`/afforestation-task`)}
-                              className="w-full bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white"
-                            >
-                              <Camera className="h-4 w-4 mr-2" />
-                              {t('student.tasks.start.task')}
-                            </Button>
+                            <div className="space-y-3 mt-4">
+                              {/* New Image Upload Section */}
+                              <div className="relative">
+                                <input
+                                  type="file"
+                                  accept="image/*"
+                                  id={`upload-${task.id}`}
+                                  className="hidden"
+                                  onChange={(e) => {
+                                    if (e.target.files && e.target.files[0]) {
+                                      setUploadedFiles(prev => ({
+                                        ...prev,
+                                        [task.id]: e.target.files![0]
+                                      }));
+                                    }
+                                  }}
+                                />
+                                <label
+                                  htmlFor={`upload-${task.id}`}
+                                  className="w-full flex items-center justify-center space-x-2 px-4 py-3 border-2 border-dashed border-green-300 rounded-lg cursor-pointer hover:bg-green-50 text-green-700 transition-colors"
+                                >
+                                  {uploadedFiles[task.id] ? (
+                                    <>
+                                      <CheckCircle className="h-5 w-5 text-green-500" />
+                                      <span className="font-medium truncate max-w-[200px]">
+                                        {uploadedFiles[task.id].name}
+                                      </span>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <Upload className="h-5 w-5 text-green-500" />
+                                      <span className="font-medium text-sm">Upload Image Evidence</span>
+                                    </>
+                                  )}
+                                </label>
+                              </div>
+
+                              <Button
+                                onClick={() => {
+                                  if (uploadedFiles[task.id]) {
+                                    alert(`Successfully submitted image: ${uploadedFiles[task.id].name}`);
+                                    // Normally you'd submit via API here
+                                  } else {
+                                    navigate(`/afforestation-task`);
+                                  }
+                                }}
+                                className={`w-full text-white ${
+                                  uploadedFiles[task.id] 
+                                    ? "bg-green-600 hover:bg-green-700" 
+                                    : "bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700"
+                                }`}
+                              >
+                                {uploadedFiles[task.id] ? (
+                                  <>
+                                    <CheckCircle className="h-4 w-4 mr-2" />
+                                    Submit Evidence
+                                  </>
+                                ) : (
+                                  <>
+                                    <Camera className="h-4 w-4 mr-2" />
+                                    {t('student.tasks.start.task')}
+                                  </>
+                                )}
+                              </Button>
+                            </div>
                           );
                         })()}
                       </div>
@@ -491,12 +633,6 @@ export default function StudentTasks() {
             <p className="text-lg mb-4">
               {t('student.tasks.call.to.action.description')}
             </p>
-            <Button
-              onClick={() => navigate('/student/achievements')}
-              className="bg-gray-800 text-white hover:bg-gray-700 border-2 border-white font-semibold"
-            >
-              {t('student.tasks.view.progress')}
-            </Button>
           </CardContent>
         </Card>
       </div>

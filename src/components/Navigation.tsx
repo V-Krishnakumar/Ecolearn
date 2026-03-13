@@ -83,20 +83,6 @@ export function Navigation() {
             </NavLink>
 
             <NavLink
-              to="/student/achievements"
-              className={({ isActive }) =>
-                `flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  isActive
-                    ? 'bg-green-100 text-green-700'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                }`
-              }
-            >
-              <Award className="h-4 w-4" />
-              <span>{t("nav.achievements")}</span>
-            </NavLink>
-
-            <NavLink
               to="/advanced-modules"
               className={({ isActive }) =>
                 `flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
@@ -187,20 +173,6 @@ export function Navigation() {
             >
               <Trophy className="h-3 w-3" />
               <span>{t("nav.scoreboard")}</span>
-            </NavLink>
-
-            <NavLink
-              to="/student/achievements"
-              className={({ isActive }) =>
-                `flex items-center space-x-1 px-3 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${
-                  isActive
-                    ? 'bg-green-100 text-green-700'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                }`
-              }
-            >
-              <Award className="h-3 w-3" />
-              <span>{t("nav.achievements")}</span>
             </NavLink>
 
             <NavLink

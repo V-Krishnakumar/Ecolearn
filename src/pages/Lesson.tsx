@@ -24,13 +24,12 @@ import { AfforestationGame } from "@/components/games/AfforestationGame";
 import { DeforestationGame } from "@/components/games/DeforestationGame";
 import { RenewableEnergyGame } from "@/components/games/RenewableEnergyGame";
 
-// Lesson images from public directory
-const wasteManagementImg = "/images/lesson-waste-management.jpg";
-const waterTreatmentImg = "/images/lesson-water-treatment.jpg";
-const pollutionFreeImg = "/images/lesson-pollution-free.jpg";
-const afforestationImg = "/images/lesson-afforestation.jpg";
-const deforestationImg = "/images/lesson-deforestation.jpg";
-const renewableEnergyImg = "/images/lesson-renewable-energy.jpg";
+import wasteManagementImg from "@/assets/lesson-waste-management2.png";
+import waterTreatmentImg from "@/assets/lesson-water-treatment2.png";
+import pollutionFreeImg from "@/assets/lesson-pollution-free2.png";
+import afforestationImg from "@/assets/lesson-afforestation2.png";
+import deforestationImg from "@/assets/lesson-biodiversity2.png";
+import renewableEnergyImg from "@/assets/lesson-renewable-energy2.png";
 
 const getLessonsData = (t: (key: string) => string) => ({
   1: {

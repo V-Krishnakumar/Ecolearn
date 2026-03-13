@@ -1,12 +1,13 @@
 // src/hooks/useSupabaseAchievements.ts
 import { useState, useEffect } from 'react';
 import { useUser } from '@/contexts/UserContext';
-import { AchievementService, Achievement, StudentAchievement, AchievementStats } from '@/lib/supabase/achievements';
+import { AchievementService } from '@/lib/supabase/achievements';
+import { Achievement, StudentAchievement, StudentAchievementWithDetails, AchievementStats } from '@/lib/supabase/types';
 
 export function useSupabaseAchievements() {
   const { user } = useUser();
   const [achievements, setAchievements] = useState<Achievement[]>([]);
-  const [studentAchievements, setStudentAchievements] = useState<StudentAchievement[]>([]);
+  const [studentAchievements, setStudentAchievements] = useState<StudentAchievementWithDetails[]>([]);
   const [newAchievements, setNewAchievements] = useState<Achievement[]>([]);
   const [stats, setStats] = useState<AchievementStats>({
     totalAchievements: 0,
@@ -23,6 +24,12 @@ export function useSupabaseAchievements() {
 
   const loadAchievements = async () => {
     if (user) {
+      // Skip Supabase calls for demo users (their IDs are not valid UUIDs)
+      const isDemoUser = user.id.startsWith('demo-');
+      if (isDemoUser) {
+        setLoading(false);
+        return;
+      }
       try {
         setLoading(true);
         
@@ -71,11 +78,11 @@ export function useSupabaseAchievements() {
     loadAchievements();
   }, [user]);
 
-  const getUnlockedAchievements = (): StudentAchievement[] => {
+  const getUnlockedAchievements = (): StudentAchievementWithDetails[] => {
     return studentAchievements.filter(sa => sa.is_unlocked);
   };
 
-  const getRecentAchievements = (): StudentAchievement[] => {
+  const getRecentAchievements = (): StudentAchievementWithDetails[] => {
     return studentAchievements
       .filter(sa => sa.is_unlocked && sa.unlocked_at)
       .sort((a, b) => new Date(b.unlocked_at!).getTime() - new Date(a.unlocked_at!).getTime())
@@ -92,7 +99,7 @@ export function useSupabaseAchievements() {
     return studentAchievement?.is_unlocked || false;
   };
 
-  const getAchievementsByRarity = (rarity: 'common' | 'rare' | 'epic' | 'legendary'): StudentAchievement[] => {
+  const getAchievementsByRarity = (rarity: 'common' | 'rare' | 'epic' | 'legendary'): StudentAchievementWithDetails[] => {
     return studentAchievements.filter(sa => 
       sa.is_unlocked && sa.achievement?.rarity === rarity
     );
@@ -102,7 +109,7 @@ export function useSupabaseAchievements() {
     return achievements.filter(achievement => achievement.category === category);
   };
 
-  const getLockedAchievements = (): StudentAchievement[] => {
+  const getLockedAchievements = (): StudentAchievementWithDetails[] => {
     return studentAchievements.filter(sa => !sa.is_unlocked);
   };
 
@@ -110,7 +117,7 @@ export function useSupabaseAchievements() {
     return achievements.find(a => a.id === achievementId);
   };
 
-  const getStudentAchievementById = (achievementId: number): StudentAchievement | undefined => {
+  const getStudentAchievementById = (achievementId: number): StudentAchievementWithDetails | undefined => {
     return studentAchievements.find(sa => sa.achievement_id === achievementId);
   };
 

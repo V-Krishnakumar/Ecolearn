@@ -18,6 +18,24 @@ export function useSupabaseProgress(lessonId: number) {
 
   const loadProgress = useCallback(async () => {
     if (user && lessonId > 0 && !initialized) {
+      // Skip Supabase calls for demo users (their IDs are not valid UUIDs)
+      const isDemoUser = user.id.startsWith('demo-');
+      if (isDemoUser) {
+        setProgress({
+          student_id: user.id,
+          lesson_id: lessonId,
+          video_progress: 0,
+          game_completed: false,
+          quiz_completed: false,
+          quiz_score: 0,
+          is_completed: false,
+          time_spent_minutes: 0,
+          last_accessed: new Date().toISOString()
+        });
+        setInitialized(true);
+        setLoading(false);
+        return;
+      }
       try {
         setLoading(true);
         const { data, error } = await LessonService.getLessonProgress(user.id, lessonId);
@@ -54,7 +72,7 @@ export function useSupabaseProgress(lessonId: number) {
                   quiz_completed: localProgress.quizCompleted,
                   quiz_score: localProgress.quizScore,
                   is_completed: localProgress.completed,
-                  time_spent_minutes: localProgress.timeSpent || 0,
+                  time_spent_minutes: 0,
                   last_accessed: localProgress.lastAccessed || new Date().toISOString()
                 };
                 console.log('Loaded progress from local storage (network fallback):', supabaseProgress);
@@ -102,7 +120,7 @@ export function useSupabaseProgress(lessonId: number) {
                   quiz_completed: localProgress.quizCompleted,
                   quiz_score: localProgress.quizScore,
                   is_completed: localProgress.completed,
-                  time_spent_minutes: localProgress.timeSpent || 0,
+                  time_spent_minutes: 0,
                   last_accessed: localProgress.lastAccessed || new Date().toISOString()
                 };
                 console.log('Loaded progress from local storage (auth fallback):', supabaseProgress);
@@ -391,6 +409,12 @@ export function useStudentProgress() {
 
   const loadProgress = async () => {
     if (user) {
+      // Skip Supabase calls for demo users
+      const isDemoUser = user.id.startsWith('demo-');
+      if (isDemoUser) {
+        setLoading(false);
+        return;
+      }
       try {
         setLoading(true);
         const { data, error } = await LessonService.getStudentProgress(user.id);

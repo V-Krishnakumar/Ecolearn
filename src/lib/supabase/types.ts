@@ -115,7 +115,7 @@ export interface StudentAchievement {
 }
 
 export interface StudentLessonProgress {
-  id: number;
+  id?: number;
   student_id?: string; // UUID
   lesson_id?: number;
   video_progress: number; // 0-100
@@ -127,8 +127,8 @@ export interface StudentLessonProgress {
   last_accessed: string;
   completed_at?: string;
   points?: number; // Points earned for this lesson
-  created_at: string;
-  updated_at: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface StudentQuizAttempt {

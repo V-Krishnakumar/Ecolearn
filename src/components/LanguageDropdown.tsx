@@ -13,7 +13,6 @@ import { Language } from '@/types/language';
 const languageOptions = [
   { code: 'en' as Language, name: 'English', flag: '🇺🇸' },
   { code: 'hi' as Language, name: 'हिंदी', flag: '🇮🇳' },
-  { code: 'pa' as Language, name: 'ਪੰਜਾਬੀ', flag: '🇮🇳' },
 ];
 
 export function LanguageDropdown() {

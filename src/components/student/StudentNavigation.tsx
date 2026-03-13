@@ -36,11 +36,7 @@ const getNavigationItems = (t: (key: string) => string) => [
     href: '/scoreboard',
     icon: Trophy
   },
-  {
-    name: t('nav.achievements'),
-    href: '/achievements',
-    icon: Award
-  },
+
   {
     name: t('nav.advanced.modules'),
     href: '/advanced-modules',

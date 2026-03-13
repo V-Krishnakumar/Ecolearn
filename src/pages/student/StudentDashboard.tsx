@@ -21,13 +21,12 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import ScrollStoryAnimation from "@/components/ScrollStoryAnimation";
 
-// Lesson images from public directory
-const wasteManagementImg = "/images/lesson-waste-management.jpg";
-const waterTreatmentImg = "/images/lesson-water-treatment.jpg";
-const pollutionFreeImg = "/images/lesson-pollution-free.jpg";
-const afforestationImg = "/images/lesson-afforestation.jpg";
-const deforestationImg = "/images/lesson-deforestation.jpg";
-const renewableEnergyImg = "/images/lesson-renewable-energy.jpg";
+import wasteManagementImg from "@/assets/lesson-waste-management2.png";
+import waterTreatmentImg from "@/assets/lesson-water-treatment2.png";
+import pollutionFreeImg from "@/assets/lesson-pollution-free2.png";
+import afforestationImg from "@/assets/lesson-afforestation2.png";
+import deforestationImg from "@/assets/lesson-biodiversity2.png"; // User provided biodiversity2.png as the 6th image
+import renewableEnergyImg from "@/assets/lesson-renewable-energy2.png";
 
 const getLessonsTemplate = (t: (key: string) => string) => [
   {
@@ -159,6 +158,8 @@ export default function StudentDashboard() {
     const loadData = async () => {
       if (!user) return;
       
+      const isDemoUser = user.id.startsWith('demo-');
+      
       try {
         setLoading(true);
         setProgressLoading(true);
@@ -255,25 +256,29 @@ export default function StudentDashboard() {
           }
         }
 
-        // Load user progress
-        const { data: progressData, error: progressError } = await LessonService.getStudentProgress(user.id);
-        if (progressError) {
-          console.error('Error loading progress:', progressError);
+        // Load user progress (skip for demo users)
+        if (!isDemoUser) {
+          const { data: progressData, error: progressError } = await LessonService.getStudentProgress(user.id);
+          if (progressError) {
+            console.error('Error loading progress:', progressError);
+            setUserProgress([]);
+          } else {
+            setUserProgress(progressData || []);
+          }
+
+          // Load user statistics
+          const { data: statsData, error: statsError } = await StatisticsService.getUserStats(user.id);
+          if (statsError) {
+            console.error('Error loading user statistics:', statsError);
+          } else {
+            setUserStatistics(statsData);
+          }
+
+          // Load scoreboard data
+          await loadScoreboardData();
+        } else {
           setUserProgress([]);
-        } else {
-          setUserProgress(progressData || []);
         }
-
-        // Load user statistics
-        const { data: statsData, error: statsError } = await StatisticsService.getUserStats(user.id);
-        if (statsError) {
-          console.error('Error loading user statistics:', statsError);
-        } else {
-          setUserStatistics(statsData);
-        }
-
-        // Load scoreboard data
-        await loadScoreboardData();
       } catch (error) {
         console.error('Error loading data:', error);
         setLessons(getLessonsTemplate(t));
@@ -423,7 +428,7 @@ export default function StudentDashboard() {
 
 
         {/* Stats Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <Card className="bg-white shadow-lg border-0">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
@@ -462,20 +467,6 @@ export default function StudentDashboard() {
                 </div>
                 <div className="p-3 bg-purple-100 rounded-full">
                   <Clock className="h-6 w-6 text-purple-600" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-white shadow-lg border-0">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">{t('student.dashboard.achievements')}</p>
-                  <p className="text-2xl font-bold text-gray-900">{stats.unlockedAchievements}</p>
-                </div>
-                <div className="p-3 bg-yellow-100 rounded-full">
-                  <Star className="h-6 w-6 text-yellow-600" />
                 </div>
               </div>
             </CardContent>
