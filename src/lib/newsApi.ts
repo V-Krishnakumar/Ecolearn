@@ -282,11 +282,10 @@ export class NewsService {
     }
 
     try {
-      // Try to fetch from NewsAPI (only for English)
-      if (language === 'en') {
-        const response = await fetch(
-          `${NEWS_API_BASE_URL}/everything?q=environment OR climate OR renewable energy OR sustainability&sortBy=publishedAt&pageSize=10&apiKey=${NEWS_API_KEY}`
-        );
+      // Fetch from NewsAPI (strictly in English as requested)
+      const response = await fetch(
+        `${NEWS_API_BASE_URL}/everything?q=environment OR climate OR "renewable energy" OR sustainability&language=en&sortBy=publishedAt&pageSize=15&apiKey=${NEWS_API_KEY}`
+      );
         
         if (response.ok) {
           const data: NewsResponse = await response.json();
@@ -299,13 +298,12 @@ export class NewsService {
           this.cache.set(cacheKey, { data: articles, timestamp: Date.now() });
           return articles;
         }
-      }
     } catch (error) {
       console.warn('Failed to fetch real-time news, using fallback data:', error);
     }
 
-    // Use fallback data based on language
-    const fallbackData = language === 'hi' ? FALLBACK_NEWS_HI : language === 'pa' ? FALLBACK_NEWS_PA : FALLBACK_NEWS_EN;
+    // Always use English fallback data to strictly fulfill "only English environment news" requirement
+    const fallbackData = FALLBACK_NEWS_EN;
     this.cache.set(cacheKey, { data: fallbackData, timestamp: Date.now() });
     return fallbackData;
   }
