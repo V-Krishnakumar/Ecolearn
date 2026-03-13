@@ -11,8 +11,13 @@ import {
   Leaf,
   Users,
   Target,
-  Globe
+  Globe,
+  GraduationCap,
+  Waves,
+  Wind
 } from 'lucide-react';
+
+import '../index.css'; // Ensure index.css is loaded for Inter/Poppins font if defined there
 
 const LandingPage: React.FC = () => {
   const navigate = useNavigate();
@@ -24,7 +29,7 @@ const LandingPage: React.FC = () => {
   const [scrollY, setScrollY] = useState(0);
   const [isVideoVisible, setIsVideoVisible] = useState(true);
   
-  const fullText = "Empowering students to learn sustainability through fun games, interactive lessons, and real-world actions.";
+  const fullText = "Shaping Young Minds for a Greener Tomorrow.";
 
   useEffect(() => {
     if (isTyping) {
@@ -91,6 +96,13 @@ const LandingPage: React.FC = () => {
 
   const sdgGoals = [
     {
+      number: 4,
+      title: "Quality Education",
+      icon: GraduationCap,
+      color: "bg-[#C5192D]",
+      description: "Ensure inclusive and equitable quality education and promote lifelong learning opportunities for all"
+    },
+    {
       number: 6,
       title: "Clean Water and Sanitation",
       icon: Droplets,
@@ -124,6 +136,13 @@ const LandingPage: React.FC = () => {
       icon: Thermometer,
       color: "bg-green-600",
       description: "Take urgent action to combat climate change"
+    },
+    {
+      number: 14,
+      title: "Life Below Water",
+      icon: Waves,
+      color: "bg-[#0A97D9]",
+      description: "Conserve and sustainably use the oceans, seas and marine resources for sustainable development"
     },
     {
       number: 15,
@@ -240,22 +259,21 @@ const LandingPage: React.FC = () => {
                 Sustainable Future
               </span>
             </h1>
-            <div className="text-xl md:text-2xl mb-10 max-w-3xl mx-auto leading-relaxed font-medium min-h-[4rem]">
+            <div className="text-lg md:text-xl mt-8 max-w-3xl mx-auto leading-relaxed font-[500] tracking-[0.5px] min-h-[4rem]" style={{ fontFamily: "'Poppins', 'Inter', 'Nunito', sans-serif" }}>
               <span className="typewriter-text">
                 {displayText.split(' ').map((word, index, array) => {
-                  const isHighlighted = word === 'games' || word === 'lessons,' || word === 'actions.';
-                  const color = word === 'games' || word === 'actions.' ? 'text-yellow-400 font-bold drop-shadow-lg' : 
-                               word === 'lessons,' ? 'text-cyan-400 font-bold drop-shadow-lg' : 'text-white drop-shadow-lg';
-                  const shadowStyle = word === 'games' || word === 'actions.' ? { textShadow: '0 0 15px rgba(251, 191, 36, 0.8)' } :
-                                    word === 'lessons,' ? { textShadow: '0 0 15px rgba(34, 211, 238, 0.8)' } :
-                                    { textShadow: '0 0 10px rgba(255, 255, 255, 0.6)' };
+                  const isGreener = word === 'Greener';
                   return (
-                    <span key={index} className={color} style={shadowStyle}>
+                    <span 
+                      key={index} 
+                      className={isGreener ? "text-[#22c55e]" : "text-white"} 
+                        style={{ textShadow: '0px 3px 10px rgba(0,0,0,0.4)' }}
+                    >
                       {word}{index < array.length - 1 ? ' ' : ''}
                     </span>
                   );
                 })}
-                <span className={`text-yellow-400 font-bold drop-shadow-lg ${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity duration-75`} style={{ textShadow: '0 0 15px rgba(251, 191, 36, 0.8)' }}>
+                <span className={`text-[#22c55e] font-bold drop-shadow-lg ${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity duration-75`} style={{ textShadow: '0 0 15px rgba(34, 197, 94, 0.8)' }}>
                   |
                 </span>
               </span>
@@ -288,19 +306,40 @@ const LandingPage: React.FC = () => {
       <section className="py-20 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-7xl mx-auto relative">
           {/* Background overlay */}
-          <div className="absolute inset-0 bg-white/95 backdrop-blur-sm rounded-3xl -m-4"></div>
+          <div className="absolute inset-0 bg-black/35 rounded-3xl -m-4"></div>
+          <div className="absolute inset-0 bg-white/10 backdrop-blur-[10px] rounded-3xl -m-4"></div>
           <div className="text-center mb-16 animate-fade-in relative z-10">
-            <div className="inline-flex items-center bg-gradient-to-r from-green-500 to-blue-500 p-4 rounded-2xl mb-8 shadow-xl">
-              <Globe className="h-12 w-12 text-white" />
+            {/* SDG Icon with Hover Animation */}
+            <div className="flex justify-center mb-6">
+              <img 
+                src="/images/sdg-goal.png" 
+                alt="UN SDG Wheel" 
+                className="w-[75px] h-[75px] object-contain transition-transform duration-300 ease-out hover:-translate-y-1 bg-transparent"
+                style={{ 
+                  boxShadow: '0px 10px 25px rgba(0,0,0,0.25)',
+                  borderRadius: '50%' // Assuming circular wheel for box-shadow to look nice
+                }}
+              />
             </div>
-            <h2 className="text-5xl font-bold mb-6">
-              <span className="bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
-                Our SDG Goals
-              </span>
+            
+            <h2 className="text-5xl md:text-6xl text-white font-[800] tracking-[0.5px]" style={{ textShadow: '0px 4px 20px rgba(0,0,0,0.45)' }}>
+              Our SDG Goals
             </h2>
-            <p className="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed font-medium">
+
+            {/* Professional Divider */}
+            <div 
+              style={{
+                width: '80px',
+                height: '3px',
+                background: 'linear-gradient(90deg,#22c55e,#3b82f6)',
+                margin: '20px auto',
+                borderRadius: '10px'
+              }} 
+            />
+
+            <p className="text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed font-medium" style={{ color: 'rgba(255,255,255,0.85)', textShadow: '0px 2px 10px rgba(0,0,0,0.3)' }}>
               We align with the{' '}
-              <span className="text-green-600 font-bold">United Nations Sustainable Development Goals</span>{' '}
+              <span className="font-bold" style={{ background: 'linear-gradient(90deg,#22c55e,#3b82f6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', filter: 'drop-shadow(0px 2px 4px rgba(0,0,0,0.5))' }}>United Nations Sustainable Development Goals</span>{' '}
               to create meaningful impact.
             </p>
           </div>
@@ -311,7 +350,7 @@ const LandingPage: React.FC = () => {
               return (
                 <div
                   key={goal.number}
-                  className="group bg-gradient-to-br from-white via-white to-gray-50/50 rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4 border border-gray-200/50 animate-fade-in relative overflow-hidden backdrop-blur-sm"
+                  className="group bg-white/75 rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4 border border-gray-200/50 animate-fade-in relative overflow-hidden backdrop-blur-sm"
                   style={{ animationDelay: `${index * 150}ms` }}
                 >
                   {/* Background gradient overlay */}
@@ -338,6 +377,118 @@ const LandingPage: React.FC = () => {
                 </div>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 1 — Join the Global Movement */}
+      <section className="py-12 px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-7xl mx-auto relative group">
+          <div className="absolute inset-0 bg-white/40 backdrop-blur-xl rounded-[32px] shadow-2xl border border-white/50 transition-all duration-300 group-hover:scale-[1.01]" />
+          
+          <div className="relative p-10 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 rounded-[32px] overflow-hidden">
+
+            <div className="flex flex-col md:flex-row items-center md:items-start gap-6 text-center md:text-left z-10">
+              
+              <div>
+                <h3 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-2 tracking-tight">
+                  Join the Global Movement
+                </h3>
+                <p className="text-lg text-gray-700 font-medium mb-6">
+                  Students from around the world are already making an impact through EcoLearn.
+                </p>
+
+                {/* Overlapping Avatars */}
+                <div className="flex items-center justify-center md:justify-start">
+                  <div className="flex -space-x-4">
+                    <div className="w-10 h-10 rounded-full border-2 border-white bg-[#16a34a] flex items-center justify-center shadow-lg relative z-40 bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80')" }}></div>
+                    <div className="w-10 h-10 rounded-full border-2 border-white bg-[#22c55e] flex items-center justify-center shadow-lg relative z-30 bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80')" }}></div>
+                    <div className="w-10 h-10 rounded-full border-2 border-white bg-[#10b981] flex items-center justify-center shadow-lg relative z-20 bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80')" }}></div>
+                    <div className="w-10 h-10 rounded-full border-2 border-white bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center shadow-lg relative z-10">
+                      <Leaf className="w-5 h-5 text-white" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="text-center md:text-right shrink-0 z-10">
+              <div className="text-5xl md:text-6xl font-black bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent mb-1 tracking-tight drop-shadow-sm">
+                +50,000
+              </div>
+              <div className="text-gray-500 text-lg font-bold uppercase tracking-wider">
+                Active Learners
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 2 — Our Community's Environmental Impact */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-7xl mx-auto relative">
+          <div className="absolute inset-0 bg-white/40 backdrop-blur-xl rounded-[32px] -m-6 shadow-2xl border border-white/50"></div>
+          
+          <div className="relative text-center mb-16 animate-fade-in z-10">
+            <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 tracking-tight drop-shadow-sm">
+              Our Community's <br className="hidden md:block"/>
+              <span className="bg-gradient-to-r from-[#16a34a] to-[#22c55e] bg-clip-text text-transparent">Environmental Impact</span>
+            </h2>
+            
+            <p className="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed font-medium">
+              Every activity completed contributes to real-world environmental outcomes. 
+              Here's what the EcoLearn community has achieved together.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
+            {/* Card 1: Trees Planted */}
+            <div className="group bg-white/80 backdrop-blur-xl rounded-[20px] p-8 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-green-100 flex flex-col items-center text-center text-gray-900">
+              <div className="w-16 h-16 rounded-2xl bg-green-100 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300 shadow-inner">
+                <Trees className="w-8 h-8 text-[#22c55e]" />
+              </div>
+              <div className="text-4xl font-black text-[#22c55e] mb-2 tracking-tight">2.5M+</div>
+              <div className="text-lg font-bold text-gray-800 mb-3">Trees Planted</div>
+              <p className="text-gray-600 text-sm leading-relaxed font-medium">
+                Trees planted through community sustainability missions.
+              </p>
+            </div>
+
+            {/* Card 2: CO2 Reduced */}
+            <div className="group bg-white/80 backdrop-blur-xl rounded-[20px] p-8 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-blue-100 flex flex-col items-center text-center text-gray-900">
+              <div className="w-16 h-16 rounded-2xl bg-blue-100 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-300 shadow-inner">
+                <Wind className="w-8 h-8 text-[#38bdf8]" />
+              </div>
+              <div className="text-4xl font-black text-[#38bdf8] mb-2 tracking-tight">850K</div>
+              <div className="text-lg font-bold text-gray-800 mb-3">Kg CO2 Reduced</div>
+              <p className="text-gray-600 text-sm leading-relaxed font-medium">
+                Carbon emissions reduced through eco-friendly activities.
+              </p>
+            </div>
+
+            {/* Card 3: Water Saved */}
+            <div className="group bg-white/80 backdrop-blur-xl rounded-[20px] p-8 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-cyan-100 flex flex-col items-center text-center text-gray-900">
+              <div className="w-16 h-16 rounded-2xl bg-cyan-100 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300 shadow-inner">
+                <Droplets className="w-8 h-8 text-[#06b6d4]" />
+              </div>
+              <div className="text-4xl font-black text-[#06b6d4] mb-2 tracking-tight">12M</div>
+              <div className="text-lg font-bold text-gray-800 mb-3">Liters Water Saved</div>
+              <p className="text-gray-600 text-sm leading-relaxed font-medium">
+                Water conserved through sustainability awareness actions.
+              </p>
+            </div>
+
+            {/* Card 4: Items Recycled */}
+            <div className="group bg-white/80 backdrop-blur-xl rounded-[20px] p-8 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-orange-100 flex flex-col items-center text-center text-gray-900">
+              <div className="w-16 h-16 rounded-2xl bg-orange-100 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-300 shadow-inner">
+                <Recycle className="w-8 h-8 text-[#f97316]" />
+              </div>
+              <div className="text-4xl font-black text-[#f97316] mb-2 tracking-tight">5M+</div>
+              <div className="text-lg font-bold text-gray-800 mb-3">Items Recycled</div>
+              <p className="text-gray-600 text-sm leading-relaxed font-medium">
+                Waste prevented from reaching landfills.
+              </p>
+            </div>
           </div>
         </div>
       </section>
