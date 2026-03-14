@@ -8,6 +8,7 @@ export interface LocalUser {
   username: string;
   email: string;
   role: UserRole;
+  school_id?: string;
   created_at: string;
   total_points?: number;
   level?: number;
@@ -25,6 +26,7 @@ export interface RegisterCredentials {
   email: string;
   password: string;
   role: UserRole;
+  school_id?: string;
 }
 
 /**
@@ -65,7 +67,8 @@ export class LocalAuth {
         userId, 
         credentials.name.trim(), // Store full name in username
         credentials.email.trim(),  // Store email in email field
-        credentials.role // Store user role
+        credentials.role, // Store user role
+        credentials.school_id // Store school_id if available
       );
       
       if (!profileResult.success) {
@@ -91,6 +94,7 @@ export class LocalAuth {
         username: credentials.name.trim(), // Display name
         email: credentials.email,
         role: credentials.role,
+        school_id: credentials.school_id,
         created_at: new Date().toISOString()
       };
 
@@ -148,6 +152,7 @@ export class LocalAuth {
         username: storedUsername, // Display name
         email: profile.email,
         role: (profile.role as UserRole) || 'student', // Default to student if no role
+        school_id: profile.school_id,
         created_at: profile.created_at
       };
 

@@ -230,11 +230,19 @@ export class LessonService {
     points: number = 0
   ): Promise<void> {
     try {
+      // Get school_id from profile
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('school_id')
+        .eq('id', studentId)
+        .single();
+
       // Log the activity
       await supabase
         .from('activities')
         .insert({
           student_id: studentId,
+          school_id: profile?.school_id,
           activity_type: activityType,
           points_earned: points,
           metadata: metadata,
@@ -255,10 +263,10 @@ export class LessonService {
    */
   private static async updateUserPoints(studentId: string, points: number): Promise<void> {
     try {
-      // Get current user points
+      // Get current user points and school_id
       const { data: profile } = await supabase
         .from('profiles')
-        .select('total_points')
+        .select('total_points, school_id')
         .eq('id', studentId)
         .single();
 
@@ -294,6 +302,7 @@ export class LessonService {
             .from('leaderboard')
             .insert({
               student_id: studentId,
+              school_id: profile.school_id,
               total_points: (profile.total_points || 0) + points,
               points: points,
               updated_at: new Date().toISOString()

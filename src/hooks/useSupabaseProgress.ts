@@ -23,6 +23,7 @@ export function useSupabaseProgress(lessonId: number) {
       if (isDemoUser) {
         setProgress({
           student_id: user.id,
+          school_id: user.school_id,
           lesson_id: lessonId,
           video_progress: 0,
           game_completed: false,
@@ -66,6 +67,7 @@ export function useSupabaseProgress(lessonId: number) {
                 // Convert local progress to Supabase format
                 const supabaseProgress: StudentLessonProgress = {
                   student_id: user.id,
+                  school_id: user.school_id,
                   lesson_id: lessonId,
                   video_progress: localProgress.videoProgress,
                   game_completed: localProgress.gameCompleted,
@@ -172,6 +174,7 @@ export function useSupabaseProgress(lessonId: number) {
           console.log('Loaded progress from Supabase:', data);
           const progressData = data || {
             student_id: user.id,
+            school_id: user.school_id,
             lesson_id: lessonId,
             video_progress: 0,
             game_completed: false,
@@ -213,6 +216,7 @@ export function useSupabaseProgress(lessonId: number) {
       try {
         console.log('Updating video progress:', { videoProgress, completed, lessonId });
         const { data, error } = await LessonService.updateLessonProgress(user.id, lessonId, {
+          school_id: user.school_id,
           video_progress: videoProgress,
           is_completed: completed && progress?.game_completed && progress?.quiz_completed,
           last_accessed: new Date().toISOString()
@@ -262,6 +266,7 @@ export function useSupabaseProgress(lessonId: number) {
     if (user) {
       try {
         const { data, error } = await LessonService.updateLessonProgress(user.id, lessonId, {
+          school_id: user.school_id,
           game_completed: completed,
           is_completed: completed && progress?.video_progress >= 100 && progress?.quiz_completed,
           last_accessed: new Date().toISOString()

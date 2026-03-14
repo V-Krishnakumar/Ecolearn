@@ -6,14 +6,25 @@
 -- ==============================================
 
 -- ==================
--- 1. PROFILES TABLE
+-- 1. SCHOOLS TABLE (SAAS TENANT)
 -- ==================
+CREATE TABLE public.schools (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  name text NOT NULL,
+  domain text UNIQUE,
+  subscription_status text DEFAULT 'active' CHECK (subscription_status IN ('active', 'trial', 'suspended')),
+  created_at timestamp with time zone DEFAULT now() NOT NULL
+);
+
+-- ==================
+-- 2. PROFILES TABLE
 CREATE TABLE public.profiles (
   id uuid NOT NULL,
+  school_id uuid REFERENCES public.schools(id) ON DELETE CASCADE,
   username text,
   created_at timestamp without time zone DEFAULT now(),
   email text NOT NULL,
-  role text DEFAULT 'student'::text CHECK (role = ANY (ARRAY['student'::text, 'teacher'::text])),
+  role text DEFAULT 'student'::text CHECK (role = ANY (ARRAY['platform_admin'::text, 'school_admin'::text, 'teacher'::text, 'student'::text])),
   updated_at timestamp with time zone DEFAULT now(),
   avatar_url text,
   bio text,
@@ -100,6 +111,7 @@ CREATE TABLE public.real_time_tasks (
 -- ==================
 CREATE TABLE public.activities (
   id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  school_id uuid REFERENCES public.schools(id) ON DELETE CASCADE,
   student_id uuid,
   type text,
   points integer,
@@ -117,6 +129,7 @@ CREATE TABLE public.activities (
 -- ==================
 CREATE TABLE public.leaderboard (
   id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  school_id uuid REFERENCES public.schools(id) ON DELETE CASCADE,
   student_id uuid,
   points integer DEFAULT 0,
   updated_at timestamp without time zone DEFAULT now(),
@@ -133,6 +146,7 @@ CREATE TABLE public.leaderboard (
 -- ==================
 CREATE TABLE public.notifications (
   id serial NOT NULL,
+  school_id uuid REFERENCES public.schools(id) ON DELETE CASCADE,
   student_id uuid,
   title text NOT NULL,
   message text NOT NULL,
@@ -149,6 +163,7 @@ CREATE TABLE public.notifications (
 -- ==================
 CREATE TABLE public.student_lesson_progress (
   id serial NOT NULL,
+  school_id uuid REFERENCES public.schools(id) ON DELETE CASCADE,
   student_id uuid,
   lesson_id integer,
   video_progress integer DEFAULT 0 CHECK (video_progress >= 0 AND video_progress <= 100),
@@ -172,6 +187,7 @@ CREATE TABLE public.student_lesson_progress (
 -- ==================
 CREATE TABLE public.student_quiz_attempts (
   id serial NOT NULL,
+  school_id uuid REFERENCES public.schools(id) ON DELETE CASCADE,
   student_id uuid,
   quiz_id integer,
   selected_answer integer NOT NULL,
@@ -188,6 +204,7 @@ CREATE TABLE public.student_quiz_attempts (
 -- ==================
 CREATE TABLE public.student_achievements (
   id serial NOT NULL,
+  school_id uuid REFERENCES public.schools(id) ON DELETE CASCADE,
   student_id uuid,
   achievement_id integer,
   progress integer DEFAULT 0 CHECK (progress >= 0 AND progress <= 100),
@@ -204,6 +221,7 @@ CREATE TABLE public.student_achievements (
 -- ==================
 CREATE TABLE public.student_task_submissions (
   id serial NOT NULL,
+  school_id uuid REFERENCES public.schools(id) ON DELETE CASCADE,
   student_id uuid,
   task_id integer,
   submission_type text NOT NULL CHECK (submission_type = ANY (ARRAY['image'::text, 'video'::text, 'text'::text, 'document'::text])),
@@ -225,6 +243,7 @@ CREATE TABLE public.student_task_submissions (
 -- ==============================================
 
 -- Enable RLS on all tables
+ALTER TABLE public.schools ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.lessons ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.quizzes ENABLE ROW LEVEL SECURITY;
@@ -238,27 +257,82 @@ ALTER TABLE public.student_quiz_attempts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.student_achievements ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.student_task_submissions ENABLE ROW LEVEL SECURITY;
 
--- PUBLIC READ: lessons, quizzes, achievements, tasks, leaderboard (anyone can read)
+-- 1. GLOBAL READ-ONLY (Lessons, Quizzes, Tasks, Achievements)
+-- Anyone authenticated can read the core curriculum
 CREATE POLICY "Anyone can read lessons" ON public.lessons FOR SELECT USING (true);
 CREATE POLICY "Anyone can read quizzes" ON public.quizzes FOR SELECT USING (true);
 CREATE POLICY "Anyone can read achievements" ON public.achievements FOR SELECT USING (true);
 CREATE POLICY "Anyone can read tasks" ON public.real_time_tasks FOR SELECT USING (true);
-CREATE POLICY "Anyone can read leaderboard" ON public.leaderboard FOR SELECT USING (true);
 
--- PROFILES: anyone can read, anyone can insert, anyone can update (for the demo/local auth system)
-CREATE POLICY "Anyone can read profiles" ON public.profiles FOR SELECT USING (true);
-CREATE POLICY "Anyone can insert profiles" ON public.profiles FOR INSERT WITH CHECK (true);
-CREATE POLICY "Anyone can update profiles" ON public.profiles FOR UPDATE USING (true);
+-- 2. SCHOOL TENANT ACCESS
+CREATE POLICY "Platform admins can see all schools" ON public.schools FOR ALL USING (
+  EXISTS (SELECT 1 FROM public.profiles WHERE profiles.id = auth.uid() AND profiles.role = 'platform_admin')
+);
+CREATE POLICY "Users can see their own school" ON public.schools FOR SELECT USING (
+  id IN (SELECT school_id FROM public.profiles WHERE profiles.id = auth.uid())
+);
 
--- STUDENT DATA: full access (since we use custom auth, not Supabase Auth)
-CREATE POLICY "Full access to activities" ON public.activities FOR ALL USING (true);
-CREATE POLICY "Full access to notifications" ON public.notifications FOR ALL USING (true);
-CREATE POLICY "Full access to student_lesson_progress" ON public.student_lesson_progress FOR ALL USING (true);
-CREATE POLICY "Full access to student_quiz_attempts" ON public.student_quiz_attempts FOR ALL USING (true);
-CREATE POLICY "Full access to student_achievements" ON public.student_achievements FOR ALL USING (true);
-CREATE POLICY "Full access to student_task_submissions" ON public.student_task_submissions FOR ALL USING (true);
-CREATE POLICY "Full access to leaderboard write" ON public.leaderboard FOR INSERT WITH CHECK (true);
-CREATE POLICY "Full update leaderboard" ON public.leaderboard FOR UPDATE USING (true);
+-- 3. PROFILES ACCESS
+CREATE POLICY "Users can read profiles in their school" ON public.profiles FOR SELECT USING (
+  school_id IN (SELECT school_id FROM public.profiles WHERE id = auth.uid()) OR auth.uid() = id
+);
+CREATE POLICY "Platform admins manage all profiles" ON public.profiles FOR ALL USING (
+  EXISTS (SELECT 1 FROM public.profiles WHERE profiles.id = auth.uid() AND profiles.role = 'platform_admin')
+);
+CREATE POLICY "School admins manage school profiles" ON public.profiles FOR ALL USING (
+  school_id IN (SELECT school_id FROM public.profiles WHERE id = auth.uid() AND role = 'school_admin')
+);
+
+-- 4. TENANT ISOLATED DATA (Progress, Activities, Submissions, Leaderboard, Notifications)
+-- Students see their own. Teachers/Admins see their school's. Platform Admins see all.
+
+-- Activities
+CREATE POLICY "Students see own activities" ON public.activities FOR SELECT USING (student_id = auth.uid());
+CREATE POLICY "Staff see school activities" ON public.activities FOR SELECT USING (
+  school_id IN (SELECT school_id FROM public.profiles WHERE id = auth.uid() AND role IN ('teacher', 'school_admin'))
+);
+CREATE POLICY "Platform admin activities" ON public.activities FOR ALL USING (
+  EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'platform_admin')
+);
+CREATE POLICY "System insert activities" ON public.activities FOR INSERT WITH CHECK (true); -- For demo/local auth bypass
+
+-- Student Lesson Progress
+CREATE POLICY "Students see own progress" ON public.student_lesson_progress FOR SELECT USING (student_id = auth.uid());
+CREATE POLICY "Staff see school progress" ON public.student_lesson_progress FOR SELECT USING (
+  school_id IN (SELECT school_id FROM public.profiles WHERE id = auth.uid() AND role IN ('teacher', 'school_admin'))
+);
+CREATE POLICY "System insert/update progress" ON public.student_lesson_progress FOR ALL USING (true); -- Relaxed for demo auth
+
+-- Student Task Submissions
+CREATE POLICY "Students see own submissions" ON public.student_task_submissions FOR SELECT USING (student_id = auth.uid());
+CREATE POLICY "Staff see school submissions" ON public.student_task_submissions FOR SELECT USING (
+  school_id IN (SELECT school_id FROM public.profiles WHERE id = auth.uid() AND role IN ('teacher', 'school_admin'))
+);
+CREATE POLICY "System insert/update submissions" ON public.student_task_submissions FOR ALL USING (true); -- Relaxed for demo auth
+
+-- Leaderboard
+CREATE POLICY "Users see school leaderboard" ON public.leaderboard FOR SELECT USING (
+  school_id IN (SELECT school_id FROM public.profiles WHERE id = auth.uid())
+);
+CREATE POLICY "System update leaderboard" ON public.leaderboard FOR ALL USING (true); -- Relaxed for demo auth
+
+-- Notifications
+CREATE POLICY "Students see own notifications" ON public.notifications FOR SELECT USING (student_id = auth.uid());
+CREATE POLICY "System update notifications" ON public.notifications FOR ALL USING (true); -- Relaxed for demo auth
+
+-- Student Achievements
+CREATE POLICY "Students see own achievements" ON public.student_achievements FOR SELECT USING (student_id = auth.uid());
+CREATE POLICY "System update student achievements" ON public.student_achievements FOR ALL USING (true); -- Relaxed for demo auth
+CREATE POLICY "Staff see school student achievements" ON public.student_achievements FOR SELECT USING (
+  school_id IN (SELECT school_id FROM public.profiles WHERE id = auth.uid() AND role IN ('teacher', 'school_admin'))
+);
+
+-- Student Quiz Attempts
+CREATE POLICY "Students see own quiz attempts" ON public.student_quiz_attempts FOR SELECT USING (student_id = auth.uid());
+CREATE POLICY "System update quiz attempts" ON public.student_quiz_attempts FOR ALL USING (true); -- Relaxed for demo auth
+CREATE POLICY "Staff see school quiz attempts" ON public.student_quiz_attempts FOR SELECT USING (
+  school_id IN (SELECT school_id FROM public.profiles WHERE id = auth.uid() AND role IN ('teacher', 'school_admin'))
+);
 
 -- ==============================================
 -- SEED DATA: LESSONS

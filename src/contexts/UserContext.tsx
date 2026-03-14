@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { LocalAuth, LocalUser, UserRole } from '@/lib/localAuth';
+import { LocalAuth, LocalUser } from '@/lib/localAuth';
 import { UserProfile } from '@/lib/profile';
+import { UserRole } from '@/lib/supabase/types';
 
 interface UserContextType {
   user: LocalUser | null;
@@ -32,6 +33,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
           username: currentUser.username,
           email: currentUser.email,
           role: currentUser.role,
+          school_id: currentUser.school_id,
           created_at: currentUser.created_at
         });
       }
@@ -52,6 +54,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
           username: result.user.username,
           email: result.user.email,
           role: result.user.role,
+          school_id: result.user.school_id,
           created_at: result.user.created_at
         });
       }
@@ -74,6 +77,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
           username: result.user.username,
           email: result.user.email,
           role: result.user.role,
+          school_id: result.user.school_id,
           created_at: result.user.created_at
         });
       }
@@ -102,6 +106,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         username: updatedUser.username,
         email: updatedUser.email,
         role: updatedUser.role,
+        school_id: updatedUser.school_id,
         created_at: updatedUser.created_at
       });
     }
@@ -117,6 +122,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         username: demoUser.username,
         email: demoUser.email,
         role: demoUser.role,
+        school_id: demoUser.school_id,
         created_at: demoUser.created_at
       });
       return { success: true, user: demoUser };

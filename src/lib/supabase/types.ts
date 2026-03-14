@@ -1,12 +1,15 @@
 // src/lib/supabase/types.ts
 // TypeScript types that match the SQL schema exactly
 
+export type UserRole = 'platform_admin' | 'school_admin' | 'teacher' | 'student';
+
 export interface Profile {
   id: string; // UUID
+  school_id?: string; // UUID
   username?: string;
   created_at: string;
   email: string;
-  role: 'student' | 'teacher';
+  role: UserRole;
   updated_at: string;
   avatar_url?: string;
   bio?: string;
@@ -29,6 +32,7 @@ export interface Achievement {
 
 export interface Activity {
   id: number; // bigint GENERATED ALWAYS AS IDENTITY
+  school_id?: string; // UUID
   student_id?: string; // UUID
   type?: string;
   points?: number;
@@ -41,6 +45,7 @@ export interface Activity {
 
 export interface Leaderboard {
   id: number; // bigint GENERATED ALWAYS AS IDENTITY
+  school_id?: string; // UUID
   student_id?: string; // UUID
   points: number;
   updated_at: string;
@@ -67,6 +72,7 @@ export interface Lesson {
 
 export interface Notification {
   id: number;
+  school_id?: string; // UUID
   student_id?: string; // UUID
   title: string;
   message: string;
@@ -106,6 +112,7 @@ export interface RealTimeTask {
 
 export interface StudentAchievement {
   id: number;
+  school_id?: string; // UUID
   student_id?: string; // UUID
   achievement_id?: number;
   progress: number; // 0-100
@@ -116,6 +123,7 @@ export interface StudentAchievement {
 
 export interface StudentLessonProgress {
   id?: number;
+  school_id?: string; // UUID
   student_id?: string; // UUID
   lesson_id?: number;
   video_progress: number; // 0-100
@@ -133,6 +141,7 @@ export interface StudentLessonProgress {
 
 export interface StudentQuizAttempt {
   id: number;
+  school_id?: string; // UUID
   student_id?: string; // UUID
   quiz_id?: number;
   selected_answer: number;
@@ -143,6 +152,7 @@ export interface StudentQuizAttempt {
 
 export interface StudentTaskSubmission {
   id: number;
+  school_id?: string; // UUID
   student_id?: string; // UUID
   task_id?: number;
   submission_type: 'image' | 'video' | 'text' | 'document';
@@ -274,4 +284,3 @@ export type SubmissionType = 'image' | 'video' | 'text' | 'document';
 export type SubmissionStatus = 'pending' | 'approved' | 'rejected';
 
 // User roles
-export type UserRole = 'student' | 'teacher';

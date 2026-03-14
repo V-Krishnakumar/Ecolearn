@@ -130,11 +130,19 @@ export class AchievementService {
 
         return { data, error };
       } else {
+        // Query profile for school_id
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('school_id')
+          .eq('id', studentId)
+          .single();
+
         // Create new record
         const { data, error } = await supabase
           .from('student_achievements')
           .insert({
             student_id: studentId,
+            school_id: profile?.school_id,
             achievement_id: achievementId,
             progress: Math.min(progress, 100),
             is_unlocked: shouldUnlock,

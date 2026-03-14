@@ -29,7 +29,8 @@ export async function createUserProfile(
   userId: string,
   username: string,
   email: string,
-  role: UserRole = 'student'
+  role: UserRole = 'student',
+  school_id?: string
 ): Promise<{ success: boolean; profile?: Profile; error?: string }> {
   try {
     const profileData = {
@@ -37,6 +38,7 @@ export async function createUserProfile(
       username: username.trim(),
       email: email.trim(),
       role: role,
+      school_id: school_id,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
     };
@@ -159,6 +161,7 @@ export async function ensureUserProfile(
 
     // If no profile exists, create one
     if (username) {
+      // NOTE: We do not have a school_id here. Defaulting to empty or null.
       return await createUserProfile(userId, username, email || '', 'student');
     }
 

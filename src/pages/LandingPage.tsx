@@ -223,12 +223,9 @@ const LandingPage: React.FC = () => {
       {/* Navbar */}
       <nav className="fixed top-0 w-full bg-white/80 backdrop-blur-md border-b border-green-200/50 z-50 shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+          <div className="flex justify-between items-center h-24">
             <div className="flex items-center space-x-3">
-              <div className="bg-gradient-to-r from-green-500 to-blue-500 p-2 rounded-xl shadow-lg">
-                <Leaf className="h-6 w-6 text-white" />
-              </div>
-              <span className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-600 bg-clip-text text-transparent drop-shadow-lg" style={{ textShadow: '0 0 15px rgba(34, 211, 238, 0.5)' }}>EcoLearn</span>
+              <img src="/images/logo.png" alt="EcoLearn Logo" className="h-20 object-contain drop-shadow-sm scale-[1.3] origin-left" />
             </div>
             <button
               onClick={handleGetStarted}
@@ -249,11 +246,15 @@ const LandingPage: React.FC = () => {
           {/* Background overlay for better text readability */}
           <div className="absolute inset-0 bg-black/10 rounded-3xl -m-8"></div>
           <div className="animate-fade-in relative z-10">
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-              <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent drop-shadow-2xl" style={{ textShadow: '0 0 20px rgba(34, 211, 238, 0.5)' }}>
-                EcoLearn
-              </span>
-              <br />
+            <div className="flex justify-center mb-6 z-20 relative animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+            <img 
+              src="/images/logo.png" 
+              alt="EcoLearn" 
+              className="h-48 md:h-64 lg:h-72 object-contain drop-shadow-[0_4px_16px_rgba(34,197,94,0.4)] transition-transform hover:scale-110 duration-300" 
+            />
+          </div>
+          
+          <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-6 tracking-tight drop-shadow-xl z-20 relative animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
               <span className="text-white drop-shadow-2xl" style={{ textShadow: '0 0 15px rgba(255, 255, 255, 0.8)' }}>Shaping a</span>{' '}
               <span className="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 bg-clip-text text-transparent drop-shadow-2xl" style={{ textShadow: '0 0 20px rgba(251, 191, 36, 0.6)' }}>
                 Sustainable Future

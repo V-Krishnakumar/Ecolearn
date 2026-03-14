@@ -58,14 +58,11 @@ export default function TeacherNavigation() {
   return (
     <nav className="bg-white shadow-lg border-b border-gray-200">
       <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-24">
           {/* Logo and Brand */}
           <div className="flex items-center space-x-4">
-            <Link to="/teacher/dashboard" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-blue-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">🌱</span>
-              </div>
-              <span className="text-xl font-bold text-gray-900">EcoLearn</span>
+            <Link to="/teacher/dashboard" className="flex items-center">
+              <img src="/images/logo.png" alt="EcoLearn Logo" className="h-20 object-contain drop-shadow-sm scale-[1.3] origin-left" />
             </Link>
             <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded">{t('teacher.nav.portal')}</span>
           </div>

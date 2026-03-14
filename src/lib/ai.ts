@@ -134,13 +134,13 @@ export async function askAI(messages: ChatMessage[], language: 'en' | 'hi' | 'pa
   });
 
   // Always try AI first if we have an API key
-  if (apiKey && apiKey !== "your_google_api_key_here" && apiKey.length > 20) {
+  if (apiKey) {
     try {
       console.log("🤖 Using Google Gemini API with key:", apiKey.substring(0, 20) + "...");
       console.log("❓ Question:", last);
       
       // Use Google Gemini API for comprehensive environmental answers
-      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -36,6 +36,9 @@ import TeacherAssignments from "./pages/teacher/TeacherAssignments";
 import TeacherReports from "./pages/teacher/TeacherReports";
 import TeacherAchievements from "./pages/teacher/TeacherAchievements";
 
+// Admin pages
+import SchoolAdminDashboard from "./pages/admin/SchoolAdminDashboard";
+import PlatformAdminDashboard from "./pages/admin/PlatformAdminDashboard";
 
 const queryClient = new QueryClient();
 
@@ -55,8 +58,12 @@ const RoleRoute = ({ children, allowedRoles }: { children: React.ReactNode; allo
   if (!allowedRoles.includes(user.role)) {
     // If it's a demo user, redirect to appropriate dashboard
     if (user.id.startsWith('demo-')) {
-      const demoRole = user.role;
-      return <Navigate to={`/${demoRole}/dashboard`} replace />;
+      let demoRole = user.role;
+      let targetPath = `/${demoRole}/dashboard`;
+      if (demoRole === 'school_admin') targetPath = '/admin/dashboard';
+      if (demoRole === 'platform_admin') targetPath = '/platform/dashboard';
+      
+      return <Navigate to={targetPath} replace />;
     }
     return <Navigate to="/auth" replace />;
   }
@@ -131,6 +138,18 @@ const App = () => (
                 </RoleRoute>
               } />
               
+              {/* Admin routes */}
+              <Route path="/admin/dashboard" element={
+                <RoleRoute allowedRoles={['school_admin']}>
+                  <SchoolAdminDashboard />
+                </RoleRoute>
+              } />
+              <Route path="/platform/dashboard" element={
+                <RoleRoute allowedRoles={['platform_admin']}>
+                  <PlatformAdminDashboard />
+                </RoleRoute>
+              } />
+
               {/* Shared routes */}
               <Route path="/lesson/:id" element={<Lesson />} />
               <Route path="/quiz/:id" element={<Quiz />} />
