@@ -168,10 +168,10 @@ export class TeacherDataManager {
   /**
    * Add a student to a class
    */
-  static addStudent(classId: string, name: string, email: string): Student {
+  static addStudent(classId: string, name: string, email: string, studentId?: string): Student {
     const data = this.getTeacherData();
     const newStudent: Student = {
-      id: this.generateId(),
+      id: studentId || this.generateId(),
       name,
       email,
       classId,

@@ -91,22 +91,22 @@ const App = () => (
               
               {/* Student routes */}
               <Route path="/student/dashboard" element={
-                <RoleRoute allowedRoles={['student']}>
+                <RoleRoute allowedRoles={['student', 'independent_student']}>
                   <StudentDashboard />
                 </RoleRoute>
               } />
               <Route path="/student/lessons" element={
-                <RoleRoute allowedRoles={['student']}>
+                <RoleRoute allowedRoles={['student', 'independent_student']}>
                   <StudentLessons />
                 </RoleRoute>
               } />
               <Route path="/student/tasks" element={
-                <RoleRoute allowedRoles={['student']}>
+                <RoleRoute allowedRoles={['student', 'independent_student']}>
                   <StudentTasks />
                 </RoleRoute>
               } />
               <Route path="/student/achievements" element={
-                <RoleRoute allowedRoles={['student']}>
+                <RoleRoute allowedRoles={['student', 'independent_student']}>
                   <Achievements />
                 </RoleRoute>
               } />

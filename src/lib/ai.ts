@@ -123,7 +123,7 @@ function answerFromKnowledge(query: string, language: 'en' | 'hi' | 'pa' = 'en')
 
 export async function askAI(messages: ChatMessage[], language: 'en' | 'hi' | 'pa' = 'en'): Promise<string> {
   // Use the provided Gemini API key (falling back to env if available, though we'll hardcode the working one)
-  const apiKey = (import.meta.env.VITE_GOOGLE_API_KEY as string | undefined) || "AIzaSyALvVYv0_VFqPk-4gbq2wYbQj-ySAD1G0A";
+  const apiKey = (import.meta.env.VITE_GOOGLE_API_KEY as string | undefined) || "AIzaSyA1UtoZI62AtECOnJwAEQibtvwRNPAeU-c";
   const last = messages.filter(m => m.role === "user").pop()?.content || "";
   
   // Debug environment variables
@@ -140,7 +140,7 @@ export async function askAI(messages: ChatMessage[], language: 'en' | 'hi' | 'pa
       console.log("❓ Question:", last);
       
       // Use Google Gemini API for comprehensive environmental answers
-      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

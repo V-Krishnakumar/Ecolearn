@@ -24,7 +24,7 @@ CREATE TABLE public.profiles (
   username text,
   created_at timestamp without time zone DEFAULT now(),
   email text NOT NULL,
-  role text DEFAULT 'student'::text CHECK (role = ANY (ARRAY['platform_admin'::text, 'school_admin'::text, 'teacher'::text, 'student'::text])),
+  role text DEFAULT 'student'::text CHECK (role = ANY (ARRAY['platform_admin'::text, 'school_admin'::text, 'teacher'::text, 'student'::text, 'independent_student'::text])),
   updated_at timestamp with time zone DEFAULT now(),
   avatar_url text,
   bio text,

@@ -14,7 +14,11 @@ import {
   Globe,
   GraduationCap,
   Waves,
-  Wind
+  Wind,
+  BadgeDollarSign,
+  CheckCircle2,
+  Rocket,
+  Crown
 } from 'lucide-react';
 
 import '../index.css'; // Ensure index.css is loaded for Inter/Poppins font if defined there
@@ -91,6 +95,13 @@ const LandingPage: React.FC = () => {
     const aboutSection = document.getElementById('about-section');
     if (aboutSection) {
       aboutSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const scrollToPricing = () => {
+    const pricingSection = document.getElementById('pricing');
+    if (pricingSection) {
+      pricingSection.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
@@ -227,14 +238,23 @@ const LandingPage: React.FC = () => {
             <div className="flex items-center space-x-3">
               <img src="/images/logo.png" alt="EcoLearn Logo" className="h-20 object-contain drop-shadow-sm scale-[1.3] origin-left" />
             </div>
-            <button
-              onClick={handleGetStarted}
-              className="bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white px-6 py-2 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border border-cyan-300/50"
-              style={{ boxShadow: '0 0 20px rgba(34, 211, 238, 0.3)' }}
-            >
-              Get Started
-              <ArrowRight className="inline ml-2 h-4 w-4" />
-            </button>
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={scrollToPricing}
+                className="bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white px-6 py-2 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border border-cyan-300/50"
+                style={{ boxShadow: '0 0 20px rgba(34, 211, 238, 0.3)' }}
+              >
+                Pricing
+              </button>
+              <button
+                onClick={handleGetStarted}
+                className="bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white px-6 py-2 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border border-cyan-300/50"
+                style={{ boxShadow: '0 0 20px rgba(34, 211, 238, 0.3)' }}
+              >
+                Get Started
+                <ArrowRight className="inline ml-2 h-4 w-4" />
+              </button>
+            </div>
           </div>
         </div>
       </nav>
@@ -542,6 +562,151 @@ const LandingPage: React.FC = () => {
               <span className="text-green-600 font-bold">greener tomorrow</span>{' '}
               together.
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section id="pricing" className="py-24 px-4 sm:px-6 lg:px-8 relative z-10 bg-white/40">
+        <div className="max-w-7xl mx-auto relative">
+          <div className="text-center mb-16 animate-fade-in-up">
+            <h2 className="text-5xl font-extrabold mb-6 tracking-tight">
+              <span className="bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent">
+                Pricing Plans
+              </span>
+            </h2>
+            <p className="text-xl text-gray-700 max-w-2xl mx-auto font-medium">
+              Choose the right plan for your school to start building sustainable future leaders.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {/* Starter Plan */}
+            <div className="bg-white/95 backdrop-blur-md rounded-2xl p-8 shadow-xl border border-gray-100 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl flex flex-col relative group">
+              <div className="absolute inset-0 bg-gradient-to-b from-green-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl"></div>
+              <div className="relative z-10 flex-1">
+                <div className="flex justify-between items-start mb-6">
+                  <div>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Starter</h3>
+                    <p className="text-teal-600 font-medium text-sm px-3 py-1 bg-teal-50 rounded-full inline-block">Small schools</p>
+                  </div>
+                  <div className="p-3 bg-green-100 rounded-xl text-green-600">
+                    <Leaf className="w-6 h-6" />
+                  </div>
+                </div>
+                <div className="mb-6">
+                  <span className="text-4xl font-extrabold text-gray-900">₹999</span>
+                  <span className="text-gray-500 font-medium"> / month</span>
+                </div>
+                <ul className="space-y-4 mb-8">
+                  {[
+                    'Up to 200 students',
+                    'Access to all learning modules',
+                    'Basic quizzes and gamification',
+                    'AI EcoLearn Assistant',
+                    'Environmental news feed',
+                    'Student progress tracking'
+                  ].map((feature, i) => (
+                    <li key={i} className="flex items-start text-gray-700">
+                      <CheckCircle2 className="w-5 h-5 text-green-500 mr-3 shrink-0 mt-0.5" />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <button 
+                onClick={handleGetStarted}
+                className="w-full relative z-10 py-3 px-6 rounded-xl font-semibold border-2 border-green-500 text-green-600 hover:bg-green-50 transition-colors duration-300"
+              >
+                Get Started
+              </button>
+            </div>
+
+            {/* Growth Plan (Recommended) */}
+            <div className="bg-white/95 backdrop-blur-md rounded-2xl p-8 shadow-2xl border-2 border-green-500 transition-all duration-300 transform hover:scale-105 hover:shadow-green-500/20 flex flex-col relative group scale-100 md:scale-105 z-10">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                <span className="bg-gradient-to-r from-green-500 to-teal-500 text-white text-xs font-bold uppercase tracking-wider py-1 px-4 rounded-full shadow-md">
+                  Most Popular
+                </span>
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-b from-green-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl"></div>
+              <div className="relative z-10 flex-1">
+                <div className="flex justify-between items-start mb-6">
+                  <div>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Growth</h3>
+                    <p className="text-blue-600 font-medium text-sm px-3 py-1 bg-blue-50 rounded-full inline-block">Medium to large</p>
+                  </div>
+                  <div className="p-3 bg-gradient-to-br from-green-400 to-teal-500 rounded-xl text-white shadow-md">
+                    <Rocket className="w-6 h-6" />
+                  </div>
+                </div>
+                <div className="mb-6">
+                  <span className="text-4xl font-extrabold text-gray-900">₹2999</span>
+                  <span className="text-gray-500 font-medium"> / month</span>
+                </div>
+                <ul className="space-y-4 mb-8">
+                  {[
+                    'Up to 1000 students',
+                    'All Starter features',
+                    'Advanced analytics dashboard',
+                    'Classroom leaderboards',
+                    'Real-world task verification',
+                    'Teacher insights & reports'
+                  ].map((feature, i) => (
+                    <li key={i} className="flex items-start text-gray-700 font-medium">
+                      <CheckCircle2 className="w-5 h-5 text-teal-500 mr-3 shrink-0 mt-0.5" />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <button 
+                onClick={handleGetStarted}
+                className="w-full relative z-10 py-3 px-6 rounded-xl font-bold text-white bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-400 hover:to-teal-500 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+              >
+                Start Growth Plan
+              </button>
+            </div>
+
+            {/* Enterprise Plan */}
+            <div className="bg-white/95 backdrop-blur-md rounded-2xl p-8 shadow-xl border border-gray-100 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl flex flex-col relative group">
+              <div className="absolute inset-0 bg-gradient-to-b from-orange-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl"></div>
+              <div className="relative z-10 flex-1">
+                <div className="flex justify-between items-start mb-6">
+                  <div>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Enterprise</h3>
+                    <p className="text-orange-600 font-medium text-sm px-3 py-1 bg-orange-50 rounded-full inline-block">District level</p>
+                  </div>
+                  <div className="p-3 bg-orange-100 rounded-xl text-orange-600">
+                    <Crown className="w-6 h-6" />
+                  </div>
+                </div>
+                <div className="mb-6">
+                  <span className="text-3xl font-extrabold text-gray-900">Custom Pricing</span>
+                </div>
+                <ul className="space-y-4 mb-8">
+                  {[
+                    'Unlimited students',
+                    'Dedicated school workspace',
+                    'Custom branding',
+                    'API integrations',
+                    'Advanced analytics',
+                    'Priority support'
+                  ].map((feature, i) => (
+                    <li key={i} className="flex items-start text-gray-700">
+                      <CheckCircle2 className="w-5 h-5 text-orange-500 mr-3 shrink-0 mt-0.5" />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <button 
+                onClick={handleGetStarted}
+                className="w-full relative z-10 py-3 px-6 rounded-xl font-semibold border-2 border-orange-500 text-orange-600 hover:bg-orange-50 transition-colors duration-300"
+              >
+                Contact Sales
+              </button>
+            </div>
           </div>
         </div>
       </section>

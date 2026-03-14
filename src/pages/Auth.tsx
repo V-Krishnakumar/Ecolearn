@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { useUser } from "@/contexts/UserContext";
 import AnimatedBackground from "@/components/AnimatedBackground";
@@ -12,7 +13,7 @@ import { UserRole } from "@/lib/supabase/types";
 export default function Auth() {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { signIn, startDemo } = useUser();
+  const { signIn, signUp, startDemo } = useUser();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -83,6 +84,49 @@ export default function Auth() {
     }
   };
 
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    
+    if (formData.password.length < 6) {
+      toast({
+        title: "Registration Failed",
+        description: "Password must be at least 6 characters long.",
+        variant: "destructive",
+      });
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      // Register with the fixed independent_student role
+      const result = await signUp(formData.name, formData.email, formData.password, "independent_student");
+
+      if (!result.success) {
+        toast({
+          title: "Registration Failed",
+          description: result.error || "Unable to create account. Please check your details.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Account created successfully!",
+          description: "Welcome to EcoLearn! Initializing your learning space.",
+        });
+        setTimeout(() => navigate('/student/dashboard'), 1000);
+      }
+    } catch (error) {
+      console.error("Unexpected registration error:", error);
+      toast({
+        title: "Registration Failed",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="relative min-h-screen bg-gradient-nature flex items-center justify-center p-4">
       <AnimatedBackground />
@@ -110,7 +154,14 @@ export default function Auth() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleLogin} className="space-y-4">
+            <Tabs defaultValue="login" className="w-full">
+              <TabsList className="grid w-full grid-cols-2 mb-6 h-12">
+                <TabsTrigger value="login" className="text-base font-medium transition-all duration-200 data-[state=active]:bg-green-50 data-[state=active]:text-green-700 data-[state=active]:shadow-sm">Login</TabsTrigger>
+                <TabsTrigger value="register" className="text-base font-medium transition-all duration-200 data-[state=active]:bg-teal-50 data-[state=active]:text-teal-700 data-[state=active]:shadow-sm">Register</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="login" className="animate-in fade-in zoom-in-95 duration-200 outline-none">
+                <form onSubmit={handleLogin} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
                     <Input
@@ -121,7 +172,7 @@ export default function Auth() {
                       value={formData.email}
                       onChange={handleInputChange}
                       required
-                      className="border-border focus:ring-primary"
+                      className="border-border focus:ring-green-500 rounded-md transition-all"
                     />
                   </div>
                   <div className="space-y-2">
@@ -134,17 +185,71 @@ export default function Auth() {
                       value={formData.password}
                       onChange={handleInputChange}
                       required
-                      className="border-border focus:ring-primary"
+                      className="border-border focus:ring-green-500 rounded-md transition-all"
                     />
                   </div>
                   <Button 
                     type="submit" 
                     disabled={isLoading}
-                    className="w-full bg-gradient-nature hover:opacity-90 transition-all duration-200 shadow-glow disabled:opacity-50"
+                    className="w-full bg-gradient-nature hover:from-green-500 hover:to-teal-600 transition-all duration-300 shadow-glow disabled:opacity-50 text-white font-semibold py-6 rounded-xl"
                   >
                     {isLoading ? "Signing in..." : "Login to EcoLearn"}
                   </Button>
                 </form>
+              </TabsContent>
+
+              <TabsContent value="register" className="animate-in fade-in zoom-in-95 duration-200 outline-none">
+                <form onSubmit={handleRegister} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="reg-name">Full Name</Label>
+                    <Input
+                      id="reg-name"
+                      name="name"
+                      type="text"
+                      placeholder="Enter your full name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      required
+                      className="border-border focus:ring-teal-500 rounded-md transition-all"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="reg-email">Email</Label>
+                    <Input
+                      id="reg-email"
+                      name="email"
+                      type="email"
+                      placeholder="Enter your email address"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      required
+                      className="border-border focus:ring-teal-500 rounded-md transition-all"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="reg-password">Password</Label>
+                    <Input
+                      id="reg-password"
+                      name="password"
+                      type="password"
+                      placeholder="Minimum 6 characters"
+                      value={formData.password}
+                      onChange={handleInputChange}
+                      required
+                      minLength={6}
+                      className="border-border focus:ring-teal-500 rounded-md transition-all"
+                    />
+                  </div>
+                  <Button 
+                    type="submit" 
+                    disabled={isLoading}
+                    className="w-full bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-400 hover:to-emerald-500 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 text-white font-semibold py-6 rounded-xl"
+                  >
+                    {isLoading ? "Creating account..." : "Create Free Account"}
+                  </Button>
+                </form>
+              </TabsContent>
+            </Tabs>
           </CardContent>
         </Card>
 

@@ -1,7 +1,7 @@
 // src/lib/supabase/types.ts
 // TypeScript types that match the SQL schema exactly
 
-export type UserRole = 'platform_admin' | 'school_admin' | 'teacher' | 'student';
+export type UserRole = 'platform_admin' | 'school_admin' | 'teacher' | 'student' | 'independent_student';
 
 export interface Profile {
   id: string; // UUID

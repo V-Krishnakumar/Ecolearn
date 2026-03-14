@@ -20,6 +20,8 @@ import {
 import { useUser } from "@/contexts/UserContext";
 import { TeacherDataManager, Class, Student } from "@/lib/teacherData";
 import { useLanguage } from "@/hooks/useLanguage";
+import { TeacherStudentSelector } from "@/components/teacher/TeacherStudentSelector";
+import { supabase } from "@/lib/supabase";
 
 export default function TeacherClasses() {
   const navigate = useNavigate();
@@ -31,7 +33,7 @@ export default function TeacherClasses() {
   const [isAddStudentDialogOpen, setIsAddStudentDialogOpen] = useState(false);
   const [selectedClass, setSelectedClass] = useState<Class | null>(null);
   const [newClass, setNewClass] = useState({ name: '', description: '' });
-  const [newStudent, setNewStudent] = useState({ name: '', email: '' });
+  const [newStudent, setNewStudent] = useState({ id: '', name: '', email: '' });
 
   useEffect(() => {
     if (user?.role !== 'teacher') {
@@ -42,13 +44,46 @@ export default function TeacherClasses() {
     loadData();
   }, [user, navigate]);
 
-  const loadData = () => {
+  const loadData = async () => {
     if (!user) return;
 
     const teacherClasses = TeacherDataManager.getTeacherClasses(user.id);
-    const allStudents = teacherClasses.flatMap(cls => 
+    let allStudents = teacherClasses.flatMap(cls => 
       TeacherDataManager.getClassStudents(cls.id)
     );
+
+    // Hydrate local mock data with live stats from Supabase if we have valid IDs
+    const studentIds = allStudents.map(s => s.id).filter(id => id.includes('-'));
+    
+    if (studentIds.length > 0) {
+      try {
+        const { data: profiles } = await supabase
+          .from('profiles')
+          .select('id, total_points')
+          .in('id', studentIds);
+
+        const { data: unlocked } = await supabase
+          .from('student_achievements')
+          .select('student_id, achievements(name)')
+          .in('student_id', studentIds)
+          .eq('is_unlocked', true);
+
+        allStudents = allStudents.map(student => {
+          const profile = profiles?.find(p => p.id === student.id);
+          const studentBadges = unlocked
+            ?.filter(u => u.student_id === student.id)
+            ?.map(u => (u.achievements as any)?.name) || [];
+
+          return {
+            ...student,
+            ecoPoints: profile?.total_points || student.ecoPoints,
+            badges: studentBadges.length > 0 ? studentBadges : student.badges
+          };
+        });
+      } catch (err) {
+        console.error('Failed to sync live student stats:', err);
+      }
+    }
 
     setClasses(teacherClasses);
     setStudents(allStudents);
@@ -69,16 +104,17 @@ export default function TeacherClasses() {
   };
 
   const handleAddStudent = () => {
-    if (!selectedClass || !newStudent.name.trim() || !newStudent.email.trim()) return;
+    if (!selectedClass || !newStudent.id) return;
 
     const createdStudent = TeacherDataManager.addStudent(
       selectedClass.id,
       newStudent.name.trim(),
-      newStudent.email.trim()
+      newStudent.email.trim(),
+      newStudent.id
     );
 
     setStudents(prev => [...prev, createdStudent]);
-    setNewStudent({ name: '', email: '' });
+    setNewStudent({ id: '', name: '', email: '' });
     setIsAddStudentDialogOpen(false);
   };
 
@@ -258,30 +294,21 @@ export default function TeacherClasses() {
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4">
-              <div>
-                <Label htmlFor="studentName">{t('teacher.classes.student.name')}</Label>
-                <Input
-                  id="studentName"
-                  placeholder={t('teacher.classes.student.name.placeholder')}
-                  value={newStudent.name}
-                  onChange={(e) => setNewStudent(prev => ({ ...prev, name: e.target.value }))}
-                />
-              </div>
-              <div>
-                <Label htmlFor="studentEmail">{t('teacher.classes.student.email')}</Label>
-                <Input
-                  id="studentEmail"
-                  type="email"
-                  placeholder={t('teacher.classes.student.email.placeholder')}
-                  value={newStudent.email}
-                  onChange={(e) => setNewStudent(prev => ({ ...prev, email: e.target.value }))}
-                />
-              </div>
-              <div className="flex justify-end space-x-2">
+              <TeacherStudentSelector 
+                selectedId={newStudent.id}
+                onSelect={(student) => {
+                  if (student) {
+                    setNewStudent({ id: student.id, name: student.name, email: student.email });
+                  } else {
+                    setNewStudent({ id: '', name: '', email: '' });
+                  }
+                }}
+              />
+              <div className="flex justify-end space-x-2 pt-4">
                 <Button variant="outline" onClick={() => setIsAddStudentDialogOpen(false)}>
                   {t('teacher.classes.cancel')}
                 </Button>
-                <Button onClick={handleAddStudent}>
+                <Button onClick={handleAddStudent} disabled={!newStudent.id}>
                   {t('teacher.classes.add')}
                 </Button>
               </div>
